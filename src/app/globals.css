@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ujjain-gold: #d4af37;
+  --color-ujjain-saffron: #ff9933;
+  --color-ujjain-maroon: #800000;
+  --color-ujjain-dark: #0a0a0f;
+  --color-ujjain-cream: #f5f0e6;
+}
+
+body {
+  background-color: var(--color-ujjain-dark);
+  color: var(--color-ujjain-cream);
+  font-family: "Poppins", sans-serif;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 40s linear infinite;
+}
+* {
+  cursor: default;
+}
+
+a, button, input[type="range"], input[type="submit"] {
+  cursor: pointer;
+}
