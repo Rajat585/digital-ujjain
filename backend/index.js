@@ -28,7 +28,12 @@ if (!razorpay) {
 }
 
 // ---------- Setup ----------
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://digital-ujjain.vercel.app",
+    "http://localhost:3000"
+  ]
+}));
 app.use(express.json());
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
