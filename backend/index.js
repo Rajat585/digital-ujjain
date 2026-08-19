@@ -6,7 +6,22 @@ const path = require("path");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 
+const http = require("http");
+const { Server } = require("socket.io");
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ["https://digital-ujjain.vercel.app", "http://localhost:3000"],
+  },
+});
+io.on("connection", (socket) => {
+  console.log("✅ Socket connected:", socket.id);
+  socket.on("disconnect", () => {
+    console.log("❌ Socket disconnected:", socket.id);
+  });
+});
 const PORT = process.env.PORT || 5000;
 const DATA_DIR = path.join(__dirname, "data");
 
@@ -234,6 +249,7 @@ app.post("/api/bookings/hotel", rateLimit(20), requireRazorpay, async (req, res)
     createdAt: new Date().toISOString(),
   };
   await appendJSON(FILES.hotelBookings, booking);
+  io.emit("newBooking", { type: "hotel", propertyName: booking.propertyName, createdAt: booking.createdAt });
   res.status(201).json(booking);
 });
 
@@ -293,6 +309,7 @@ app.post("/api/bookings/sathi", rateLimit(20), requireRazorpay, async (req, res)
     createdAt: new Date().toISOString(),
   };
   await appendJSON(FILES.sathiBookings, booking);
+  io.emit("newBooking", { type: "sathi", sathiName: booking.sathiName, createdAt: booking.createdAt });
   res.status(201).json(booking);
 });
 
@@ -395,6 +412,6 @@ app.get("/api/admin/feedback", requireAdminKey, (req, res) => res.json(readJSON(
 // ---------- 404 ----------
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Digital Ujjain backend running on http://localhost:${PORT}`);
 });

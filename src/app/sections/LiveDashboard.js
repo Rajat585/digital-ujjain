@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 import { useLanguage } from "../components/LanguageContext";
 
 const templeSchedules = {
@@ -76,6 +77,7 @@ export default function LiveDashboard() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [liveActivity, setLiveActivity] = useState([]);
 
   useEffect(() => {
     fetch("https://api.open-meteo.com/v1/forecast?latitude=23.1793&longitude=75.7849&current=temperature_2m,relative_humidity_2m,weather_code")
@@ -88,6 +90,21 @@ export default function LiveDashboard() {
 
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
+  }, []);
+
+    useEffect(() => {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const socket = io(API_BASE_URL);
+
+    socket.on("newBooking", (data) => {
+      const label =
+        data.type === "hotel"
+          ? `🏨 ${data.propertyName} — new hotel booking`
+          : `🧭 ${data.sathiName} — new Sathi booking`;
+      setLiveActivity((prev) => [{ label, time: new Date() }, ...prev].slice(0, 5));
+    });
+
+    return () => socket.disconnect();
   }, []);
 
   const hour = currentTime.getHours();
@@ -162,6 +179,20 @@ export default function LiveDashboard() {
           <div className="text-ujjain-cream/60 text-[11px] mt-1">{t.verifiedStallsNote}</div>
         </div>
       </div>
+
+      {liveActivity.length > 0 && (
+        <div className="w-full max-w-4xl mt-6 bg-white/5 border border-ujjain-gold/30 rounded-xl p-4">
+          <h4 className="text-ujjain-gold font-semibold text-sm mb-2">🔴 Live Activity</h4>
+          <ul className="space-y-1">
+            {liveActivity.map((item, i) => (
+              <li key={i} className="text-ujjain-cream/80 text-xs flex justify-between">
+                <span>{item.label}</span>
+                <span className="text-ujjain-cream/40">{item.time.toLocaleTimeString()}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
     </section>
