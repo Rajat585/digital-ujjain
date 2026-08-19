@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { LanguageProvider } from "./components/LanguageContext";
 import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
+import InstallPrompt from "./components/InstallPrompt";
 
 export const metadata = {
   metadataBase: new URL("https://digital-ujjain.vercel.app"),
@@ -53,8 +54,12 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         {/* Razorpay Checkout widget script — loaded once, used by Hotel & Sathi booking */}
-        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="afterInteractive"
+        />
         <ServiceWorkerRegister />
+        <InstallPrompt />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
