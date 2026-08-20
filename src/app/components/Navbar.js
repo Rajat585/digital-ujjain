@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "./LanguageContext";
 import { NAV_GROUPS } from "./navData";
+import InstallBadge from "./InstallBadge";
 
 export default function Navbar() {
   const { lang, toggleLang } = useLanguage();
@@ -88,6 +89,8 @@ export default function Navbar() {
           {t.book}
         </a>
 
+        <InstallBadge />
+
         <button
           onClick={toggleLang}
           className="border border-ujjain-gold/40 text-ujjain-gold px-3 py-1 rounded-full text-xs font-semibold hover:bg-ujjain-gold/10 transition"
@@ -96,13 +99,16 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile: just language toggle — navigation lives in the bottom bar */}
-      <button
-        onClick={toggleLang}
-        className="md:hidden border border-ujjain-gold/40 text-ujjain-gold px-3 py-1 rounded-full text-xs font-semibold"
-      >
-        {lang === "hi" ? "EN" : "हिं"}
-      </button>
+      {/* Mobile: language toggle + install badge — navigation lives in the bottom bar */}
+      <div className="md:hidden flex items-center gap-2">
+        <InstallBadge />
+        <button
+          onClick={toggleLang}
+          className="border border-ujjain-gold/40 text-ujjain-gold px-3 py-1 rounded-full text-xs font-semibold"
+        >
+          {lang === "hi" ? "EN" : "हिं"}
+        </button>
+      </div>
     </nav>
   );
 }
