@@ -180,7 +180,7 @@ export default function Achievements() {
   const activeItem = activeIndex !== null ? achievements[activeIndex] : null;
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="achievements" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
         {headings[lang].title}
       </h2>

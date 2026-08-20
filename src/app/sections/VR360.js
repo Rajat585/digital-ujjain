@@ -313,7 +313,7 @@ export default function VR360() {
   const activeWaypoint = waypoints.find((w) => w.id === activeId);
 
   return (
-    <section className="h-screen w-full bg-ujjain-dark relative overflow-hidden">
+    <section id="vr-zone" className="h-screen w-full bg-ujjain-dark relative overflow-hidden">
       <div className="absolute top-10 left-0 right-0 text-center z-10 pointer-events-none px-4">
         <h2 className="text-3xl md:text-5xl font-bold text-ujjain-gold">{t.title}</h2>
         <p className="text-ujjain-cream mt-2">{t.subtitle}</p>

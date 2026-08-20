@@ -21,7 +21,7 @@ export default function Leadership() {
   const t = text[lang];
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="leadership" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
       <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
 

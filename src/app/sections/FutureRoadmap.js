@@ -180,7 +180,7 @@ export default function FutureRoadmap() {
   const activeProject = activeIndex !== null ? projects[activeIndex] : null;
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="future-roadmap" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
         {headings[lang].title}
       </h2>

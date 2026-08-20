@@ -92,7 +92,7 @@ export default function LiveDashboard() {
     return () => clearInterval(timer);
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     const socket = io(API_BASE_URL);
 
@@ -116,7 +116,7 @@ export default function LiveDashboard() {
   const kalBhairavNext = getNextEvent(templeSchedules.kalbhairav, currentDecimal, t.tomorrowMorning);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="live-dashboard" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
       <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
 

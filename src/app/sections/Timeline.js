@@ -181,7 +181,7 @@ export default function Timeline() {
   const item = data[active];
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="timeline" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
         {headings[lang].title}
       </h2>
@@ -194,11 +194,10 @@ export default function Timeline() {
           <button
             key={index}
             onClick={() => setActive(index)}
-            className={`px-5 py-2 rounded-full border transition ${
-              active === index
+            className={`px-5 py-2 rounded-full border transition ${active === index
                 ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
                 : "border-ujjain-gold/40 text-ujjain-cream hover:border-ujjain-gold"
-            }`}
+              }`}
           >
             {d.title}
           </button>
