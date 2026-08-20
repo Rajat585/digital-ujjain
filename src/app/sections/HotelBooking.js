@@ -228,7 +228,7 @@ export default function HotelBooking() {
   const grandTotal = baseTotal + taxes;
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="hotel-booking" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">
         {t.eyebrow}
       </span>

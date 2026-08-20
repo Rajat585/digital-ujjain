@@ -326,7 +326,7 @@ export default function SathiBooking() {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="sathi-booking" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
       <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">{t.eyebrow}</span>
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
       <p className="text-ujjain-cream mb-4 text-center max-w-xl">{t.subtitle}</p>

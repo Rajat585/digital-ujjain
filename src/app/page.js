@@ -1,5 +1,6 @@
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
+import MobileBottomNav from "./components/MobileBottomNav";
 import BadgeSystem from "./components/BadgeSystem";
 import VoiceNarrator from "./components/VoiceNarrator";
 import Footer from "./components/Footer";
@@ -25,6 +26,7 @@ export default function Home() {
     <>
       <Loader />
       <Navbar />
+      <MobileBottomNav />
       <BadgeSystem />
       <MahakalMitra />
       <VoiceNarrator />
@@ -68,6 +70,7 @@ export default function Home() {
         <FadeIn>
           <CitizenEngagement />
         </FadeIn>
+        <div className="h-20 md:h-0" />
       </main>
       <Footer />
     </>

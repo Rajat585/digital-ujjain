@@ -18,13 +18,14 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center scale-110"
         style={{
           backgroundImage:
-"url('https://commons.wikimedia.org/wiki/Special:FilePath/Swayambhu%20and%20Dakshinamukhi%20in%20Ujjain.jpg')",        }}
+            "url('https://commons.wikimedia.org/wiki/Special:FilePath/Swayambhu%20and%20Dakshinamukhi%20in%20Ujjain.jpg')",
+        }}
       ></div>
 
       {/* Dark overlay for text readability */}
