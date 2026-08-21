@@ -24,6 +24,7 @@ import SentimentWall from "./sections/SentimentWall";
 import CitizenEngagement from "./sections/CitizenEngagement";
 import FAQAccordion from "./components/FAQAccordion";
 import StickyBookButton from "./components/StickyBookButton";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -35,6 +36,7 @@ export default function Home() {
       <MahakalMitra />
       <VoiceNarrator />
       <StickyBookButton />
+      <WhatsAppButton />
       <main>
         <Hero />
         <Gateway3D />

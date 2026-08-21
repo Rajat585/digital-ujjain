@@ -59,14 +59,14 @@ export default function CitizenEngagement() {
       <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
         <input
           type="text"
-          placeholder={t.namePlaceholder}
+          placeholder={t.namePlaceholder} aria-label={t.namePlaceholder}
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
           required
         />
         <textarea
-          placeholder={t.suggestionPlaceholder}
+          placeholder={t.suggestionPlaceholder} aria-label={t.suggestionPlaceholder}
           value={suggestion}
           onChange={(e) => setSuggestion(e.target.value)}
           rows={4}

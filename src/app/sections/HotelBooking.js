@@ -603,14 +603,14 @@ export default function HotelBooking() {
                 <div className="flex flex-col gap-3 mb-4">
                   <input
                     type="text"
-                    placeholder={t.guestName}
+                    placeholder={t.guestName} aria-label={t.guestName}
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
                     className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
                   />
                   <input
                     type="tel"
-                    placeholder={t.mobile}
+                    placeholder={t.mobile} aria-label={t.mobile}
                     value={guestPhone}
                     onChange={(e) => setGuestPhone(e.target.value)}
                     className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
