@@ -8,21 +8,38 @@ const text = {
     title: "Simhastha 2028",
     subtitle: "Mahaparv Shuru Hone Mein Bacha Hua Samay",
     highlight: "Vishwa ke sabse bade dharmik samagam ka hissa baniye",
-    labels: { days: "Din", hours: "Ghante", minutes: "Minute", seconds: "Second" },
+    labels: {
+      days: "Din",
+      hours: "Ghante",
+      minutes: "Minute",
+      seconds: "Second",
+    },
+    disclaimer: "Tareekhein official ghoshna ke anusaar update hongi.",
   },
   en: {
     badge: "🔥 The Grand Event Approaches",
     title: "Simhastha 2028",
     subtitle: "Time Remaining Until The Grand Event Begins",
     highlight: "Be a part of the world's largest religious gathering",
-    labels: { days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds" },
+    labels: {
+      days: "Days",
+      hours: "Hours",
+      minutes: "Minutes",
+      seconds: "Seconds",
+    },
+    disclaimer: "Dates will be updated as per the official announcement.",
   },
 };
 
 export default function Countdown() {
   const { lang } = useLanguage();
   const targetDate = new Date("2028-04-01T00:00:00");
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,13 +74,17 @@ export default function Countdown() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ujjain-saffron opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-ujjain-saffron"></span>
         </span>
-        <span className="text-ujjain-saffron text-sm font-semibold tracking-wide">{t.badge}</span>
+        <span className="text-ujjain-saffron text-sm font-semibold tracking-wide">
+          {t.badge}
+        </span>
       </div>
 
       <h2 className="relative text-4xl md:text-6xl font-bold mb-4 text-center text-ujjain-gold">
         {t.title}
       </h2>
-      <p className="relative text-ujjain-cream/90 mb-2 text-center max-w-xl">{t.subtitle}</p>
+      <p className="relative text-ujjain-cream/90 mb-2 text-center max-w-xl">
+        {t.subtitle}
+      </p>
       <p className="relative text-ujjain-saffron/90 text-sm mb-12 text-center max-w-xl font-medium">
         {t.highlight}
       </p>
@@ -89,6 +110,10 @@ export default function Countdown() {
           </div>
         ))}
       </div>
+
+      <p className="relative text-ujjain-cream/40 text-xs mt-8 text-center italic">
+        {t.disclaimer}
+      </p>
     </section>
   );
 }

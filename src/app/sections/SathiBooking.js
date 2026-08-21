@@ -360,11 +360,11 @@ export default function SathiBooking() {
             <div>
               <p className="text-ujjain-cream mb-6 text-center">{t.verifyIntro}</p>
               <div className="flex flex-col gap-3 mb-4">
-                <input type="text" placeholder={t.fullName} value={touristName} onChange={(e) => setTouristName(e.target.value)} disabled={verified}
+                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={touristName} onChange={(e) => setTouristName(e.target.value)} disabled={verified}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
-                <input type="tel" placeholder={t.mobile} value={touristPhone} onChange={(e) => setTouristPhone(e.target.value)} disabled={verified}
+                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={touristPhone} onChange={(e) => setTouristPhone(e.target.value)} disabled={verified}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
-                <input type="text" placeholder={t.idNumber} value={touristId} onChange={(e) => setTouristId(e.target.value)} disabled={verified}
+                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={touristId} onChange={(e) => setTouristId(e.target.value)} disabled={verified}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
               </div>
               {!verified && (
@@ -479,13 +479,13 @@ export default function SathiBooking() {
             <div>
               <p className="text-ujjain-cream mb-6 text-center">{t.regIntro}</p>
               <div className="flex flex-col gap-3 mb-4">
-                <input type="text" placeholder={t.fullName} value={regName} onChange={(e) => setRegName(e.target.value)}
+                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={regName} onChange={(e) => setRegName(e.target.value)}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="tel" placeholder={t.mobile} value={regPhone} onChange={(e) => setRegPhone(e.target.value)}
+                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={regPhone} onChange={(e) => setRegPhone(e.target.value)}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="text" placeholder={t.idNumber} value={regAadhar} onChange={(e) => setRegAadhar(e.target.value)}
+                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={regAadhar} onChange={(e) => setRegAadhar(e.target.value)}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="text" placeholder={t.experiencePlaceholder} value={regExperience} onChange={(e) => setRegExperience(e.target.value)}
+                <input type="text" placeholder={t.experiencePlaceholder} aria-label={t.experiencePlaceholder} value={regExperience} onChange={(e) => setRegExperience(e.target.value)}
                   className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
               </div>
               <div className="mb-4">

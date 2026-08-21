@@ -683,7 +683,7 @@ export default function MahakalMitra() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={t.placeholder}
+              placeholder={t.placeholder} aria-label={t.placeholder}
               className="flex-1 bg-transparent px-4 py-3 text-ujjain-cream text-sm focus:outline-none"
             />
             <button type="submit" className="px-4 text-ujjain-gold font-bold">➤</button>

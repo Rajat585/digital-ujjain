@@ -12,17 +12,23 @@ import OldVsNew from "./sections/OldVsNew";
 import Timeline from "./sections/Timeline";
 import FutureRoadmap from "./sections/FutureRoadmap";
 import Countdown from "./sections/Countdown";
+import NewsUpdates from "./sections/NewsUpdates";
+import VisitorGuide from "./sections/VisitorGuide";
+import EventsSchedule from "./sections/EventsSchedule";
+import SimhasthaInfo from "./sections/SimhasthaInfo";
 import SimhasthaZone from "./sections/SimhasthaZone";
 // import SimhasthaSahayak from "./sections/SimhasthaSahayak";
 import HotelBooking from "./sections/HotelBooking";
 import SathiBooking from "./sections/SathiBooking";
 import Achievements from "./sections/Achievements";
+import Gallery from "./sections/Gallery";
 import Leadership from "./sections/Leadership";
 import SentimentWall from "./sections/SentimentWall";
 import CitizenEngagement from "./sections/CitizenEngagement";
-import NewsUpdates from "./sections/NewsUpdates";
-import VisitorGuide from "./sections/VisitorGuide";
-import EventsSchedule from "./sections/EventsSchedule";
+import FAQAccordion from "./components/FAQAccordion";
+import StickyBookButton from "./components/StickyBookButton";
+import WhatsAppButton from "./components/WhatsAppButton";
+
 export default function Home() {
   return (
     <>
@@ -32,6 +38,8 @@ export default function Home() {
       <BadgeSystem />
       <MahakalMitra />
       <VoiceNarrator />
+      <StickyBookButton />
+      <WhatsAppButton />
       <main>
         <Hero />
         <Gateway3D />
@@ -60,6 +68,9 @@ export default function Home() {
           <EventsSchedule />
         </FadeIn>
         <FadeIn>
+          <SimhasthaInfo />
+        </FadeIn>
+        <FadeIn>
           <SimhasthaZone />
         </FadeIn>
         <FadeIn>
@@ -70,6 +81,9 @@ export default function Home() {
         </FadeIn>
         <FadeIn>
           <Achievements />
+        </FadeIn>
+        <FadeIn>
+          <Gallery />
         </FadeIn>
         <VR360 />
         <FadeIn>
@@ -82,6 +96,9 @@ export default function Home() {
           <CitizenEngagement />
         </FadeIn>
         <div className="h-20 md:h-0" />
+        <FadeIn>
+          <FAQAccordion />
+        </FadeIn>
       </main>
       <Footer />
     </>
