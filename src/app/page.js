@@ -11,6 +11,7 @@ import OldVsNew from "./sections/OldVsNew";
 import Timeline from "./sections/Timeline";
 import FutureRoadmap from "./sections/FutureRoadmap";
 import Countdown from "./sections/Countdown";
+import SimhasthaInfo from "./sections/SimhasthaInfo";
 import SimhasthaZone from "./sections/SimhasthaZone";
 // import SimhasthaSahayak from "./sections/SimhasthaSahayak";
 import HotelBooking from "./sections/HotelBooking";
@@ -45,6 +46,9 @@ export default function Home() {
         </FadeIn>
         <FadeIn>
           <Countdown />
+        </FadeIn>
+        <FadeIn>
+          <SimhasthaInfo />
         </FadeIn>
         <FadeIn>
           <SimhasthaZone />
