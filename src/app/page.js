@@ -20,7 +20,9 @@ import Achievements from "./sections/Achievements";
 import Leadership from "./sections/Leadership";
 import SentimentWall from "./sections/SentimentWall";
 import CitizenEngagement from "./sections/CitizenEngagement";
-
+import NewsUpdates from "./sections/NewsUpdates";
+import VisitorGuide from "./sections/VisitorGuide";
+import EventsSchedule from "./sections/EventsSchedule";
 export default function Home() {
   return (
     <>
@@ -47,6 +49,15 @@ export default function Home() {
         </FadeIn>
         <FadeIn>
           <Countdown />
+        </FadeIn>
+        <FadeIn>
+          <NewsUpdates />
+        </FadeIn>
+        <FadeIn>
+          <VisitorGuide />
+        </FadeIn>
+        <FadeIn>
+          <EventsSchedule />
         </FadeIn>
         <FadeIn>
           <SimhasthaZone />
