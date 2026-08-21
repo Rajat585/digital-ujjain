@@ -17,9 +17,12 @@ import SimhasthaZone from "./sections/SimhasthaZone";
 import HotelBooking from "./sections/HotelBooking";
 import SathiBooking from "./sections/SathiBooking";
 import Achievements from "./sections/Achievements";
+import Gallery from "./sections/Gallery";
 import Leadership from "./sections/Leadership";
 import SentimentWall from "./sections/SentimentWall";
 import CitizenEngagement from "./sections/CitizenEngagement";
+import FAQAccordion from "./components/FAQAccordion";
+import StickyBookButton from "./components/StickyBookButton";
 
 export default function Home() {
   return (
@@ -29,6 +32,7 @@ export default function Home() {
       <BadgeSystem />
       <MahakalMitra />
       <VoiceNarrator />
+      <StickyBookButton />
       <main>
         <Hero />
         <Gateway3D />
@@ -62,6 +66,9 @@ export default function Home() {
         <FadeIn>
           <Achievements />
         </FadeIn>
+        <FadeIn>
+          <Gallery />
+        </FadeIn>
         <VR360 />
         <FadeIn>
           <Leadership />
@@ -71,6 +78,9 @@ export default function Home() {
         </FadeIn>
         <FadeIn>
           <CitizenEngagement />
+        </FadeIn>
+        <FadeIn>
+          <FAQAccordion />
         </FadeIn>
       </main>
       <Footer />
