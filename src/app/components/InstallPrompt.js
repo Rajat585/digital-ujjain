@@ -65,7 +65,7 @@ export default function InstallPrompt() {
   // iOS Safari — manual instructions (no native prompt exists on iOS)
   if (platform.isIOS && platform.isSafari) {
     return (
-      <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-start gap-3">
+      <div className="fixed bottom-40 left-4 right-4 md:bottom-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-start gap-3">
         <span className="text-3xl">📲</span>
         <div className="flex-1">
           <p className="text-ujjain-cream text-sm font-semibold">
@@ -89,7 +89,7 @@ export default function InstallPrompt() {
   // Firefox — no beforeinstallprompt support, show manual hint
   if (platform.isFirefox) {
     return (
-      <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-start gap-3">
+      <div className="fixed bottom-40 left-4 right-4 md:bottom-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-start gap-3">
         <span className="text-3xl">📲</span>
         <div className="flex-1">
           <p className="text-ujjain-cream text-sm font-semibold">
@@ -113,7 +113,7 @@ export default function InstallPrompt() {
 
   // Chrome/Edge and other Chromium browsers — native install prompt
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-center gap-3">
+    <div className="fixed bottom-40 left-4 right-4 md:bottom-4 md:left-auto md:right-4 md:w-80 bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-4 shadow-lg z-50 flex items-center gap-3">
       <span className="text-3xl">📲</span>
       <div className="flex-1">
         <p className="text-ujjain-cream text-sm font-semibold">

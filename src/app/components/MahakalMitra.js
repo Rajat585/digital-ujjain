@@ -657,22 +657,21 @@ export default function MahakalMitra() {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-ujjain-gold text-ujjain-dark text-2xl shadow-lg flex items-center justify-center hover:scale-110 transition"
+        className="fixed bottom-24 left-4 md:bottom-6 md:right-6 z-40 w-14 h-14 md:w-16 md:h-16 rounded-full bg-ujjain-gold text-ujjain-dark text-2xl shadow-lg flex items-center justify-center hover:scale-110 transition"
       >
         {isOpen ? "✕" : "🙏"}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 md:w-96 h-[450px] bg-ujjain-dark border border-ujjain-gold/40 rounded-xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="fixed bottom-40 left-4 md:bottom-24 md:right-6 z-40 w-[calc(100vw-2rem)] max-w-80 md:w-96 h-[450px] bg-ujjain-dark border border-ujjain-gold/40 rounded-xl shadow-2xl flex flex-col overflow-hidden">
           <div className="bg-ujjain-gold text-ujjain-dark px-4 py-3 font-bold">{t.header}</div>
 
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`max-w-[80%] px-4 py-2 rounded-lg text-sm ${
-                  msg.from === "bot" ? "bg-white/10 text-ujjain-cream self-start" : "bg-ujjain-saffron text-ujjain-dark self-end"
-                }`}
+                className={`max-w-[80%] px-4 py-2 rounded-lg text-sm ${msg.from === "bot" ? "bg-white/10 text-ujjain-cream self-start" : "bg-ujjain-saffron text-ujjain-dark self-end"
+                  }`}
               >
                 {msg.text}
               </div>
