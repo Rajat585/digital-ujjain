@@ -156,10 +156,6 @@ const galleryData = {
           caption: "Shri Mahakaleshwar Jyotirlinga",
         },
         {
-          file: "Shri Mahakaleshwar Temple Ujjain - panoramio (1).jpg",
-          caption: "Mahakaleshwar Mandir, ek drishya",
-        },
-        {
           file: "Shri Mahakaleshwar Temple Ujjain - panoramio (2).jpg",
           caption: "Mahakaleshwar Mandir, doosra drishya",
         },
@@ -179,7 +175,6 @@ const galleryData = {
           file: "Shri Mahakaleshwer Temple at Night ujjain - panoramio.jpg",
           caption: "Raat mein Mahakaleshwar Mandir",
         },
-        { file: "MAHAKAL LOK UJJAIN.jpg", caption: "Mahakal Lok corridor" },
         {
           file: "Ujjain Mahakal Temple.jpg",
           caption: "Ujjain ka Mahakal Mandir",
@@ -214,7 +209,6 @@ const galleryData = {
         },
         { file: "Shri Ram Ghat 01.jpg", caption: "Ram Ghat, ek aur drishya" },
         { file: "Ram ghat ujjain.jpg", caption: "Ram Ghat, Ujjain" },
-        { file: "Kshipra aarti.jpg", caption: "Shipra nadi ki sandhya aarti" },
       ],
     },
     {
@@ -392,10 +386,6 @@ const galleryData = {
           caption: "Shri Mahakaleshwar Jyotirlinga",
         },
         {
-          file: "Shri Mahakaleshwar Temple Ujjain - panoramio (1).jpg",
-          caption: "A view of Mahakaleshwar Temple",
-        },
-        {
           file: "Shri Mahakaleshwar Temple Ujjain - panoramio (2).jpg",
           caption: "Another view of Mahakaleshwar Temple",
         },
@@ -415,7 +405,6 @@ const galleryData = {
           file: "Shri Mahakaleshwer Temple at Night ujjain - panoramio.jpg",
           caption: "Mahakaleshwar Temple at night",
         },
-        { file: "MAHAKAL LOK UJJAIN.jpg", caption: "The Mahakal Lok corridor" },
         {
           file: "Ujjain Mahakal Temple.jpg",
           caption: "The Mahakal Temple in Ujjain",
@@ -453,10 +442,6 @@ const galleryData = {
         },
         { file: "Shri Ram Ghat 01.jpg", caption: "Ram Ghat, another view" },
         { file: "Ram ghat ujjain.jpg", caption: "Ram Ghat, Ujjain" },
-        {
-          file: "Kshipra aarti.jpg",
-          caption: "Evening aarti on the Shipra river",
-        },
       ],
     },
     {
@@ -502,24 +487,35 @@ const headings = {
 };
 
 const allLabel = { hi: "Sabhi", en: "All" };
+const viewMoreLabel = { hi: "Aur Dekhein ↓", en: "View More ↓" };
+const viewLessLabel = { hi: "Kam Dekhein ↑", en: "View Less ↑" };
+const INITIAL_COUNT = 9;
 
 export default function Gallery() {
   const { lang } = useLanguage();
   const categories = galleryData[lang];
   const [activeCategory, setActiveCategory] = useState("all");
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const [showAll, setShowAll] = useState(false);
 
   const allImages = categories.flatMap((cat) => cat.images);
-  const visibleImages =
+  const fullList =
     activeCategory === "all"
       ? allImages
       : categories.find((c) => c.key === activeCategory)?.images || [];
+
+  const visibleImages = showAll ? fullList : fullList.slice(0, INITIAL_COUNT);
 
   const slides = visibleImages.map((img) => ({
     src: wikiImg(img.file),
     alt: img.caption,
     title: img.caption,
   }));
+
+  const handleCategoryChange = (key) => {
+    setActiveCategory(key);
+    setShowAll(false);
+  };
 
   return (
     <section
@@ -535,7 +531,7 @@ export default function Gallery() {
 
       <div className="flex flex-wrap justify-center gap-2 mb-10">
         <button
-          onClick={() => setActiveCategory("all")}
+          onClick={() => handleCategoryChange("all")}
           className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold border transition ${
             activeCategory === "all"
               ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
@@ -547,7 +543,7 @@ export default function Gallery() {
         {categories.map((cat) => (
           <button
             key={cat.key}
-            onClick={() => setActiveCategory(cat.key)}
+            onClick={() => handleCategoryChange(cat.key)}
             className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold border transition ${
               activeCategory === cat.key
                 ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
@@ -576,6 +572,15 @@ export default function Gallery() {
           </button>
         ))}
       </div>
+
+      {fullList.length > INITIAL_COUNT && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="mt-8 px-6 py-2 rounded-full bg-ujjain-gold text-ujjain-dark text-sm font-semibold hover:bg-ujjain-saffron transition"
+        >
+          {showAll ? viewLessLabel[lang] : viewMoreLabel[lang]}
+        </button>
+      )}
 
       <Lightbox
         open={lightboxIndex >= 0}

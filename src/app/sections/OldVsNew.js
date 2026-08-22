@@ -34,7 +34,7 @@ export default function OldVsNew() {
       <div className="relative w-full max-w-4xl h-[280px] md:h-[480px] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(212,175,55,0.25)] border-2 border-ujjain-gold/40">
         <div className="absolute inset-0">
           <img
-            src="https://commons.wikimedia.org/wiki/Special:FilePath/MAHAKAL%20LOK%20UJJAIN.jpg"
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%20Mahakal%20Temple.jpg"
             alt={t.newAlt}
             className="w-full h-full object-cover"
             draggable={false}
@@ -44,7 +44,6 @@ export default function OldVsNew() {
             {t.newLabel}
           </div>
         </div>
-
         <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
           <img
             src="https://commons.wikimedia.org/wiki/Special:FilePath/Mahakal%20Temple%20Ujjain.JPG"
