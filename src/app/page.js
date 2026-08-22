@@ -12,6 +12,9 @@ import OldVsNew from "./sections/OldVsNew";
 import Timeline from "./sections/Timeline";
 import FutureRoadmap from "./sections/FutureRoadmap";
 import Countdown from "./sections/Countdown";
+import NewsUpdates from "./sections/NewsUpdates";
+import VisitorGuide from "./sections/VisitorGuide";
+import EventsSchedule from "./sections/EventsSchedule";
 import SimhasthaInfo from "./sections/SimhasthaInfo";
 import SimhasthaZone from "./sections/SimhasthaZone";
 // import SimhasthaSahayak from "./sections/SimhasthaSahayak";
@@ -54,6 +57,15 @@ export default function Home() {
         </FadeIn>
         <FadeIn>
           <Countdown />
+        </FadeIn>
+        <FadeIn>
+          <NewsUpdates />
+        </FadeIn>
+        <FadeIn>
+          <VisitorGuide />
+        </FadeIn>
+        <FadeIn>
+          <EventsSchedule />
         </FadeIn>
         <FadeIn>
           <SimhasthaInfo />
