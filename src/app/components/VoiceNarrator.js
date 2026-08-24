@@ -3,8 +3,9 @@ import { useState, useRef } from "react";
 import { useLanguage } from "./LanguageContext";
 
 const text = {
-  hi: { pause: "Narration rokein", play: "Narration suniye" },
+  hi: { pause: "वर्णन रोकें", play: "वर्णन सुनें" },
   en: { pause: "Pause narration", play: "Listen to narration" },
+  hinglish: { pause: "Narration rokein", play: "Narration suniye" },
 };
 
 export default function VoiceNarrator() {
@@ -27,7 +28,12 @@ export default function VoiceNarrator() {
 
   return (
     <>
-      <audio ref={audioRef} src="/audio/narration.mp4" preload="none" onEnded={() => setIsPlaying(false)} />
+      <audio
+        ref={audioRef}
+        src="/audio/narration.mp4"
+        preload="none"
+        onEnded={() => setIsPlaying(false)}
+      />
       <button
         onClick={handleToggle}
         className="fixed bottom-24 right-6 z-40 w-14 h-14 rounded-full bg-white/10 border border-ujjain-gold/40 text-ujjain-gold text-xl shadow-lg flex items-center justify-center hover:scale-110 transition backdrop-blur-md"

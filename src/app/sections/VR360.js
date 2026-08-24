@@ -46,12 +46,16 @@ const waypoints = [
 
 const text = {
   hi: {
-    title: "360° Simhastha Walkthrough",
-    subtitle: "Neeche button dabao, ghumo aur khud dekho",
+    title: "360° सिंहस्थ वॉकथ्रू",
+    subtitle: "नीचे बटन दबाएं, घुमाएं और खुद देखें",
   },
   en: {
     title: "360° Simhastha Walkthrough",
     subtitle: "Tap a spot below, then drag to look around",
+  },
+  hinglish: {
+    title: "360° Simhastha Walkthrough",
+    subtitle: "Neeche button dabao, ghumo aur khud dekho",
   },
 };
 
@@ -345,7 +349,7 @@ export default function VR360() {
               }`}
           >
             <span className="mr-1">{w.icon}</span>
-            {lang === "hi" ? w.nameHi : w.nameEn}
+            {lang !== "en" ? w.nameHi : w.nameEn}
           </button>
         ))}
       </div>

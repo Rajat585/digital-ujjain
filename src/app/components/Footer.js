@@ -5,27 +5,27 @@ import { useLanguage } from "./LanguageContext";
 const text = {
   hi: {
     tagline:
-      "Mahakal Ki Nagri — Itihaas, Vikas, aur Bhavishya Ki Ek Digital Yatra",
-    quickLinks: "Quick Links",
-    vikas: "Vikas",
-    simhastha: "Simhastha 2028",
-    map: "Map",
-    contact: "Contact",
-    simhasthaCol: "Simhastha 2028",
-    countdown: "Countdown",
-    stayBooking: "Stay Booking",
-    bookSathi: "Book a Sathi",
-    zones: "Simhastha Zones",
-    emergency: "Emergency Helpline",
-    police: "👮 Police —",
-    ambulance: "🚑 Ambulance —",
-    fire: "🚒 Fire —",
-    tourist: "📞 Tourist Helpline —",
-    copyright: "© 2026 Digital Ujjain Experience. Sabhi Adhikar Surakshit.",
-    badge: "Madhya Pradesh Digital Initiative",
-    cancellationLink: "Cancellation & Refund Policy →",
+      "महाकाल की नगरी — इतिहास, विकास, और भविष्य की एक डिजिटल यात्रा",
+    quickLinks: "मुख्य लिंक",
+    vikas: "विकास",
+    simhastha: "सिंहस्थ 2028",
+    map: "मानचित्र",
+    contact: "संपर्क",
+    simhasthaCol: "सिंहस्थ 2028",
+    countdown: "काउंटडाउन",
+    stayBooking: "ठहराव बुकिंग",
+    bookSathi: "साथी बुक करें",
+    zones: "सिंहस्थ ज़ोन",
+    emergency: "आपातकालीन हेल्पलाइन",
+    police: "👮 पुलिस —",
+    ambulance: "🚑 एम्बुलेंस —",
+    fire: "🚒 फायर —",
+    tourist: "📞 पर्यटक हेल्पलाइन —",
+    copyright: "© 2026 Digital Ujjain Experience. सभी अधिकार सुरक्षित।",
+    badge: "मध्य प्रदेश डिजिटल पहल",
+    cancellationLink: "रद्दीकरण एवं रिफंड नीति →",
     cancellationText:
-      "Check-in se 48 ghante pehle cancel karne par poora refund milega. Uske baad cancel karne par booking amount ka 50% refund hoga.",
+      "चेक-इन से 48 घंटे पहले रद्द करने पर पूरा रिफंड मिलेगा। उसके बाद रद्द करने पर बुकिंग राशि का 50% रिफंड होगा।",
   },
   en: {
     tagline:
@@ -50,6 +50,30 @@ const text = {
     cancellationLink: "Cancellation & Refund Policy →",
     cancellationText:
       "Free cancellation up to 48 hours before check-in. Cancellations after that are eligible for a 50% refund of the booking amount.",
+  },
+  hinglish: {
+    tagline:
+      "Mahakal Ki Nagri — Itihaas, Vikas, aur Bhavishya Ki Ek Digital Yatra",
+    quickLinks: "Quick Links",
+    vikas: "Vikas",
+    simhastha: "Simhastha 2028",
+    map: "Map",
+    contact: "Contact",
+    simhasthaCol: "Simhastha 2028",
+    countdown: "Countdown",
+    stayBooking: "Stay Booking",
+    bookSathi: "Book a Sathi",
+    zones: "Simhastha Zones",
+    emergency: "Emergency Helpline",
+    police: "👮 Police —",
+    ambulance: "🚑 Ambulance —",
+    fire: "🚒 Fire —",
+    tourist: "📞 Tourist Helpline —",
+    copyright: "© 2026 Digital Ujjain Experience. Sabhi Adhikar Surakshit.",
+    badge: "Madhya Pradesh Digital Initiative",
+    cancellationLink: "Cancellation & Refund Policy →",
+    cancellationText:
+      "Check-in se 48 ghante pehle cancel karne par poora refund milega. Uske baad cancel karne par booking amount ka 50% refund hoga.",
   },
 };
 
@@ -108,7 +132,7 @@ export default function Footer() {
               href="#simhastha"
               className="hover:text-ujjain-saffron transition"
             >
-              {t.countdown}
+             {t.countdown}
             </a>
             <span>{t.stayBooking}</span>
             <span>{t.bookSathi}</span>

@@ -5,54 +5,54 @@ import { useLanguage } from "../components/LanguageContext";
 const infoData = {
   hi: [
     {
-      title: "Dharmik Evam Sanskritik Mahatva",
-      desc: "Simhastha sirf ek mela nahi, ek jeevit parampara hai jo Ujjain ko Hindu cosmology mein vishesh sthaan deti hai.",
+      title: "धार्मिक एवं सांस्कृतिक महत्व",
+      desc: "सिंहस्थ केवल एक मेला नहीं, एक जीवंत परंपरा है जो उज्जैन को हिंदू ब्रह्मांड-विज्ञान में विशेष स्थान देती है।",
       icon: "🕉️",
       points: [
-        "Simhastha tab hoti hai jab Brihaspati (Guru Graha) Simha (Leo) rashi mein pravesh karte hain — ek khagoliya sanyog jo har 12 saal mein aata hai.",
-        "Ye Bharat ke 4 classical Kumbh Melon mein se ek hai (baaki teen: Haridwar, Prayagraj, aur Nashik-Trimbak).",
-        "Mान्यता hai ki Samudra Manthan ke dauraan Amrit ki kuch boondein Shipra nadi ke tat par giri thi — isi wajah se Ujjain mein snan ka itna mahatva hai.",
-        "Shipra nadi mein snan karne se paapon se mukti aur moksha milta hai, aisi shraddha hai.",
+        "सिंहस्थ तब होता है जब बृहस्पति (गुरु ग्रह) सिंह राशि में प्रवेश करते हैं — एक खगोलीय संयोग जो हर 12 साल में आता है।",
+        "यह भारत के 4 पारंपरिक कुंभ मेलों में से एक है (बाकी तीन: हरिद्वार, प्रयागराज, और नासिक-त्र्यंबकेश्वर)।",
+        "मान्यता है कि समुद्र मंथन के दौरान अमृत की कुछ बूंदें क्षिप्रा नदी के तट पर गिरी थीं — इसी वजह से उज्जैन में स्नान का इतना महत्व है।",
+        "क्षिप्रा नदी में स्नान करने से पापों से मुक्ति और मोक्ष मिलता है, ऐसी श्रद्धा है।",
       ],
       impact:
-        "Prachin Bharatiya khagolshastri Ujjain ko samay-nirdharan ke liye reference meridian jaisa maante the — isliye ise 'kaal ki nagri' bhi kaha jaata hai.",
+        "प्राचीन भारतीय खगोलशास्त्री उज्जैन को समय-निर्धारण के लिए संदर्भ मध्याह्न रेखा मानते थे — इसीलिए इसे 'काल की नगरी' भी कहा जाता है।",
     },
     {
-      title: "Simhastha Ka Itihas",
-      desc: "Ujjain mein Simhastha ka aayojan sadiyon purani parampara hai, jo har baar lakhon-crodon shraddhaluon ko ekjut karti hai.",
+      title: "सिंहस्थ का इतिहास",
+      desc: "उज्जैन में सिंहस्थ का आयोजन सदियों पुरानी परंपरा है, जो हर बार लाखों-करोड़ों श्रद्धालुओं को एकजुट करती है।",
       icon: "📜",
       points: [
-        "Pichli Simhastha 2016 mein hui thi — us dauraan lagbhag 5 crore shraddhalu Ujjain aaye the, aayojan lagbhag ek mahine tak chala tha.",
-        "Ram Ghat, jo Simhastha se sabse zyada juda hua ghat hai, 8vi shatabdi se hi is dharmik parampara ka kendra raha hai.",
-        "Har baar Simhastha ke saath shehar ka infrastructure aur badhta hai — 2028 ke liye bhi bade paimane par vikas kaary chal rahe hain.",
-        "Mahakaleshwar Mandir, jo 12 Jyotirlingon mein se ek hai, sadiyon se is aayojan ka aadhyatmik kendra raha hai.",
+        "पिछला सिंहस्थ 2016 में हुआ था — उस दौरान लगभग 5 करोड़ श्रद्धालु उज्जैन आए थे, आयोजन लगभग एक महीने तक चला था।",
+        "राम घाट, जो सिंहस्थ से सबसे ज़्यादा जुड़ा हुआ घाट है, 8वीं शताब्दी से ही इस धार्मिक परंपरा का केंद्र रहा है।",
+        "हर बार सिंहस्थ के साथ शहर की अवसंरचना और बढ़ती है — 2028 के लिए भी बड़े पैमाने पर विकास कार्य चल रहे हैं।",
+        "महाकालेश्वर मंदिर, जो 12 ज्योतिर्लिंगों में से एक है, सदियों से इस आयोजन का आध्यात्मिक केंद्र रहा है।",
       ],
       impact:
-        "Har 12 saal mein hone wali Simhastha, Ujjain ke itihas aur pehchaan ka ek ateet-vartaman ko jodne wala mahatvapurna adhyay hai.",
+        "हर 12 साल में होने वाला सिंहस्थ, उज्जैन के इतिहास और पहचान का अतीत-वर्तमान को जोड़ने वाला एक महत्वपूर्ण अध्याय है।",
     },
     {
-      title: "Mukhya Paramparayein",
-      desc: "Simhastha ke dauraan kai vishesh dharmik parivayein nibhayi jaati hain, jinka apna alag mahatva hai.",
+      title: "मुख्य परंपराएं",
+      desc: "सिंहस्थ के दौरान कई विशेष धार्मिक परंपराएं निभाई जाती हैं, जिनका अपना अलग महत्व है।",
       icon: "🙏",
       points: [
-        "Shahi Snan (Amrit Snan) — sabse mahatvapurna 'rajkiya snan', jisme 13 Akhaden apni bhavya shobha yatraon ke saath nadi mein snan karti hain. Ye sabse zyada bheed wale din hote hain.",
-        "Parva Snan — baaki shubh snan tithiyan (jaise Purnima, Ekadashi) — inme bheed kam hoti hai, parivaron ke liye behtar rehta hai.",
-        "Kalpvas — ek mahine tak nadi kinare rehkar tap aur vrat karne ki parampara, jo bahut se shraddhalu nibhate hain.",
-        "Panchkoshi Yatra — ek parikrama marg jo Simhastha se juda hua ek prachin teerth-yatra hai.",
-        "13 Akhade (paramparik sadhu-sant sanghatan) is aayojan ka sabse mahatvapurna hissa hain — Naga Sadhu apni shobha yatraon ke saath khaas aakarshan hote hain.",
+        "शाही स्नान (अमृत स्नान) — सबसे महत्वपूर्ण 'राजकीय स्नान', जिसमें 13 अखाड़े अपनी भव्य शोभा यात्राओं के साथ नदी में स्नान करते हैं। ये सबसे ज़्यादा भीड़ वाले दिन होते हैं।",
+        "पर्व स्नान — बाकी शुभ स्नान तिथियां (जैसे पूर्णिमा, एकादशी) — इनमें भीड़ कम होती है, परिवारों के लिए बेहतर रहता है।",
+        "कल्पवास — एक महीने तक नदी किनारे रहकर तप और व्रत करने की परंपरा, जो बहुत से श्रद्धालु निभाते हैं।",
+        "पंचकोशी यात्रा — एक परिक्रमा मार्ग जो सिंहस्थ से जुड़ा हुआ एक प्राचीन तीर्थ-यात्रा है।",
+        "13 अखाड़े (पारंपरिक साधु-संत संगठन) इस आयोजन का सबसे महत्वपूर्ण हिस्सा हैं — नागा साधु अपनी शोभा यात्राओं के साथ खास आकर्षण होते हैं।",
       ],
       impact:
-        "In paramparaon ko samajhna yatriyon ke liye zaroori hai — isse wo sahi din chun sakte hain: darshan-shanti ke liye Parva Snan, ya bhavyata dekhne ke liye Shahi Snan.",
+        "इन परंपराओं को समझना यात्रियों के लिए ज़रूरी है — इससे वे सही दिन चुन सकते हैं: शांति से दर्शन के लिए पर्व स्नान, या भव्यता देखने के लिए शाही स्नान।",
     },
     {
-      title: "Mukhya Aakarshan",
-      desc: "Ujjain mein Simhastha se jude kai mandir aur ghat hain jo har shraddhalu ko avashya dekhne chahiye.",
+      title: "मुख्य आकर्षण",
+      desc: "उज्जैन में सिंहस्थ से जुड़े कई मंदिर और घाट हैं जो हर श्रद्धालु को अवश्य देखने चाहिए।",
       icon: "🛕",
       points: [
-        "Mahakaleshwar Jyotirlinga — 12 Jyotirlingon mein se ek aur ekmatra Dakshinamukhi (dakshin-mukhi) lingam; famous Bhasma Aarti subah lagbhag 4 baje hoti hai.",
-        "Kal Bhairav Mandir — Ujjain ke rakshak devta, Shipra tat par sthit, apni vishisht aradhna paddhati ke liye jaana jaata hai.",
-        "Harsiddhi Mandir — ek Shakti Peeth, apne do ऊंche deep stambhon ke liye prasiddh, jo utsav ki shaamon par jalaye jaate hain.",
-        "Ram Ghat — Simhastha se sabse purana aur seedha juda hua snan ghat, jahan Chitragupta Mandir aur sandhya Kshipra Aarti bhi dekhi ja sakti hai.",
+        "महाकालेश्वर ज्योतिर्लिंग — 12 ज्योतिर्लिंगों में से एक और एकमात्र दक्षिणमुखी लिंगम; प्रसिद्ध भस्म आरती सुबह लगभग 4 बजे होती है।",
+        "काल भैरव मंदिर — उज्जैन के रक्षक देवता, क्षिप्रा तट पर स्थित, अपनी विशिष्ट आराधना पद्धति के लिए जाना जाता है।",
+        "हर्षिद्धि मंदिर — एक शक्ति पीठ, अपने दो ऊंचे दीप स्तंभों के लिए प्रसिद्ध, जो उत्सव की शामों पर जलाए जाते हैं।",
+        "राम घाट — सिंहस्थ से सबसे पुराना और सीधा जुड़ा हुआ स्नान घाट, जहां चित्रगुप्त मंदिर और संध्या क्षिप्रा आरती भी देखी जा सकती है।",
       ],
       impact: "",
       cta: true,
@@ -126,30 +126,93 @@ const wikiImg = (filename) =>
 
 const headings = {
   hi: {
-    title: "Simhastha 2028 Ke Baare Mein",
-    subtitle: "Dharmik mahatva, itihas, paramparayein aur mukhya aakarshan",
+    title: "सिंहस्थ 2028 के बारे में",
+    subtitle: "धार्मिक महत्व, इतिहास, परंपराएं और मुख्य आकर्षण",
   },
   en: {
     title: "About Simhastha 2028",
     subtitle:
       "Religious significance, history, traditions, and major attractions",
   },
+  hinglish: {
+    title: "Simhastha 2028 Ke Baare Mein",
+    subtitle: "Dharmik mahatva, itihas, paramparayein aur mukhya aakarshan",
+  },
 };
 
 const modalLabels = {
-  hi: { points: "Mukhya Baatein", impact: "Vishesh" },
+  hi: { points: "मुख्य बातें", impact: "विशेष" },
   en: { points: "Key Points", impact: "Note" },
+  hinglish: { points: "Mukhya Baatein", impact: "Vishesh" },
 };
 
-const readMoreLabel = { hi: "Aur Padhein →", en: "Read More →" };
+const readMoreLabel = { hi: "और पढ़ें →", en: "Read More →", hinglish: "Aur Padhein →" };
 const ctaLabel = {
-  hi: "Poori Suchi Map Par Dekhein ↓",
+  hi: "पूरी सूची मानचित्र पर देखें ↓",
   en: "See Full List On Map ↓",
+  hinglish: "Poori Suchi Map Par Dekhein ↓",
 };
 const disclaimer = {
-  hi: "Simhastha 2028 ki tareekhein official ghoshna ke anusaar update hongi.",
+  hi: "सिंहस्थ 2028 की तारीखें आधिकारिक घोषणा के अनुसार अपडेट होंगी।",
   en: "Simhastha 2028 dates will be updated as per the official announcement.",
+  hinglish: "Simhastha 2028 ki tareekhein official ghoshna ke anusaar update hongi.",
 };
+
+infoData.hinglish = [
+  {
+    title: "Dharmik Evam Sanskritik Mahatva",
+    desc: "Simhastha sirf ek mela nahi, ek jeevit parampara hai jo Ujjain ko Hindu cosmology mein vishesh sthaan deti hai.",
+    icon: "🕉️",
+    points: [
+      "Simhastha tab hoti hai jab Brihaspati (Guru Graha) Simha (Leo) rashi mein pravesh karte hain — ek khagoliya sanyog jo har 12 saal mein aata hai.",
+      "Ye Bharat ke 4 classical Kumbh Melon mein se ek hai (baaki teen: Haridwar, Prayagraj, aur Nashik-Trimbak).",
+      "Manyata hai ki Samudra Manthan ke dauraan Amrit ki kuch boondein Shipra nadi ke tat par giri thi — isi wajah se Ujjain mein snan ka itna mahatva hai.",
+      "Shipra nadi mein snan karne se paapon se mukti aur moksha milta hai, aisi shraddha hai.",
+    ],
+    impact:
+      "Prachin Bharatiya khagolshastri Ujjain ko samay-nirdharan ke liye reference meridian jaisa maante the — isliye ise 'kaal ki nagri' bhi kaha jaata hai.",
+  },
+  {
+    title: "Simhastha Ka Itihas",
+    desc: "Ujjain mein Simhastha ka aayojan sadiyon purani parampara hai, jo har baar lakhon-crodon shraddhaluon ko ekjut karti hai.",
+    icon: "📜",
+    points: [
+      "Pichli Simhastha 2016 mein hui thi — us dauraan lagbhag 5 crore shraddhalu Ujjain aaye the, aayojan lagbhag ek mahine tak chala tha.",
+      "Ram Ghat, jo Simhastha se sabse zyada juda hua ghat hai, 8vi shatabdi se hi is dharmik parampara ka kendra raha hai.",
+      "Har baar Simhastha ke saath shehar ka infrastructure aur badhta hai — 2028 ke liye bhi bade paimane par vikas kaary chal rahe hain.",
+      "Mahakaleshwar Mandir, jo 12 Jyotirlingon mein se ek hai, sadiyon se is aayojan ka aadhyatmik kendra raha hai.",
+    ],
+    impact:
+      "Har 12 saal mein hone wali Simhastha, Ujjain ke itihas aur pehchaan ka ek ateet-vartaman ko jodne wala mahatvapurna adhyay hai.",
+  },
+  {
+    title: "Mukhya Paramparayein",
+    desc: "Simhastha ke dauraan kai vishesh dharmik parivayein nibhayi jaati hain, jinka apna alag mahatva hai.",
+    icon: "🙏",
+    points: [
+      "Shahi Snan (Amrit Snan) — sabse mahatvapurna 'rajkiya snan', jisme 13 Akhaden apni bhavya shobha yatraon ke saath nadi mein snan karti hain. Ye sabse zyada bheed wale din hote hain.",
+      "Parva Snan — baaki shubh snan tithiyan (jaise Purnima, Ekadashi) — inme bheed kam hoti hai, parivaron ke liye behtar rehta hai.",
+      "Kalpvas — ek mahine tak nadi kinare rehkar tap aur vrat karne ki parampara, jo bahut se shraddhalu nibhate hain.",
+      "Panchkoshi Yatra — ek parikrama marg jo Simhastha se juda hua ek prachin teerth-yatra hai.",
+      "13 Akhade (paramparik sadhu-sant sanghatan) is aayojan ka sabse mahatvapurna hissa hain — Naga Sadhu apni shobha yatraon ke saath khaas aakarshan hote hain.",
+    ],
+    impact:
+      "In paramparaon ko samajhna yatriyon ke liye zaroori hai — isse wo sahi din chun sakte hain: darshan-shanti ke liye Parva Snan, ya bhavyata dekhne ke liye Shahi Snan.",
+  },
+  {
+    title: "Mukhya Aakarshan",
+    desc: "Ujjain mein Simhastha se jude kai mandir aur ghat hain jo har shraddhalu ko avashya dekhne chahiye.",
+    icon: "🛕",
+    points: [
+      "Mahakaleshwar Jyotirlinga — 12 Jyotirlingon mein se ek aur ekmatra Dakshinamukhi (dakshin-mukhi) lingam; famous Bhasma Aarti subah lagbhag 4 baje hoti hai.",
+      "Kal Bhairav Mandir — Ujjain ke rakshak devta, Shipra tat par sthit, apni vishisht aradhna paddhati ke liye jaana jaata hai.",
+      "Harsiddhi Mandir — ek Shakti Peeth, apne do ऊंche deep stambhon ke liye prasiddh, jo utsav ki shaamon par jalaye jaate hain.",
+      "Ram Ghat — Simhastha se sabse purana aur seedha juda hua snan ghat, jahan Chitragupta Mandir aur sandhya Kshipra Aarti bhi dekhi ja sakti hai.",
+    ],
+    impact: "",
+    cta: true,
+  },
+];
 
 export default function SimhasthaInfo() {
   const { lang } = useLanguage();

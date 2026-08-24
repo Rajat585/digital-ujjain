@@ -4,17 +4,17 @@ import { useLanguage } from "../components/LanguageContext";
 
 const text = {
   hi: {
-    badge: "🔥 Mahaparv Nikat Hai",
-    title: "Simhastha 2028",
-    subtitle: "Mahaparv Shuru Hone Mein Bacha Hua Samay",
-    highlight: "Vishwa ke sabse bade dharmik samagam ka hissa baniye",
+    badge: "🔥 महापर्व निकट है",
+    title: "सिंहस्थ 2028",
+    subtitle: "महापर्व शुरू होने में बचा हुआ समय",
+    highlight: "विश्व के सबसे बड़े धार्मिक समागम का हिस्सा बनिए",
     labels: {
-      days: "Din",
-      hours: "Ghante",
-      minutes: "Minute",
-      seconds: "Second",
+      days: "दिन",
+      hours: "घंटे",
+      minutes: "मिनट",
+      seconds: "सेकंड",
     },
-    disclaimer: "Tareekhein official ghoshna ke anusaar update hongi.",
+    disclaimer: "तारीखें आधिकारिक घोषणा के अनुसार अपडेट होंगी।",
   },
   en: {
     badge: "🔥 The Grand Event Approaches",
@@ -28,6 +28,19 @@ const text = {
       seconds: "Seconds",
     },
     disclaimer: "Dates will be updated as per the official announcement.",
+  },
+  hinglish: {
+    badge: "🔥 Mahaparv Nikat Hai",
+    title: "Simhastha 2028",
+    subtitle: "Mahaparv Shuru Hone Mein Bacha Hua Samay",
+    highlight: "Vishwa ke sabse bade dharmik samagam ka hissa baniye",
+    labels: {
+      days: "Din",
+      hours: "Ghante",
+      minutes: "Minute",
+      seconds: "Second",
+    },
+    disclaimer: "Tareekhein official ghoshna ke anusaar update hongi.",
   },
 };
 

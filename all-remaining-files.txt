@@ -1,0 +1,2710 @@
+
+
+===== FILE: src\app\sections\CitizenEngagement.js =====
+
+"use client";
+import { useState } from "react";
+import { useLanguage } from "../components/LanguageContext";
+import { api } from "../lib/api";
+
+const text = {
+  hi: {
+    title: "Aapka Yogdaan",
+    subtitle: "Simhastha 2028 ki behtar planning ke liye apne sujhaav dein",
+    namePlaceholder: "Aapka Naam",
+    suggestionPlaceholder: "Aapka Sujhaav Likhein...",
+    submitBtn: "Sujhaav Bhejein",
+    sendingBtn: "Bheja Ja Raha Hai...",
+    successMsg: "Dhanyavaad! Aapka sujhaav safaltapoorvak bhej diya gaya hai.",
+    errorMsg: "Kuch gadbad ho gayi. Kripya dobara koshish karein.",
+  },
+  en: {
+    title: "Your Contribution",
+    subtitle: "Share your suggestions for better planning of Simhastha 2028",
+    namePlaceholder: "Your Name",
+    suggestionPlaceholder: "Write your suggestion...",
+    submitBtn: "Send Suggestion",
+    sendingBtn: "Sending...",
+    successMsg: "Thank you! Your suggestion has been sent successfully.",
+    errorMsg: "Something went wrong. Please try again.",
+  },
+};
+
+export default function CitizenEngagement() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const [name, setName] = useState("");
+  const [suggestion, setSuggestion] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!(name.trim() && suggestion.trim())) return;
+    setSending(true);
+    setError("");
+    const result = await api.submitFeedback({ name: name.trim(), suggestion: suggestion.trim() });
+    setSending(false);
+    if (result.ok) {
+      setSubmitted(true);
+      setName("");
+      setSuggestion("");
+    } else {
+      setError(t.errorMsg);
+    }
+  };
+
+  return (
+    <section id="contact" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
+
+      <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder={t.namePlaceholder} aria-label={t.namePlaceholder}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+          required
+        />
+        <textarea
+          placeholder={t.suggestionPlaceholder} aria-label={t.suggestionPlaceholder}
+          value={suggestion}
+          onChange={(e) => setSuggestion(e.target.value)}
+          rows={4}
+          className="bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+          required
+        />
+        <button type="submit" disabled={sending} className="bg-ujjain-gold text-ujjain-dark font-bold py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-50">
+          {sending ? t.sendingBtn : t.submitBtn}
+        </button>
+
+        {submitted && <p className="text-ujjain-saffron text-center mt-2">{t.successMsg}</p>}
+        {error && <p className="text-red-400 text-center mt-2">{error}</p>}
+      </form>
+    </section>
+  );
+} 
+
+
+===== FILE: src\app\sections\EventsSchedule.js =====
+
+"use client";
+import { useState } from "react";
+import { useLanguage } from "../components/LanguageContext";
+
+// NOTE: Exact 2028 dates vary across sources — confirm with Rajat that
+// these match whatever target date the Countdown Timer section uses,
+// then keep both consistent.
+const events = [
+    {
+        id: 1,
+        category: "shahi-snan",
+        date: { hi: "9 April 2028", en: "9 April 2028" },
+        title: { hi: "Pratham Shahi Snan", en: "First Shahi Snan" },
+        desc: {
+            hi: "Sabse mahatvapoorna snan — 13 Akhade apni shobhayatra ke saath Shipra nadi me snan karenge.",
+            en: "The most significant bath — all 13 Akhadas will bathe in the Shipra river with their processions.",
+        },
+    },
+    {
+        id: 2,
+        category: "shahi-snan",
+        date: { hi: "23-27 April 2028", en: "23-27 April 2028" },
+        title: { hi: "Dwitiya Shahi Snan", en: "Second Shahi Snan" },
+        desc: {
+            hi: "Doosra pramukh Amrit Snan — bhari sankhya me shraddhalu aur Akhada processions.",
+            en: "Second major Amrit Snan — large crowds and Akhada processions expected.",
+        },
+    },
+    {
+        id: 3,
+        category: "shahi-snan",
+        date: { hi: "8 May 2028", en: "8 May 2028" },
+        title: { hi: "Antim Shahi Snan", en: "Final Shahi Snan" },
+        desc: {
+            hi: "Simhastha ka aakhri aur samapan Shahi Snan.",
+            en: "The final and concluding Shahi Snan of Simhastha.",
+        },
+    },
+    {
+        id: 4,
+        category: "parva-snan",
+        date: { hi: "Purnima Tithi", en: "Purnima Tithi" },
+        title: { hi: "Purnima Snan", en: "Purnima Bathing" },
+        desc: {
+            hi: "Poornima ki tithi par shubh snan — Shahi Snan se kam bheed, parivaron ke liye behtar.",
+            en: "Auspicious bathing on the full-moon date — lower crowds than Shahi Snan, better for families.",
+        },
+    },
+    {
+        id: 5,
+        category: "parva-snan",
+        date: { hi: "Ekadashi Tithi", en: "Ekadashi Tithi" },
+        title: { hi: "Ekadashi Snan", en: "Ekadashi Bathing" },
+        desc: {
+            hi: "Ekadashi ki tithi par ek aur shubh Parva Snan avsar.",
+            en: "Another auspicious Parva Snan occasion on the Ekadashi date.",
+        },
+    },
+    {
+        id: 6,
+        category: "parva-snan",
+        date: { hi: "Amavasya Tithi", en: "Amavasya Tithi" },
+        title: { hi: "Amavasya Snan", en: "Amavasya Bathing" },
+        desc: {
+            hi: "Amavasya ki tithi par snan — Kalpvas kar rahe shraddhalu ke liye vishesh mahatva.",
+            en: "Bathing on the new-moon date — especially significant for those observing Kalpvas.",
+        },
+    },
+    {
+        id: 7,
+        category: "cultural",
+        date: { hi: "Mela avdhi bhar", en: "Throughout the mela" },
+        title: { hi: "Akhada Shobhayatra", en: "Akhada Processions" },
+        desc: {
+            hi: "13 Akhadon ki paramparik shobhayatrayein poore mela avdhi me alag-alag dinon par nikalti hain.",
+            en: "Traditional processions of the 13 Akhadas take place on various days throughout the mela.",
+        },
+    },
+    {
+        id: 8,
+        category: "cultural",
+        date: { hi: "Mela avdhi bhar", en: "Throughout the mela" },
+        title: { hi: "Bhajan-Kirtan Sandhya", en: "Bhajan-Kirtan Evenings" },
+        desc: {
+            hi: "Ghaton par shaam ko niyamit bhajan-kirtan aur aarti karyakram.",
+            en: "Regular evening bhajan-kirtan and aarti programs held at the ghats.",
+        },
+    },
+    {
+        id: 9,
+        category: "cultural",
+        date: { hi: "Mela avdhi bhar", en: "Throughout the mela" },
+        title: { hi: "Adhyatmik Pravachan", en: "Spiritual Discourses" },
+        desc: {
+            hi: "Sadhu-santon dwara pravachan aur satsang, alag-alag pandalon me.",
+            en: "Discourses and satsangs by saints and sages held at various pandals.",
+        },
+    },
+    {
+        id: 10,
+        category: "cultural",
+        date: { hi: "Kalpvas avdhi", en: "During Kalpvas period" },
+        title: { hi: "Kalpvas", en: "Kalpvas" },
+        desc: {
+            hi: "Ek mahine tak nadi-tat par rehkar tapasya aur vrat karne ki parampara.",
+            en: "The month-long tradition of staying by the riverbank observing austerity and vows.",
+        },
+    },
+    {
+        id: 11,
+        category: "cultural",
+        date: { hi: "Mela avdhi bhar", en: "Throughout the mela" },
+        title: { hi: "Panchkoshi Yatra", en: "Panchkoshi Yatra" },
+        desc: {
+            hi: "Ujjain ke charon aur parikrama/pilgrimage circuit — kai shraddhalu is yatra ko poora karte hain.",
+            en: "A pilgrimage circuit around Ujjain — many devotees complete this yatra during the mela.",
+        },
+    },
+];
+
+const text = {
+    hi: {
+        title: "Major Events & Schedule",
+        subtitle: "Simhastha 2028 ke pramukh snan aur karyakram",
+        filterAll: "Sabhi",
+        filterShahi: "Shahi Snan",
+        filterParva: "Parva Snan",
+        filterCultural: "Cultural Events",
+        noResults: "Is category me abhi koi event nahi hai.",
+        footNote: "Exact tithiyan/dates official panchang aur prashasan ki ghoshna ke anusar badal sakti hain — Simhastha ke najdeek official confirmation zaroor dekhein.",
+    },
+    en: {
+        title: "Major Events & Schedule",
+        subtitle: "Key bathing dates and programs for Simhastha 2028",
+        filterAll: "All",
+        filterShahi: "Shahi Snan",
+        filterParva: "Parva Snan",
+        filterCultural: "Cultural Events",
+        noResults: "No events in this category yet.",
+        footNote: "Exact dates may change based on the official panchang and administration announcements — please check official confirmation closer to Simhastha.",
+    },
+};
+
+const categoryStyle = {
+    "shahi-snan": "text-red-400 border-red-400/30 bg-red-400/10",
+    "parva-snan": "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
+    cultural: "text-purple-400 border-purple-400/30 bg-purple-400/10",
+};
+
+export default function EventsSchedule() {
+    const { lang } = useLanguage();
+    const t = text[lang];
+    const [activeFilter, setActiveFilter] = useState("all");
+
+    const filters = [
+        { key: "all", label: t.filterAll },
+        { key: "shahi-snan", label: t.filterShahi },
+        { key: "parva-snan", label: t.filterParva },
+        { key: "cultural", label: t.filterCultural },
+    ];
+
+    const filteredEvents =
+        activeFilter === "all" ? events : events.filter((e) => e.category === activeFilter);
+
+    return (
+        <section
+            id="events-schedule"
+            className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+        >
+            <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+                {t.title}
+            </h2>
+            <p className="text-ujjain-cream mb-8 text-center max-w-xl">{t.subtitle}</p>
+
+            {/* Filter buttons */}
+            <div className="flex flex-wrap justify-center gap-3 mb-10">
+                {filters.map((f) => (
+                    <button
+                        key={f.key}
+                        onClick={() => setActiveFilter(f.key)}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${activeFilter === f.key
+                                ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
+                                : "text-ujjain-cream border-ujjain-gold/30 hover:border-ujjain-gold/60"
+                            }`}
+                    >
+                        {f.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* Event cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
+                {filteredEvents.map((event) => (
+                    <div
+                        key={event.id}
+                        className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col"
+                    >
+                        <div className="flex items-center justify-between mb-3">
+                            <span
+                                className={`text-xs font-semibold px-3 py-1 rounded-full border ${categoryStyle[event.category]}`}
+                            >
+                                {event.category === "shahi-snan"
+                                    ? t.filterShahi
+                                    : event.category === "parva-snan"
+                                        ? t.filterParva
+                                        : t.filterCultural}
+                            </span>
+                            <span className="text-ujjain-cream/50 text-xs">{event.date[lang]}</span>
+                        </div>
+                        <h3 className="text-lg font-bold text-ujjain-gold mb-2">{event.title[lang]}</h3>
+                        <p className="text-ujjain-cream/80 text-sm">{event.desc[lang]}</p>
+                    </div>
+                ))}
+            </div>
+
+            {filteredEvents.length === 0 && (
+                <p className="text-ujjain-cream/60 text-sm mt-8">{t.noResults}</p>
+            )}
+
+            <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
+        </section>
+    );
+}
+
+
+===== FILE: src\app\sections\HotelBooking.js =====
+
+"use client";
+import { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { useLanguage } from "../components/LanguageContext";
+import { api, openRazorpayCheckout } from "../lib/api";
+
+const propertiesData = {
+  hi: [
+    {
+      id: 1,
+      name: "Ramghat Dharamshala",
+      type: "Dharamshala",
+      price: 500,
+      rating: 4.3,
+      reviews: 214,
+      amenities: ["Free WiFi", "24x7 Paani", "Common Kitchen"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ram%20Ghat,%20Ujjain%2001.jpg",
+    },
+    {
+      id: 2,
+      name: "Mahakal Yatri Niwas",
+      type: "Sarkari Guest House",
+      price: 900,
+      rating: 4.1,
+      reviews: 356,
+      amenities: ["Free WiFi", "AC Kamre", "Parking"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/India%20-%20Delhi%20-%20001%20-%20my%20room%20in%20Paharganj%20(2086441460).jpg",
+    },
+    {
+      id: 3,
+      name: "Shipra View Hotel",
+      type: "Hotel",
+      price: 1800,
+      rating: 4.5,
+      reviews: 189,
+      amenities: ["Free WiFi", "AC Kamre", "Room Service", "Restaurant"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Our%20hotel%20room%20(13357515743).jpg",
+    },
+    {
+      id: 4,
+      name: "Kshipra Ghat Homestay",
+      type: "Homestay",
+      price: 650,
+      rating: 4.4,
+      reviews: 97,
+      amenities: ["Free WiFi", "Ghar Ka Khana", "Family Friendly"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Shri%20Ram%20Ghat%2002.jpg",
+    },
+    {
+      id: 5,
+      name: "Mahakal Corridor Inn",
+      type: "Budget Hotel",
+      price: 1200,
+      rating: 4.2,
+      reviews: 143,
+      amenities: ["Free WiFi", "AC Kamre", "Mandir Se Nazdeek"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Winter%20in%20Ujjain.JPG",
+    },
+    {
+      id: 6,
+      name: "Ujjain Heritage Residency",
+      type: "3-Star Hotel",
+      price: 2400,
+      rating: 4.7,
+      reviews: 268,
+      amenities: [
+        "Free WiFi",
+        "AC Kamre",
+        "Restaurant",
+        "Elevator",
+        "Room Service",
+      ],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%2001.jpg",
+    },
+    {
+      id: 7,
+      name: "Simhastha Tent City Camp",
+      type: "Tambu Stay",
+      price: 450,
+      rating: 4.0,
+      reviews: 62,
+      amenities: ["Saanjha Bathroom", "Saamuhik Bhojan", "Suraksha Guard"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%20in%20Night%2001.jpg",
+    },
+    {
+      id: 8,
+      name: "Vikram Palace Hotel",
+      type: "Premium Hotel",
+      price: 3200,
+      rating: 4.8,
+      reviews: 174,
+      amenities: [
+        "Free WiFi",
+        "AC Kamre",
+        "Restaurant",
+        "Pool",
+        "Room Service",
+      ],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain,%20Ram%20Ghat%20(9840921865).jpg",
+    },
+  ],
+  en: [
+    {
+      id: 1,
+      name: "Ramghat Dharamshala",
+      type: "Dharamshala",
+      price: 500,
+      rating: 4.3,
+      reviews: 214,
+      amenities: ["Free WiFi", "24x7 Water", "Common Kitchen"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ram%20Ghat,%20Ujjain%2001.jpg",
+    },
+    {
+      id: 2,
+      name: "Mahakal Yatri Niwas",
+      type: "Government Guest House",
+      price: 900,
+      rating: 4.1,
+      reviews: 356,
+      amenities: ["Free WiFi", "AC Rooms", "Parking"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/India%20-%20Delhi%20-%20001%20-%20my%20room%20in%20Paharganj%20(2086441460).jpg",
+    },
+    {
+      id: 3,
+      name: "Shipra View Hotel",
+      type: "Hotel",
+      price: 1800,
+      rating: 4.5,
+      reviews: 189,
+      amenities: ["Free WiFi", "AC Rooms", "Room Service", "Restaurant"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Our%20hotel%20room%20(13357515743).jpg",
+    },
+    {
+      id: 4,
+      name: "Kshipra Ghat Homestay",
+      type: "Homestay",
+      price: 650,
+      rating: 4.4,
+      reviews: 97,
+      amenities: ["Free WiFi", "Home Cooked Meals", "Family Friendly"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Shri%20Ram%20Ghat%2002.jpg",
+    },
+    {
+      id: 5,
+      name: "Mahakal Corridor Inn",
+      type: "Budget Hotel",
+      price: 1200,
+      rating: 4.2,
+      reviews: 143,
+      amenities: ["Free WiFi", "AC Rooms", "Walking Distance to Temple"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Winter%20in%20Ujjain.JPG",
+    },
+    {
+      id: 6,
+      name: "Ujjain Heritage Residency",
+      type: "3-Star Hotel",
+      price: 2400,
+      rating: 4.7,
+      reviews: 268,
+      amenities: [
+        "Free WiFi",
+        "AC Rooms",
+        "Restaurant",
+        "Elevator",
+        "Room Service",
+      ],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%2001.jpg",
+    },
+    {
+      id: 7,
+      name: "Simhastha Tent City Camp",
+      type: "Tent Stay",
+      price: 450,
+      rating: 4.0,
+      reviews: 62,
+      amenities: ["Shared Bathroom", "Community Meals", "Security Guard"],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%20in%20Night%2001.jpg",
+    },
+    {
+      id: 8,
+      name: "Vikram Palace Hotel",
+      type: "Premium Hotel",
+      price: 3200,
+      rating: 4.8,
+      reviews: 174,
+      amenities: [
+        "Free WiFi",
+        "AC Rooms",
+        "Restaurant",
+        "Pool",
+        "Room Service",
+      ],
+      image:
+        "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain,%20Ram%20Ghat%20(9840921865).jpg",
+    },
+  ],
+};
+
+const text = {
+  hi: {
+    eyebrow: "Simhastha Sahayak",
+    title: "Stay Booking",
+    subtitle:
+      "Ujjain mein verified stays — fixed sarkari-verified price, zero commission",
+    trustBar: "Sarkari Verified Price  •  Zero Commission — Seedhi Booking",
+    howVerified: "Verification kaise hoti hai?",
+    howVerifiedText:
+      "Har property ka license aur pricing Ujjain Municipal Corporation ki team dwara physically check kiya gaya hai. Rate list registered hai — koi bhi extra charge illegal hai. Kisi bhi gadbadi ki report seedha administration ko jaati hai.",
+    checkIn: "Check-in",
+    checkOut: "Check-out",
+    guests: "Mehmaan",
+    nightsLabel: (n) => `${n} Raat${n > 1 ? "en" : ""}`,
+    verified: "Verified ✓",
+    reviews: "reviews",
+    perNight: (price, n) => `₹${price}/raat × ${n} raat${n > 1 ? "en" : ""}`,
+    bookNow: "Book Karein",
+    guestName: "Mehmaan ka poora naam",
+    mobile: "Mobile number",
+    taxesFees: "Tax aur fees",
+    commission: "Platform commission",
+    total: "Total",
+    confirmBooking: "Pay & Book Karein",
+    confirming: "Payment Khul Raha Hai...",
+    congrats: "Payment safal! Aapki booking confirm ho gayi hai 🎉",
+    lockedNote:
+      "Ye final amount hai — spot par koi extra charge maanya nahi hoga",
+    amountLocked: "(Paid)",
+    reportBtn: "⚠️ Kisi ne extra paisa maanga? Report Karein",
+    reportSentMsg:
+      "Aapki complaint administration tak bhej di gayi hai. Dhanyavaad.",
+    bookingError:
+      "Payment ya booking mein dikkat aayi. Paisa kata hai to automatically refund ho jayega. Kripya dobara koshish karein.",
+    close: "Band Karein",
+    secureBadge: "🔒 Secure Payment via Razorpay",
+    verifiedBadge: "✓ Verified Hotels",
+    cancellationPolicy: "Cancellation Policy",
+    cancellationPolicyText:
+      "Check-in se 48 ghante pehle cancel karne par poora refund milega. Uske baad cancel karne par booking amount ka 50% refund hoga.",
+  },
+  en: {
+    eyebrow: "Simhastha Sahayak",
+    title: "Stay Booking",
+    subtitle:
+      "Verified stays across Ujjain — fixed government-checked pricing, zero commission",
+    trustBar: "Government Verified Price  •  Zero Commission — Direct Booking",
+    howVerified: "How does verification work?",
+    howVerifiedText:
+      "Every property's license and pricing has been physically checked by the Ujjain Municipal Corporation's team. The rate list is registered — any extra charge is illegal. Any complaint goes directly to the administration.",
+    checkIn: "Check-in",
+    checkOut: "Check-out",
+    guests: "Guests",
+    nightsLabel: (n) => `${n} Night${n > 1 ? "s" : ""}`,
+    verified: "Verified ✓",
+    reviews: "reviews",
+    perNight: (price, n) => `₹${price}/night × ${n} night${n > 1 ? "s" : ""}`,
+    bookNow: "Book Now",
+    guestName: "Guest's full name",
+    mobile: "Mobile number",
+    taxesFees: "Taxes & fees",
+    commission: "Platform commission",
+    total: "Total",
+    confirmBooking: "Pay & Book",
+    confirming: "Opening Payment...",
+    congrats: "Payment successful! Your booking is confirmed 🎉",
+    lockedNote:
+      "This is the final amount — no extra charges are valid on the spot",
+    amountLocked: "(Paid)",
+    reportBtn: "⚠️ Someone asked for extra money? Report It",
+    reportSentMsg:
+      "Your complaint has been sent to the administration. Thank you.",
+    bookingError:
+      "There was a problem with payment or booking. If money was deducted it will be auto-refunded. Please try again.",
+    close: "Close",
+    secureBadge: "🔒 Secure Payment via Razorpay",
+    verifiedBadge: "✓ Verified Hotels",
+    cancellationPolicy: "Cancellation Policy",
+    cancellationPolicyText:
+      "Free cancellation up to 48 hours before check-in. Cancellations after that are eligible for a 50% refund of the booking amount.",
+  },
+};
+
+function StarRating({ rating }) {
+  return (
+    <span className="inline-flex items-center gap-1 text-xs text-ujjain-cream/80">
+      <span className="text-ujjain-gold">★</span> {rating}
+    </span>
+  );
+}
+
+export default function HotelBooking() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const properties = propertiesData[lang];
+
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState(2);
+  const [todayStr, setTodayStr] = useState("");
+
+  const [activeProperty, setActiveProperty] = useState(null);
+  const [modalStep, setModalStep] = useState("details");
+  const [guestName, setGuestName] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [bookingId, setBookingId] = useState("");
+  const [reportSent, setReportSent] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [bookingError, setBookingError] = useState("");
+  const [showVerifyInfo, setShowVerifyInfo] = useState(false);
+
+  useEffect(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const dayAfter = new Date(today);
+    dayAfter.setDate(today.getDate() + 2);
+    const fmt = (d) => d.toISOString().split("T")[0];
+    setTodayStr(fmt(today));
+    setCheckIn(fmt(tomorrow));
+    setCheckOut(fmt(dayAfter));
+  }, []);
+
+  const getNights = () => {
+    if (!checkIn || !checkOut) return 1;
+    const inD = new Date(checkIn);
+    const outD = new Date(checkOut);
+    const diff = Math.round((outD - inD) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 1;
+  };
+  const nights = getNights();
+
+  const openBooking = (property) => {
+    setActiveProperty(property);
+    setModalStep("details");
+    setGuestName("");
+    setGuestPhone("");
+    setBookingError("");
+  };
+
+  const closeModal = () => {
+    setActiveProperty(null);
+    setModalStep("details");
+    setBookingError("");
+  };
+
+  const confirmBooking = async () => {
+    setConfirming(true);
+    setBookingError("");
+
+    // Step 1: ask backend to create a Razorpay order. Amount is computed
+    // server-side from propertyName + dates, so the browser can't tamper with it.
+    const orderResult = await api.createHotelOrder({
+      propertyName: activeProperty.name,
+      checkIn,
+      checkOut,
+      guestName: guestName.trim(),
+      guestPhone: guestPhone.trim(),
+    });
+    if (!orderResult.ok) {
+      setConfirming(false);
+      setBookingError(orderResult.error || t.bookingError);
+      return;
+    }
+
+    // Step 2: open Razorpay Checkout and wait for the user to pay.
+    const payment = await openRazorpayCheckout({
+      orderId: orderResult.data.orderId,
+      amount: orderResult.data.amount,
+      keyId: orderResult.data.keyId,
+      name: "Digital Ujjain",
+      description: `${activeProperty.name} — ${t.nightsLabel(nights)}`,
+      prefill: { name: guestName.trim(), contact: guestPhone.trim() },
+    });
+    if (!payment.ok) {
+      setConfirming(false);
+      setBookingError(payment.error || t.bookingError);
+      return;
+    }
+
+    // Step 3: send payment proof to backend — booking is only created after
+    // the signature is verified server-side.
+    const result = await api.bookHotel({
+      propertyName: activeProperty.name,
+      checkIn,
+      checkOut,
+      guests,
+      guestName: guestName.trim(),
+      guestPhone: guestPhone.trim(),
+      razorpay_order_id: payment.razorpay_order_id,
+      razorpay_payment_id: payment.razorpay_payment_id,
+      razorpay_signature: payment.razorpay_signature,
+    });
+    setConfirming(false);
+    if (result.ok) {
+      setBookingId(result.data.bookingId);
+      setModalStep("confirmed");
+    } else {
+      // Payment succeeded but booking creation failed (e.g. network blip) —
+      // do NOT fabricate a booking ID here, since real money moved. Show the
+      // real payment ID so support can look it up and confirm manually.
+      setBookingId(payment.razorpay_payment_id);
+      setBookingError(result.error || t.bookingError);
+      setModalStep("confirmed");
+    }
+  };
+
+  const handleReport = async () => {
+    setReportSent(true);
+    await api.submitReport({
+      type: "hotel",
+      bookingId,
+      description: `Overcharging report for ${activeProperty?.name || "unknown property"}`,
+      reporterPhone: guestPhone,
+    });
+    setTimeout(() => setReportSent(false), 3000);
+  };
+
+  const baseTotal = activeProperty ? activeProperty.price * nights : 0;
+  const taxes = Math.round(baseTotal * 0.05);
+  const grandTotal = baseTotal + taxes;
+
+  return (
+    <section
+      id="hotel-booking"
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+    >
+      <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">
+        {t.eyebrow}
+      </span>
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+        {t.title}
+      </h2>
+      <p className="text-ujjain-cream mb-4 text-center max-w-xl">
+        {t.subtitle}
+      </p>
+      <div className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center">
+        <span>✓</span> {t.trustBar}
+        <button
+          onClick={() => setShowVerifyInfo((v) => !v)}
+          className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20"
+          aria-label={t.howVerified}
+        >
+          ⓘ
+        </button>
+      </div>
+      {showVerifyInfo && (
+        <p className="text-ujjain-cream/60 text-xs max-w-lg text-center mb-8 -mt-1">
+          {t.howVerifiedText}
+        </p>
+      )}
+      {!showVerifyInfo && <div className="mb-8" />}
+
+      <div className="w-full max-w-4xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 md:p-5 mb-10 flex flex-col md:flex-row gap-3 md:items-end">
+        <div className="flex-1">
+          <label className="block text-ujjain-cream/60 text-xs mb-1">
+            {t.checkIn}
+          </label>
+          <input
+            type="date"
+            value={checkIn}
+            min={todayStr}
+            onChange={(e) => setCheckIn(e.target.value)}
+            className="w-full bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2 text-ujjain-cream text-sm focus:outline-none focus:border-ujjain-gold"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-ujjain-cream/60 text-xs mb-1">
+            {t.checkOut}
+          </label>
+          <input
+            type="date"
+            value={checkOut}
+            min={checkIn || todayStr}
+            onChange={(e) => setCheckOut(e.target.value)}
+            className="w-full bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2 text-ujjain-cream text-sm focus:outline-none focus:border-ujjain-gold"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-ujjain-cream/60 text-xs mb-1">
+            {t.guests}
+          </label>
+          <div className="flex items-center justify-between bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2">
+            <button
+              onClick={() => setGuests((g) => Math.max(1, g - 1))}
+              className="text-ujjain-gold font-bold px-2"
+            >
+              −
+            </button>
+            <span className="text-ujjain-cream text-sm">
+              {guests} {t.guests}
+            </span>
+            <button
+              onClick={() => setGuests((g) => Math.min(8, g + 1))}
+              className="text-ujjain-gold font-bold px-2"
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <div className="text-center md:text-left text-ujjain-cream/60 text-xs md:pb-2">
+          {t.nightsLabel(nights)}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        {properties.map((p) => (
+          <div
+            key={p.id}
+            className="bg-white/5 border border-ujjain-gold/20 rounded-xl overflow-hidden hover:border-ujjain-gold hover:scale-105 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 flex flex-col"
+          >
+            <div className="relative h-44 w-full overflow-hidden bg-black/30">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <span className="absolute top-2 left-2 text-[10px] bg-ujjain-dark/80 text-ujjain-saffron px-2 py-1 rounded-full border border-ujjain-saffron/40">
+                {p.type}
+              </span>
+              <span className="absolute top-2 right-2 text-[10px] bg-ujjain-saffron/90 text-ujjain-dark font-semibold px-2 py-1 rounded-full">
+                {t.verified}
+              </span>
+            </div>
+            <div className="p-4 flex flex-col flex-1">
+              <h3 className="text-ujjain-gold font-bold mb-1">{p.name}</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <StarRating rating={p.rating} />
+                <span className="text-ujjain-cream/40 text-xs">
+                  ({p.reviews} {t.reviews})
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {p.amenities.map((a, i) => (
+                  <span
+                    key={i}
+                    className="text-[10px] text-ujjain-cream/70 bg-white/5 border border-ujjain-gold/20 px-2 py-0.5 rounded-full"
+                  >
+                    {a}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-auto flex items-end justify-between">
+                <div>
+                  <div className="text-ujjain-gold font-bold text-lg">
+                    ₹{p.price * nights}
+                  </div>
+                  <div className="text-ujjain-cream/40 text-[11px]">
+                    {t.perNight(p.price, nights)}
+                  </div>
+                </div>
+                <button
+                  onClick={() => openBooking(p)}
+                  className="bg-ujjain-gold text-ujjain-dark text-sm font-bold px-4 py-2 rounded-lg hover:bg-ujjain-saffron transition"
+                >
+                  {t.bookNow}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {activeProperty && (
+        <div
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4"
+          onClick={closeModal}
+        >
+          <div
+            className="w-full max-w-md bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-6 relative max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold text-2xl leading-none"
+            >
+              ×
+            </button>
+
+            {modalStep === "details" && (
+              <div>
+                <h3 className="text-xl font-bold text-ujjain-gold mb-1">
+                  {activeProperty.name}
+                </h3>
+                <p className="text-ujjain-cream/60 text-xs mb-4">
+                  {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}{" "}
+                  &nbsp;•&nbsp; {t.nightsLabel(nights)}
+                </p>
+                <div className="flex flex-col gap-3 mb-4">
+                  <input
+                    type="text"
+                    placeholder={t.guestName} aria-label={t.guestName}
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+                  />
+                  <input
+                    type="tel"
+                    placeholder={t.mobile} aria-label={t.mobile}
+                    value={guestPhone}
+                    onChange={(e) => setGuestPhone(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+                  />
+                </div>
+                <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-4 text-sm">
+                  <div className="flex justify-between text-ujjain-cream/80 mb-1">
+                    <span>{t.perNight(activeProperty.price, nights)}</span>
+                    <span>₹{baseTotal}</span>
+                  </div>
+                  <div className="flex justify-between text-ujjain-cream/80 mb-1">
+                    <span>{t.taxesFees}</span>
+                    <span>₹{taxes}</span>
+                  </div>
+                  <div className="flex justify-between text-ujjain-cream/40 mb-2 text-xs">
+                    <span>{t.commission}</span>
+                    <span>₹0</span>
+                  </div>
+                  <div className="border-t border-ujjain-gold/20 pt-2 flex justify-between text-ujjain-gold font-bold">
+                    <span>{t.total}</span>
+                    <span>₹{grandTotal}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-3 mb-3 flex-wrap">
+                  <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
+                    {t.secureBadge}
+                  </span>
+                  <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
+                    {t.verifiedBadge}
+                  </span>
+                </div>
+                <button
+                  onClick={() =>
+                    guestName.trim() &&
+                    guestPhone.trim().length >= 10 &&
+                    confirmBooking()
+                  }
+                  disabled={
+                    !(guestName.trim() && guestPhone.trim().length >= 10) ||
+                    confirming
+                  }
+                  className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40"
+                >
+                  {confirming ? t.confirming : t.confirmBooking}
+                </button>
+                <p className="text-ujjain-cream/40 text-[11px] text-center mt-3">
+                  {t.cancellationPolicy}: {t.cancellationPolicyText}
+                </p>
+              </div>
+            )}
+
+            {modalStep === "confirmed" && (
+              <div className="text-center">
+                <p className="text-ujjain-cream mb-4">{t.congrats}</p>
+                <div className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-3">
+                  <QRCodeSVG
+                    value={bookingId}
+                    size={110}
+                    bgColor="transparent"
+                    fgColor="#D4AF37"
+                  />
+                  <div className="text-ujjain-gold font-bold">{bookingId}</div>
+                  <div className="text-ujjain-cream text-sm">
+                    {activeProperty.name}
+                  </div>
+                  <div className="text-ujjain-cream/60 text-xs">
+                    {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}
+                  </div>
+                  <div className="text-2xl font-bold text-ujjain-gold">
+                    ₹{grandTotal}{" "}
+                    <span className="text-xs text-ujjain-cream/60">
+                      {t.amountLocked}
+                    </span>
+                  </div>
+                  <div className="text-xs text-ujjain-cream/50">
+                    {t.lockedNote}
+                  </div>
+                </div>
+                {bookingError && (
+                  <p className="text-red-400 text-xs mt-3">{bookingError}</p>
+                )}
+                <p className="text-ujjain-cream/40 text-[11px] mt-4">
+                  {t.cancellationPolicy}: {t.cancellationPolicyText}
+                </p>
+                <button
+                  onClick={handleReport}
+                  className="mt-6 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 transition"
+                >
+                  {t.reportBtn}
+                </button>
+                {reportSent && (
+                  <p className="text-ujjain-saffron text-sm mt-3">
+                    {t.reportSentMsg}
+                  </p>
+                )}
+                <div>
+                  <button
+                    onClick={closeModal}
+                    className="mt-6 text-ujjain-cream/60 text-sm underline"
+                  >
+                    {t.close}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\Leadership.js =====
+
+"use client";
+import { useLanguage } from "../components/LanguageContext";
+
+const text = {
+  hi: {
+    title: "Neta Ka Sandesh",
+    subtitle: "Ujjain ke vikas aur Simhastha 2028 ke vision par ek sandesh",
+    alt: "Ujjain Vision",
+    comingSoon: "Video jald hi upload hoga",
+  },
+  en: {
+    title: "Leader's Message",
+    subtitle: "A message on Ujjain's development and the vision for Simhastha 2028",
+    alt: "Ujjain Vision",
+    comingSoon: "Video coming soon",
+  },
+};
+
+export default function Leadership() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+
+  return (
+    <section id="leadership" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
+
+      <div className="w-full max-w-3xl aspect-video rounded-xl overflow-hidden border border-ujjain-gold/30 relative">
+        <img
+          src="https://commons.wikimedia.org/wiki/Special:FilePath/Narmada%20river%20from%20mahakaleshwar%20temple%2C%20Ujjain.jpg"
+          alt={t.alt}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-3">
+          <button className="w-16 h-16 rounded-full bg-ujjain-gold flex items-center justify-center text-2xl hover:scale-110 transition">
+            ▶️
+          </button>
+          <p className="text-ujjain-cream text-sm">{t.comingSoon}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\LiveDashboard.js =====
+
+"use client";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+import { useLanguage } from "../components/LanguageContext";
+
+const templeSchedules = {
+  mahakal: [
+    { name: "Bhasma Aarti", hour: 4 },
+    { name: "Prathakal Aarti", hour: 7 },
+    { name: "Bhog Aarti", hour: 10.5 },
+    { name: "Sandhya Aarti", hour: 19 },
+    { name: "Shayan Aarti", hour: 22.5 },
+  ],
+  kalbhairav: [
+    { name: "Prathakal Darshan", hour: 6 },
+    { name: "Bhog Aarti", hour: 12 },
+    { name: "Sandhya Aarti", hour: 18.5 },
+    { name: "Shayan Darshan", hour: 21 },
+  ],
+};
+
+const crowdLevels = {
+  hi: { veryHigh: "Bahut Zyada", high: "Zyada", moderate: "Madhyam", low: "Kam" },
+  en: { veryHigh: "Very High", high: "High", moderate: "Moderate", low: "Low" },
+};
+
+function getCrowdForHour(hour, isBhasmaWindow, lang) {
+  const c = crowdLevels[lang];
+  if (isBhasmaWindow && hour >= 3.5 && hour < 6) return { level: c.veryHigh, color: "text-red-400" };
+  if (hour >= 6 && hour < 9) return { level: c.high, color: "text-orange-400" };
+  if (hour >= 9 && hour < 16) return { level: c.moderate, color: "text-yellow-400" };
+  if (hour >= 16 && hour < 20) return { level: c.high, color: "text-orange-400" };
+  return { level: c.low, color: "text-green-400" };
+}
+
+function getNextEvent(schedule, currentDecimal, tomorrowText) {
+  const upcoming = schedule.find((t) => t.hour > currentDecimal);
+  return upcoming ? upcoming.name : `${schedule[0].name} (${tomorrowText})`;
+}
+
+const text = {
+  hi: {
+    title: "Live Yatri Sahayta Dashboard",
+    subtitle: "Abhi ki sthiti — yatra plan karne ke liye kaam ki jaankari",
+    mahakalTitle: "Mahakaleshwar Mandir",
+    kalBhairavTitle: "Kal Bhairav Mandir",
+    nextAarti: "Agli Aarti",
+    currentCrowd: "Abhi Ki Bhid",
+    temperature: "Tapmaan",
+    lowCrowdTime: "Kam Bhid Ka Samay",
+    lowCrowdWindow: "10 AM – 4 PM",
+    verifiedStalls: "Verified Stalls",
+    verifiedStallsNote: "Authorized paani/khana hi lein",
+    tomorrowMorning: "kal subah",
+    footNote: "Aarti samay aur bhid typical patterns par aadharit hain — Simhastha ke dauraan prashasan ke real-time updates ko priority dein.",
+  },
+  en: {
+    title: "Live Visitor Assistance Dashboard",
+    subtitle: "Current status — useful information to plan your visit",
+    mahakalTitle: "Mahakaleshwar Temple",
+    kalBhairavTitle: "Kal Bhairav Temple",
+    nextAarti: "Next Aarti",
+    currentCrowd: "Current Crowd",
+    temperature: "Temperature",
+    lowCrowdTime: "Low Crowd Time",
+    lowCrowdWindow: "10 AM – 4 PM",
+    verifiedStalls: "Verified Stalls",
+    verifiedStallsNote: "Only use authorized food/water stalls",
+    tomorrowMorning: "tomorrow morning",
+    footNote: "Aarti timings and crowd levels are based on typical patterns — during Simhastha, please prioritize real-time updates from the administration.",
+  },
+};
+
+export default function LiveDashboard() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [liveActivity, setLiveActivity] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=23.1793&longitude=75.7849&current=temperature_2m,relative_humidity_2m,weather_code")
+      .then((res) => res.json())
+      .then((data) => {
+        setWeather(data.current);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const socket = io(API_BASE_URL);
+
+    socket.on("newBooking", (data) => {
+      const label =
+        data.type === "hotel"
+          ? `🏨 ${data.propertyName} — new hotel booking`
+          : `🧭 ${data.sathiName} — new Sathi booking`;
+      setLiveActivity((prev) => [{ label, time: new Date() }, ...prev].slice(0, 5));
+    });
+
+    return () => socket.disconnect();
+  }, []);
+
+  const hour = currentTime.getHours();
+  const currentDecimal = hour + currentTime.getMinutes() / 60;
+
+  const mahakalCrowd = getCrowdForHour(currentDecimal, true, lang);
+  const kalBhairavCrowd = getCrowdForHour(currentDecimal, false, lang);
+  const mahakalNext = getNextEvent(templeSchedules.mahakal, currentDecimal, t.tomorrowMorning);
+  const kalBhairavNext = getNextEvent(templeSchedules.kalbhairav, currentDecimal, t.tomorrowMorning);
+
+  return (
+    <section id="live-dashboard" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl mb-6">
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-3xl">🙏</span>
+            <h3 className="text-xl font-bold text-ujjain-gold">{t.mahakalTitle}</h3>
+          </div>
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-ujjain-cream/70 text-sm">{t.nextAarti}</span>
+            <span className="text-ujjain-gold font-semibold">{mahakalNext}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-ujjain-cream/70 text-sm">{t.currentCrowd}</span>
+            <span className={`font-bold ${mahakalCrowd.color}`}>{mahakalCrowd.level}</span>
+          </div>
+        </div>
+
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-3xl">🕉️</span>
+            <h3 className="text-xl font-bold text-ujjain-gold">{t.kalBhairavTitle}</h3>
+          </div>
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-ujjain-cream/70 text-sm">{t.nextAarti}</span>
+            <span className="text-ujjain-gold font-semibold">{kalBhairavNext}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-ujjain-cream/70 text-sm">{t.currentCrowd}</span>
+            <span className={`font-bold ${kalBhairavCrowd.color}`}>{kalBhairavCrowd.level}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
+          <div className="text-2xl mb-1">🌤️</div>
+          <div className="text-xl font-bold text-ujjain-gold">
+            {loading ? "..." : weather ? `${Math.round(weather.temperature_2m)}°C` : "N/A"}
+          </div>
+          <div className="text-ujjain-cream/60 text-[11px] mt-1">{t.temperature}</div>
+        </div>
+
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
+          <div className="text-2xl mb-1">⏰</div>
+          <div className="text-sm font-bold text-ujjain-gold">{t.lowCrowdWindow}</div>
+          <div className="text-ujjain-cream/60 text-[11px] mt-1">{t.lowCrowdTime}</div>
+        </div>
+
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
+          <div className="text-2xl mb-1">🚨</div>
+          <div className="text-sm font-bold text-ujjain-gold">100 / 108</div>
+          <div className="text-ujjain-cream/60 text-[11px] mt-1">Police / Ambulance</div>
+        </div>
+
+        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
+          <div className="text-2xl mb-1">💧</div>
+          <div className="text-sm font-bold text-ujjain-gold">{t.verifiedStalls}</div>
+          <div className="text-ujjain-cream/60 text-[11px] mt-1">{t.verifiedStallsNote}</div>
+        </div>
+      </div>
+
+      {liveActivity.length > 0 && (
+        <div className="w-full max-w-4xl mt-6 bg-white/5 border border-ujjain-gold/30 rounded-xl p-4">
+          <h4 className="text-ujjain-gold font-semibold text-sm mb-2">🔴 Live Activity</h4>
+          <ul className="space-y-1">
+            {liveActivity.map((item, i) => (
+              <li key={i} className="text-ujjain-cream/80 text-xs flex justify-between">
+                <span>{item.label}</span>
+                <span className="text-ujjain-cream/40">{item.time.toLocaleTimeString()}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\NewsUpdates.js =====
+
+"use client";
+import { useLanguage } from "../components/LanguageContext";
+
+const newsItems = [
+    {
+        id: 1,
+        date: { hi: "18 Aug 2026", en: "18 Aug 2026" },
+        category: { hi: "Infrastructure", en: "Infrastructure" },
+        title: {
+            hi: "Simhastha 2028 ke liye ₹18,840 crore ka infrastructure plan ghoshit",
+            en: "₹18,840 crore infrastructure plan announced for Simhastha 2028",
+        },
+        desc: {
+            hi: "Sadak, ghat, aur riverfront vikas ke liye state government ne bada budget allocate kiya hai.",
+            en: "The state government has allocated a major budget for roads, ghats, and riverfront development.",
+        },
+    },
+    {
+        id: 2,
+        date: { hi: "10 Aug 2026", en: "10 Aug 2026" },
+        category: { hi: "Riverfront", en: "Riverfront" },
+        title: {
+            hi: "29-km Kshipra riverfront corridor — permanent ghats ka nirmaan jaari",
+            en: "29-km Kshipra riverfront corridor — permanent ghats under construction",
+        },
+        desc: {
+            hi: "Shipra nadi ke kinare permanent ghat banaye ja rahe hain taaki Simhastha ke baad bhi ye kaam aayein.",
+            en: "Permanent ghats are being built along the Kshipra river for long-term use beyond Simhastha.",
+        },
+    },
+    {
+        id: 3,
+        date: { hi: "2 Aug 2026", en: "2 Aug 2026" },
+        category: { hi: "Transport", en: "Transport" },
+        title: {
+            hi: "Naya 6-lane Indore-Ujjain highway — pragati update",
+            en: "New 6-lane Indore-Ujjain highway — progress update",
+        },
+        desc: {
+            hi: "Airport se Ujjain tak yatra aasan banane ke liye highway ko 6-lane kiya ja raha hai.",
+            en: "The highway is being widened to 6 lanes to make travel from the airport to Ujjain easier.",
+        },
+    },
+    {
+        id: 4,
+        date: { hi: "25 Jul 2026", en: "25 Jul 2026" },
+        category: { hi: "Accommodation", en: "Accommodation" },
+        title: {
+            hi: "Accommodation booking guidelines jaari ki gayi",
+            en: "Accommodation booking guidelines released",
+        },
+        desc: {
+            hi: "Verified stays kaise book karein, iski official guidelines aa chuki hain.",
+            en: "Official guidelines on how to book verified stays are now available.",
+        },
+        link: "#hotel-booking",
+    },
+];
+
+const categoryColors = {
+    Infrastructure: "text-blue-400 border-blue-400/30 bg-blue-400/10",
+    Riverfront: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10",
+    Transport: "text-orange-400 border-orange-400/30 bg-orange-400/10",
+    Accommodation: "text-green-400 border-green-400/30 bg-green-400/10",
+    Registration: "text-purple-400 border-purple-400/30 bg-purple-400/10",
+};
+
+const text = {
+    hi: {
+        title: "News & Updates",
+        subtitle: "Simhastha 2028 se juri taaza ghoshnayein aur updates",
+        viewLink: "Yahan dekhein →",
+        footNote: "Sabhi updates official sources par aadharit hain — naveentam jaankari ke liye Simhastha 2028 ki adhikarik website check karein.",
+    },
+    en: {
+        title: "News & Updates",
+        subtitle: "Latest Simhastha 2028 announcements and updates",
+        viewLink: "View here →",
+        footNote: "All updates are based on official sources — check the official Simhastha 2028 website for the latest information.",
+    },
+};
+
+export default function NewsUpdates() {
+    const { lang } = useLanguage();
+    const t = text[lang];
+
+    return (
+    <section
+      id="news-updates"
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+    >
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+        {t.title}
+      </h2>
+      <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
+        {newsItems.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span
+                className={`text-xs font-semibold px-3 py-1 rounded-full border ${
+                  categoryColors[item.category.en] ||
+                  "text-ujjain-gold border-ujjain-gold/30 bg-ujjain-gold/10"
+                }`}
+              >
+                {item.category[lang]}
+              </span>
+              <span className="text-ujjain-cream/50 text-xs">{item.date[lang]}</span>
+            </div>
+
+            <h3 className="text-lg font-bold text-ujjain-gold mb-2">{item.title[lang]}</h3>
+            <p className="text-ujjain-cream/80 text-sm flex-1">{item.desc[lang]}</p>
+
+            {item.link && (
+              <a
+                href={item.link}
+                className="text-ujjain-gold text-sm font-semibold mt-4 hover:underline"
+              >
+                {t.viewLink}
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
+    </section >
+  );
+}
+
+
+===== FILE: src\app\sections\OldVsNew.js =====
+
+"use client";
+import { useState } from "react";
+import { useLanguage } from "../components/LanguageContext";
+
+const text = {
+  hi: {
+    title: "Purani Ujjain vs Nayi Ujjain",
+    subtitle: "Slider ko draw karke dekho kitna badlaav aaya hai",
+    newLabel: "✨ Nayi Ujjain — 2026",
+    oldLabel: "📜 Purani Ujjain",
+    newAlt: "Nayi Ujjain - Mahakal Lok",
+    oldAlt: "Purani Ujjain",
+  },
+  en: {
+    title: "Old Ujjain vs New Ujjain",
+    subtitle: "Drag the slider to see how much has changed",
+    newLabel: "✨ New Ujjain — 2026",
+    oldLabel: "📜 Old Ujjain",
+    newAlt: "New Ujjain - Mahakal Lok",
+    oldAlt: "Old Ujjain",
+  },
+};
+
+export default function OldVsNew() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const [sliderPosition, setSliderPosition] = useState(50);
+
+  return (
+    <section id="vikas" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-10 text-center max-w-xl">{t.subtitle}</p>
+
+      <div className="relative w-full max-w-4xl h-[280px] md:h-[480px] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(212,175,55,0.25)] border-2 border-ujjain-gold/40">
+        <div className="absolute inset-0">
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain%20Mahakal%20Temple.jpg"
+            alt={t.newAlt}
+            className="w-full h-full object-cover"
+            draggable={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+          <div className="absolute bottom-5 right-5 bg-ujjain-gold text-ujjain-dark px-4 py-2 rounded-full font-bold text-sm shadow-lg">
+            {t.newLabel}
+          </div>
+        </div>
+        <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
+          <img
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/Mahakal%20Temple%20Ujjain.JPG"
+            alt={t.oldAlt}
+            className="w-full h-full object-cover grayscale contrast-125 sepia-[0.3]"
+            draggable={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+          <div className="absolute bottom-5 left-5 bg-white/10 backdrop-blur-md text-ujjain-cream px-4 py-2 rounded-full font-bold text-sm border border-white/30">
+            {t.oldLabel}
+          </div>
+        </div>
+
+        <div
+          className="absolute top-0 bottom-0 w-[3px] bg-ujjain-gold shadow-[0_0_15px_3px_rgba(212,175,55,0.8)] pointer-events-none"
+          style={{ left: `${sliderPosition}%` }}
+        ></div>
+
+        <div
+          className="absolute top-1/2 w-12 h-12 -translate-y-1/2 -translate-x-1/2 rounded-full bg-ujjain-gold border-4 border-ujjain-dark shadow-[0_0_20px_rgba(212,175,55,0.9)] flex items-center justify-center text-ujjain-dark font-bold text-lg pointer-events-none"
+          style={{ left: `${sliderPosition}%` }}
+        >
+          ↔
+        </div>
+      </div>
+
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={sliderPosition}
+        onChange={(e) => setSliderPosition(e.target.value)}
+        className="w-full max-w-4xl mt-8 h-2 accent-ujjain-saffron cursor-pointer"
+      />
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\SathiBooking.js =====
+
+"use client";
+import { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { useLanguage } from "../components/LanguageContext";
+import { api, openRazorpayCheckout } from "../lib/api";
+
+const sathiListData = {
+  hi: [
+    { id: 1, name: "Ramesh Chaturvedi", aadharMasked: "XXXX-XXXX-4521", experience: "8 Saal Ka Anubhav", languages: ["Hindi", "English"], rating: 4.9, pricePerDay: 800, zone: "Mahakal Area", areas: ["Mahakal Corridor", "Ram Ghat", "Kal Bhairav"] },
+    { id: 2, name: "Sunita Vyas", aadharMasked: "XXXX-XXXX-7734", experience: "5 Saal Ka Anubhav", languages: ["Hindi", "Marathi"], rating: 4.8, pricePerDay: 700, zone: "Ghat Area", areas: ["Ram Ghat", "Kshipra Tat", "Gadkalika"] },
+    { id: 3, name: "Iqbal Khan", aadharMasked: "XXXX-XXXX-1092", experience: "10 Saal Ka Anubhav", languages: ["Hindi", "English", "Gujarati"], rating: 5.0, pricePerDay: 900, zone: "City Center", areas: ["Sandipani Ashram", "Mangalnath", "ISKCON"] },
+    { id: 4, name: "Pooja Solanki", aadharMasked: "XXXX-XXXX-3387", experience: "4 Saal Ka Anubhav", languages: ["Hindi"], rating: 4.7, pricePerDay: 600, zone: "Station Area", areas: ["Railway Station", "Nanakheda Bus Stand", "Dewas Gate"] },
+  ],
+  en: [
+    { id: 1, name: "Ramesh Chaturvedi", aadharMasked: "XXXX-XXXX-4521", experience: "8 Years of Experience", languages: ["Hindi", "English"], rating: 4.9, pricePerDay: 800, zone: "Mahakal Area", areas: ["Mahakal Corridor", "Ram Ghat", "Kal Bhairav"] },
+    { id: 2, name: "Sunita Vyas", aadharMasked: "XXXX-XXXX-7734", experience: "5 Years of Experience", languages: ["Hindi", "Marathi"], rating: 4.8, pricePerDay: 700, zone: "Ghat Area", areas: ["Ram Ghat", "Kshipra Riverbank", "Gadkalika"] },
+    { id: 3, name: "Iqbal Khan", aadharMasked: "XXXX-XXXX-1092", experience: "10 Years of Experience", languages: ["Hindi", "English", "Gujarati"], rating: 5.0, pricePerDay: 900, zone: "City Center", areas: ["Sandipani Ashram", "Mangalnath", "ISKCON"] },
+    { id: 4, name: "Pooja Solanki", aadharMasked: "XXXX-XXXX-3387", experience: "4 Years of Experience", languages: ["Hindi"], rating: 4.7, pricePerDay: 600, zone: "Station Area", areas: ["Railway Station", "Nanakheda Bus Stand", "Dewas Gate"] },
+  ],
+};
+
+const areaOptionsData = {
+  hi: ["Mahakal Corridor", "Ram Ghat", "Kal Bhairav", "Kshipra Tat", "Mangalnath", "Sandipani Ashram", "ISKCON", "Railway Station"],
+  en: ["Mahakal Corridor", "Ram Ghat", "Kal Bhairav", "Kshipra Riverbank", "Mangalnath", "Sandipani Ashram", "ISKCON", "Railway Station"],
+};
+const languageOptions = ["Hindi", "English", "Marathi", "Gujarati", "Sanskrit"];
+
+const text = {
+  hi: {
+    eyebrow: "Simhastha Sahayak",
+    title: "Book a Sathi",
+    subtitle: "Aapka verified local guide — poori Ujjain yatra mein aapke saath",
+    trustBar: "Aadhar Verified Sathi  •  Amount Locked Jab Tak Trip Poora Na Ho",
+    howVerified: "Verification kaise hoti hai?",
+    howVerifiedText:
+      "Har Sathi ka Aadhar/Govt. ID physically verify kiya jaata hai (24–48 ghante ka process). Verified hone ke baad hi wo booking list mein aata hai. Payment escrow-style locked rehti hai — Sathi ko tabhi milegi jab aap khud trip complete confirm karein.",
+    tabBook: "Sathi Book Karein",
+    tabRegister: "Sathi Banein",
+    verifyIntro: "🙏 Sabse pehle apni pehchan verify karein — isse dono taraf (aap aur Sathi) ke liye trust banta hai.",
+    fullName: "Aapka poora naam",
+    mobile: "Mobile number",
+    idNumber: "Aadhar / Govt. ID number",
+    verifying: "Pehchan Verify Ho Rahi Hai...",
+    verifyBtn: "Pehchan Verify Karein",
+    verifiedMsg: "✓ Pehchan Verified — Ab aap kisi bhi Sathi ko book kar sakte hain",
+    continueBtn: "Aage Badhein",
+    greetSathiList: (name) => `Namaste ${name} 🙏 Ye rahe aapke aas-paas ke verified Sathi:`,
+    aadharVerified: "Aadhar Verified ✓",
+    idLabel: "ID:",
+    perDay: "din",
+    languagesLabel: "Bhaashayein:",
+    areasLabel: "Areas:",
+    youChose: "Aapne chuna:",
+    days: "Din",
+    itineraryTitle: "Yatra Itinerary Preview",
+    dayLabel: "Din",
+    darshanText: "darshan aur guidance",
+    perDayCalc: (n, price) => `${n} din × ₹${price}/din`,
+    confirmBookingBtn: "Pay & Book Karein",
+    confirmingBtn: "Payment Khul Raha Hai...",
+    congrats: "Payment safal! Aapki booking confirm ho gayi hai. Ye raha aapka digital receipt:",
+    released: "(Trip Complete — Payout Process Mein)",
+    lockedTag: "(🔒 Amount Locked)",
+    lockedNote: "Aapka paisa safely platform ke paas hai. Sathi ko payout tab process hoga jab aap trip complete confirm karenge aur admin verify kar lega — beech mein koi extra paisa maanya nahi hoga.",
+    releasedNote: "Dhanyavaad! Trip complete mark ho gaya hai. Admin verification ke baad Sathi ko payout release hoga.",
+    releaseBtn: "✓ Trip Poora Hua — Confirm Karein",
+    releasingBtn: "Confirm Ho Raha Hai...",
+    reportBtn: "⚠️ Kisi Sathi ne extra paisa maanga ya galat vyavhar kiya? Report Karein",
+    reportSentMsg: "Aapki complaint administration tak bhej di gayi hai. Dhanyavaad.",
+    bookingError: "Booking mein dikkat aayi. Kripya dobara koshish karein.",
+    newBooking: "Nayi Booking Karein",
+    regIntro: "🙏 Ujjain ke local ho aur guide banna chahte ho? Neeche apni details bharein — verification ke baad hi aap live honge.",
+    experiencePlaceholder: "Guide ka anubhav (jaise: 5 saal)",
+    languagesQ: "Aap kaunsi bhaashayein bol sakte hain?",
+    areasQ: "Aap kaunse areas achhi tarah jaante hain?",
+    submitApp: "Application Jama Karein",
+    submittingApp: "Jama Ho Raha Hai...",
+    appError: "Application submit nahi ho payi. Kripya dobara koshish karein.",
+    privacyNote: "Aapki Aadhar details sirf verification ke liye use hongi, kisi ko share nahi ki jayengi.",
+    receivedTitle: "Application Mil Gayi!",
+    receivedMsg: (name) => `Dhanyavaad ${name} ji. Aapki Aadhar verification 24–48 ghanton mein poori hogi. Verify hone ke baad hum aapko call karenge aur aap "Book a Sathi" list mein live ho jayenge.`,
+    refId: "Reference ID:",
+    newApp: "Nayi Application Bharein",
+  },
+  en: {
+    eyebrow: "Simhastha Sahayak",
+    title: "Book a Sathi",
+    subtitle: "Your verified local guide — with you throughout your Ujjain journey",
+    trustBar: "Aadhar Verified Sathi  •  Amount Locked Until Trip Is Complete",
+    howVerified: "How does verification work?",
+    howVerifiedText:
+      "Every Sathi's Aadhar/Govt. ID is physically verified (a 24–48 hour process). Only after verification do they appear in the booking list. Payment stays escrow-locked — the Sathi is paid only after you personally confirm the trip is complete.",
+    tabBook: "Book a Sathi",
+    tabRegister: "Become a Sathi",
+    verifyIntro: "🙏 First, verify your identity — this builds trust on both sides (you and your Sathi).",
+    fullName: "Your full name",
+    mobile: "Mobile number",
+    idNumber: "Aadhar / Govt. ID number",
+    verifying: "Verifying Identity...",
+    verifyBtn: "Verify Identity",
+    verifiedMsg: "✓ Identity Verified — You can now book any Sathi",
+    continueBtn: "Continue",
+    greetSathiList: (name) => `Hello ${name} 🙏 Here are the verified Sathis near you:`,
+    aadharVerified: "Aadhar Verified ✓",
+    idLabel: "ID:",
+    perDay: "day",
+    languagesLabel: "Languages:",
+    areasLabel: "Areas:",
+    youChose: "You chose:",
+    days: "Days",
+    itineraryTitle: "Trip Itinerary Preview",
+    dayLabel: "Day",
+    darshanText: "darshan and guidance",
+    perDayCalc: (n, price) => `${n} day${n > 1 ? "s" : ""} × ₹${price}/day`,
+    confirmBookingBtn: "Pay & Book",
+    confirmingBtn: "Opening Payment...",
+    congrats: "Payment successful! Your booking is confirmed. Here's your digital receipt:",
+    released: "(Trip Complete — Payout In Process)",
+    lockedTag: "(🔒 Amount Locked)",
+    lockedNote: "Your payment is safely held by the platform. The Sathi's payout is processed once you confirm the trip is complete and admin verifies it — no extra charges are valid in between.",
+    releasedNote: "Thanks! Trip marked complete. Payout to the Sathi will be released after admin verification.",
+    releaseBtn: "✓ Trip Completed — Confirm",
+    releasingBtn: "Confirming...",
+    reportBtn: "⚠️ Did a Sathi ask for extra money or misbehave? Report It",
+    reportSentMsg: "Your complaint has been sent to the administration. Thank you.",
+    bookingError: "There was a problem with your payment or booking. If money was deducted it will be auto-refunded. Please try again.",
+    newBooking: "New Booking",
+    regIntro: "🙏 Are you a local from Ujjain and want to become a guide? Fill your details below — you'll go live only after verification.",
+    experiencePlaceholder: "Guide experience (e.g., 5 years)",
+    languagesQ: "Which languages can you speak?",
+    areasQ: "Which areas do you know well?",
+    submitApp: "Submit Application",
+    submittingApp: "Submitting...",
+    appError: "Could not submit your application. Please try again.",
+    privacyNote: "Your Aadhar details will only be used for verification and will not be shared with anyone.",
+    receivedTitle: "Application Received!",
+    receivedMsg: (name) => `Thank you ${name}. Your Aadhar verification will be complete within 24–48 hours. Once verified, we'll call you and you'll go live on the "Book a Sathi" list.`,
+    refId: "Reference ID:",
+    newApp: "Submit New Application",
+  },
+};
+
+export default function SathiBooking() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const sathiList = sathiListData[lang];
+  const areaOptions = areaOptionsData[lang];
+
+  const [mode, setMode] = useState("book");
+
+  const [step, setStep] = useState(0);
+  const [touristName, setTouristName] = useState("");
+  const [touristPhone, setTouristPhone] = useState("");
+  const [touristId, setTouristId] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [selectedSathi, setSelectedSathi] = useState(null);
+  const [days, setDays] = useState(1);
+  const [bookingId, setBookingId] = useState("");
+  const [paymentReleased, setPaymentReleased] = useState(false);
+  const [reportSent, setReportSent] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [releasing, setReleasing] = useState(false);
+  const [bookingError, setBookingError] = useState("");
+
+  const handleVerify = () => {
+    setVerifying(true);
+    setTimeout(() => {
+      setVerifying(false);
+      setVerified(true);
+    }, 1200);
+  };
+
+  const confirmSathiBooking = async () => {
+    setConfirming(true);
+    setBookingError("");
+
+    // Step 1: create a Razorpay order for this Sathi's day-rate × days.
+    const orderResult = await api.createSathiOrder({
+      sathiName: selectedSathi.name,
+      touristName: touristName.trim(),
+      touristPhone: touristPhone.trim(),
+      days,
+      pricePerDay: selectedSathi.pricePerDay,
+    });
+    if (!orderResult.ok) {
+      setConfirming(false);
+      setBookingError(orderResult.error || t.bookingError);
+      setStep(3);
+      return;
+    }
+
+    // Step 2: open Razorpay Checkout — money is captured now and held with
+    // the platform (escrow) until the trip is marked complete and an admin
+    // releases the payout to the Sathi.
+    const payment = await openRazorpayCheckout({
+      orderId: orderResult.data.orderId,
+      amount: orderResult.data.amount,
+      keyId: orderResult.data.keyId,
+      name: "Digital Ujjain",
+      description: `Sathi: ${selectedSathi.name} — ${days} ${t.days}`,
+      prefill: { name: touristName.trim(), contact: touristPhone.trim() },
+    });
+    if (!payment.ok) {
+      setConfirming(false);
+      setBookingError(payment.error || t.bookingError);
+      setStep(3);
+      return;
+    }
+
+    // Step 3: verify payment + create the booking record.
+    const result = await api.bookSathi({
+      sathiName: selectedSathi.name,
+      touristName: touristName.trim(),
+      touristPhone: touristPhone.trim(),
+      days,
+      totalAmount,
+      razorpay_order_id: payment.razorpay_order_id,
+      razorpay_payment_id: payment.razorpay_payment_id,
+      razorpay_signature: payment.razorpay_signature,
+    });
+    setConfirming(false);
+    if (result.ok) {
+      setBookingId(result.data.bookingId);
+    } else {
+      // Payment went through but booking save failed — don't fabricate an ID,
+      // show the real payment ID so support can reconcile it.
+      setBookingId(payment.razorpay_payment_id);
+      setBookingError(result.error || t.bookingError);
+    }
+    setStep(3);
+  };
+
+  // Tourist confirms the trip is done. This does NOT move money — it just
+  // flags the booking for admin review. Actual fund release to the Sathi is
+  // admin-only (see backend /api/admin/bookings/sathi/:id/release), so a
+  // stranger who only knows a bookingId can no longer drain the escrow.
+  const handleMarkComplete = async () => {
+    setReleasing(true);
+    const result = await api.markSathiComplete(bookingId);
+    setReleasing(false);
+    if (result.ok) {
+      setPaymentReleased(true); // reuse existing UI state to show the "trip marked complete" message
+    } else {
+      setBookingError(result.error || t.bookingError);
+    }
+  };
+
+  const handleReport = async () => {
+    setReportSent(true);
+    await api.submitReport({
+      type: "sathi",
+      bookingId,
+      description: `Misconduct/overcharging report for Sathi ${selectedSathi?.name || "unknown"}`,
+      reporterPhone: touristPhone,
+    });
+    setTimeout(() => setReportSent(false), 3000);
+  };
+
+  const resetBooking = () => {
+    setStep(0);
+    setTouristName("");
+    setTouristPhone("");
+    setTouristId("");
+    setVerifying(false);
+    setVerified(false);
+    setSelectedSathi(null);
+    setDays(1);
+    setBookingId("");
+    setBookingError("");
+    setPaymentReleased(false);
+  };
+
+  const canVerify = touristName.trim() && touristPhone.trim().length >= 10 && touristId.trim().length >= 4;
+  const totalAmount = selectedSathi ? selectedSathi.pricePerDay * days : 0;
+
+  const [regName, setRegName] = useState("");
+  const [regPhone, setRegPhone] = useState("");
+  const [regAadhar, setRegAadhar] = useState("");
+  const [regExperience, setRegExperience] = useState("");
+  const [regLanguages, setRegLanguages] = useState([]);
+  const [regAreas, setRegAreas] = useState([]);
+  const [regSubmitted, setRegSubmitted] = useState(false);
+  const [regSubmitting, setRegSubmitting] = useState(false);
+  const [regError, setRegError] = useState("");
+  const [regRefId, setRegRefId] = useState("");
+  const [showVerifyInfo, setShowVerifyInfo] = useState(false);
+
+  const toggleFromList = (list, setList, value) => {
+    setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  };
+
+  const canSubmitReg = regName.trim() && regPhone.trim().length >= 10 && regAadhar.trim().length >= 4 && regLanguages.length > 0 && regAreas.length > 0;
+
+  const handleRegSubmit = async () => {
+    if (!canSubmitReg) return;
+    setRegSubmitting(true);
+    setRegError("");
+    const result = await api.submitSathiApplication({
+      name: regName.trim(),
+      phone: regPhone.trim(),
+      idNumber: regAadhar.trim(),
+      experience: regExperience.trim(),
+      languages: regLanguages,
+      areas: regAreas,
+    });
+    setRegSubmitting(false);
+    if (result.ok) {
+      setRegRefId(result.data.referenceId);
+      setRegSubmitted(true);
+    } else {
+      setRegError(result.error || t.appError);
+    }
+  };
+
+  const resetReg = () => {
+    setRegName("");
+    setRegPhone("");
+    setRegAadhar("");
+    setRegExperience("");
+    setRegLanguages([]);
+    setRegAreas([]);
+    setRegSubmitted(false);
+    setRegError("");
+    setRegRefId("");
+  };
+
+  return (
+    <section id="sathi-booking" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+      <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">{t.eyebrow}</span>
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-4 text-center max-w-xl">{t.subtitle}</p>
+      <div className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center">
+        <span>✓</span> {t.trustBar}
+        <button
+          onClick={() => setShowVerifyInfo((v) => !v)}
+          className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20"
+          aria-label={t.howVerified}
+        >
+          ⓘ
+        </button>
+      </div>
+      {showVerifyInfo && (
+        <p className="text-ujjain-cream/60 text-xs max-w-lg text-center mb-8 -mt-1">{t.howVerifiedText}</p>
+      )}
+      {!showVerifyInfo && <div className="mb-8" />}
+
+      <div className="flex gap-2 mb-8 bg-white/5 border border-ujjain-gold/20 rounded-full p-1">
+        <button onClick={() => setMode("book")} className={`px-5 py-2 rounded-full text-sm font-semibold transition ${mode === "book" ? "bg-ujjain-gold text-ujjain-dark" : "text-ujjain-cream/70"}`}>
+          {t.tabBook}
+        </button>
+        <button onClick={() => setMode("register")} className={`px-5 py-2 rounded-full text-sm font-semibold transition ${mode === "register" ? "bg-ujjain-gold text-ujjain-dark" : "text-ujjain-cream/70"}`}>
+          {t.tabRegister}
+        </button>
+      </div>
+
+      {mode === "book" && (
+        <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8">
+          {step === 0 && (
+            <div>
+              <p className="text-ujjain-cream mb-6 text-center">{t.verifyIntro}</p>
+              <div className="flex flex-col gap-3 mb-4">
+                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={touristName} onChange={(e) => setTouristName(e.target.value)} disabled={verified}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
+                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={touristPhone} onChange={(e) => setTouristPhone(e.target.value)} disabled={verified}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
+                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={touristId} onChange={(e) => setTouristId(e.target.value)} disabled={verified}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
+              </div>
+              {!verified && (
+                <button onClick={handleVerify} disabled={!canVerify || verifying}
+                  className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
+                  {verifying ? t.verifying : t.verifyBtn}
+                </button>
+              )}
+              {verified && (
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 text-ujjain-saffron bg-ujjain-saffron/10 border border-ujjain-saffron/40 rounded-full px-4 py-2 text-sm mb-4">
+                    {t.verifiedMsg}
+                  </div>
+                  <button onClick={() => setStep(1)} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition">
+                    {t.continueBtn}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {step === 1 && (
+            <div>
+              <p className="text-ujjain-cream mb-6 text-center">{t.greetSathiList(touristName)}</p>
+              <div className="flex flex-col gap-3">
+                {sathiList.map((s) => (
+                  <button key={s.id} onClick={() => { setSelectedSathi(s); setStep(2); }}
+                    className="bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 hover:border-ujjain-gold transition text-left">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <div className="text-ujjain-gold font-semibold flex items-center gap-2 flex-wrap">
+                          {s.name}
+                          <span className="text-xs bg-ujjain-saffron/20 text-ujjain-saffron px-2 py-0.5 rounded-full">{t.aadharVerified}</span>
+                        </div>
+                        <div className="text-ujjain-cream/50 text-xs mt-0.5">{t.idLabel} {s.aadharMasked}</div>
+                      </div>
+                      <div className="text-ujjain-gold font-bold whitespace-nowrap">₹{s.pricePerDay}/{t.perDay}</div>
+                    </div>
+                    <div className="text-ujjain-cream/70 text-xs mb-1">⭐ {s.rating} &nbsp;•&nbsp; {s.experience} &nbsp;•&nbsp; 📍 {s.zone}</div>
+                    <div className="text-ujjain-cream/60 text-xs mb-1">{t.languagesLabel} {s.languages.join(", ")}</div>
+                    <div className="text-ujjain-cream/60 text-xs">{t.areasLabel} {s.areas.join(", ")}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 2 && selectedSathi && (
+            <div>
+              <p className="text-ujjain-cream mb-4 text-center">
+                {t.youChose} <span className="text-ujjain-gold font-semibold">{selectedSathi.name}</span>
+              </p>
+              <div className="flex justify-center gap-3 mb-6">
+                {[1, 2, 3].map((d) => (
+                  <button key={d} onClick={() => setDays(d)}
+                    className={`px-5 py-2 rounded-full border transition ${days === d ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/40 text-ujjain-cream hover:border-ujjain-gold"}`}>
+                    {d} {t.days}
+                  </button>
+                ))}
+              </div>
+              <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-6">
+                <div className="text-ujjain-gold font-semibold mb-2 text-sm">{t.itineraryTitle}</div>
+                {Array.from({ length: days }).map((_, i) => (
+                  <div key={i} className="text-ujjain-cream/80 text-sm mb-1">
+                    <span className="text-ujjain-saffron">{t.dayLabel} {i + 1}:</span> {selectedSathi.areas[i % selectedSathi.areas.length]} {t.darshanText}
+                  </div>
+                ))}
+              </div>
+              <div className="text-center mb-6">
+                <div className="text-3xl font-bold text-ujjain-gold">₹{totalAmount}</div>
+                <div className="text-ujjain-cream/60 text-xs">{t.perDayCalc(days, selectedSathi.pricePerDay)}</div>
+              </div>
+              <button onClick={confirmSathiBooking} disabled={confirming} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
+                {confirming ? t.confirmingBtn : t.confirmBookingBtn}
+              </button>
+            </div>
+          )}
+
+          {step === 3 && selectedSathi && (
+            <div className="text-center">
+              <p className="text-ujjain-cream mb-6">{t.congrats}</p>
+              <div className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-4">
+                <QRCodeSVG value={bookingId} size={120} bgColor="transparent" fgColor="#D4AF37" />
+                <div className="text-ujjain-gold font-bold">{bookingId}</div>
+                <div className="text-ujjain-cream text-sm">{selectedSathi.name} — {days} {t.days}</div>
+                <div className="text-2xl font-bold text-ujjain-gold">
+                  ₹{totalAmount} <span className="text-xs text-ujjain-cream/60">{paymentReleased ? t.released : t.lockedTag}</span>
+                </div>
+                <div className="text-xs text-ujjain-cream/50 max-w-sm">{paymentReleased ? t.releasedNote : t.lockedNote}</div>
+              </div>
+              {bookingError && <p className="text-red-400 text-xs mt-3">{bookingError}</p>}
+              {!paymentReleased && (
+                <button onClick={handleMarkComplete} disabled={releasing} className="mt-6 w-full max-w-xs bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
+                  {releasing ? t.releasingBtn : t.releaseBtn}
+                </button>
+              )}
+              <button onClick={handleReport} className="mt-4 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 transition block mx-auto">
+                {t.reportBtn}
+              </button>
+              {reportSent && <p className="text-ujjain-saffron text-sm mt-3">{t.reportSentMsg}</p>}
+              <div>
+                <button onClick={resetBooking} className="mt-6 text-ujjain-cream/60 text-sm underline">{t.newBooking}</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {mode === "register" && (
+        <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8">
+          {!regSubmitted ? (
+            <div>
+              <p className="text-ujjain-cream mb-6 text-center">{t.regIntro}</p>
+              <div className="flex flex-col gap-3 mb-4">
+                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={regName} onChange={(e) => setRegName(e.target.value)}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
+                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={regPhone} onChange={(e) => setRegPhone(e.target.value)}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
+                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={regAadhar} onChange={(e) => setRegAadhar(e.target.value)}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
+                <input type="text" placeholder={t.experiencePlaceholder} aria-label={t.experiencePlaceholder} value={regExperience} onChange={(e) => setRegExperience(e.target.value)}
+                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
+              </div>
+              <div className="mb-4">
+                <div className="text-ujjain-cream/80 text-sm mb-2">{t.languagesQ}</div>
+                <div className="flex flex-wrap gap-2">
+                  {languageOptions.map((lng) => (
+                    <button key={lng} onClick={() => toggleFromList(regLanguages, setRegLanguages, lng)}
+                      className={`px-3 py-1.5 rounded-full text-xs border transition ${regLanguages.includes(lng) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
+                      {lng}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-6">
+                <div className="text-ujjain-cream/80 text-sm mb-2">{t.areasQ}</div>
+                <div className="flex flex-wrap gap-2">
+                  {areaOptions.map((area) => (
+                    <button key={area} onClick={() => toggleFromList(regAreas, setRegAreas, area)}
+                      className={`px-3 py-1.5 rounded-full text-xs border transition ${regAreas.includes(area) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
+                      {area}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button onClick={handleRegSubmit} disabled={!canSubmitReg || regSubmitting}
+                className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
+                {regSubmitting ? t.submittingApp : t.submitApp}
+              </button>
+              {regError && <p className="text-red-400 text-xs text-center mt-2">{regError}</p>}
+              <p className="text-ujjain-cream/40 text-xs text-center mt-3">{t.privacyNote}</p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="text-4xl mb-4">✅</div>
+              <h3 className="text-xl font-bold text-ujjain-gold mb-2">{t.receivedTitle}</h3>
+              <p className="text-ujjain-cream mb-4">{t.receivedMsg(regName)}</p>
+              <div className="text-ujjain-cream/60 text-xs mb-6">
+                {t.refId} {regRefId}
+              </div>
+              <button onClick={resetReg} className="text-ujjain-cream/60 text-sm underline">{t.newApp}</button>
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\SentimentWall.js =====
+
+"use client";
+import { useState, useEffect } from "react";
+import { useLanguage } from "../components/LanguageContext";
+
+const avatarColors = [
+  "bg-ujjain-gold/20 text-ujjain-gold",
+  "bg-ujjain-saffron/20 text-ujjain-saffron",
+  "bg-emerald-500/20 text-emerald-400",
+  "bg-sky-500/20 text-sky-400",
+  "bg-rose-500/20 text-rose-400",
+  "bg-violet-500/20 text-violet-400",
+];
+
+const testimonialsData = {
+  hi: [
+    { name: "Priya Sharma", text: "Mahakal Lok dekh kar dil khush ho gaya! Bahut sundar development hua hai.", category: "Vikas" },
+    { name: "Rahul Vishwakarma", text: "Ghat ki safai aur roads ka kaam sach mein kaabil-e-tareef hai.", category: "Safai" },
+    { name: "Anita Patidar", text: "Simhastha 2028 ki planning dekh kar lagta hai is baar sab kuch bahut organized hoga.", category: "Simhastha" },
+    { name: "Mohan Rathore", text: "Smart City ban ne ke baad Ujjain ka pura vibe hi badal gaya hai.", category: "Smart City" },
+    { name: "Sunita Joshi", text: "CCTV aur WiFi zones se shehar ab bahut safe aur modern lagta hai.", category: "Suraksha" },
+    { name: "Deepak Malviya", text: "Kshipra ghat par ab pehle se kahi zyada saaf paani dikhta hai.", category: "Jal" },
+    { name: "Kavita Chouhan", text: "Digital Ujjain website dekh kar laga sarkar sach mein technology use kar rahi hai.", category: "Technology" },
+    { name: "Amit Sharma", text: "Parking aur route planning agar aisi hi rahi toh Simhastha bahut smooth hoga.", category: "Parking" },
+  ],
+  en: [
+    { name: "Priya Sharma", text: "Seeing Mahakal Lok made my heart happy! Truly beautiful development.", category: "Development" },
+    { name: "Rahul Vishwakarma", text: "The ghat cleaning and road work is genuinely praiseworthy.", category: "Cleanliness" },
+    { name: "Anita Patidar", text: "Seeing the Simhastha 2028 planning, it feels like this time everything will be very organized.", category: "Simhastha" },
+    { name: "Mohan Rathore", text: "After becoming a Smart City, Ujjain's whole vibe has changed.", category: "Smart City" },
+    { name: "Sunita Joshi", text: "With CCTV and WiFi zones, the city now feels very safe and modern.", category: "Safety" },
+    { name: "Deepak Malviya", text: "The Kshipra ghat water looks much cleaner than before now.", category: "Water" },
+    { name: "Kavita Chouhan", text: "Seeing the Digital Ujjain website, it feels like the government is really using technology.", category: "Technology" },
+    { name: "Amit Sharma", text: "If parking and route planning stay this good, Simhastha will be very smooth.", category: "Parking" },
+  ],
+};
+
+const text = {
+  hi: {
+    title: "Aapki Awaaz, Ujjain Ka Vikas",
+    subtitle: "Nagrikon ke vichar is pahal ke baare mein",
+    supportText: "logo ne is pahal ko support kiya",
+    verified: "Verified Citizen",
+    feedbackBtn: "Apna Feedback Dein",
+  },
+  en: {
+    title: "Your Voice, Ujjain's Development",
+    subtitle: "What citizens think about this initiative",
+    supportText: "people have supported this initiative",
+    verified: "Verified Citizen",
+    feedbackBtn: "Share Your Feedback",
+  },
+};
+
+function TestimonialCard({ t, colorIndex, verifiedLabel }) {
+  const initial = t.name.charAt(0).toUpperCase();
+  return (
+    <div className="min-w-[280px] max-w-[280px] bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 hover:border-ujjain-gold/50 transition">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${avatarColors[colorIndex % avatarColors.length]}`}>
+            {initial}
+          </div>
+          <div>
+            <p className="text-ujjain-gold text-xs font-semibold leading-tight">{t.name}</p>
+            <p className="text-ujjain-cream/40 text-[10px] flex items-center gap-1">
+              <span className="text-emerald-400">✓</span> {verifiedLabel}
+            </p>
+          </div>
+        </div>
+      </div>
+      <p className="text-ujjain-cream/90 text-sm mb-3">&ldquo;{t.text}&rdquo;</p>
+      <span className="inline-block text-[10px] text-ujjain-saffron bg-ujjain-saffron/10 px-2 py-0.5 rounded-full border border-ujjain-saffron/20">
+        {t.category}
+      </span>
+    </div>
+  );
+}
+
+export default function SentimentWall() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const testimonials = testimonialsData[lang];
+  const [supportCount, setSupportCount] = useState(24817);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSupportCount((prev) => prev + Math.floor(Math.random() * 3));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section id="sentiment-wall" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden">
+      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+      <p className="text-ujjain-cream mb-6 text-center max-w-xl">{t.subtitle}</p>
+
+      <div className="flex items-center gap-2 mb-12 px-5 py-2.5 rounded-full bg-ujjain-saffron/10 border border-ujjain-saffron/30">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ujjain-saffron opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-ujjain-saffron"></span>
+        </span>
+        <span className="text-ujjain-saffron text-xl md:text-2xl font-bold">{supportCount.toLocaleString("en-IN")}+</span>
+        <span className="text-ujjain-cream/80 text-sm">{t.supportText}</span>
+      </div>
+
+      <div className="relative w-full max-w-6xl">
+        <div className="space-y-4">
+          <div className="flex gap-4 animate-scroll-left">
+            {[...testimonials, ...testimonials].map((item, i) => (
+              <TestimonialCard key={`row1-${i}`} t={item} colorIndex={i} verifiedLabel={t.verified} />
+            ))}
+          </div>
+          <div className="flex gap-4 animate-scroll-right">
+            {[...testimonials.slice().reverse(), ...testimonials.slice().reverse()].map((item, i) => (
+              <TestimonialCard key={`row2-${i}`} t={item} colorIndex={i + 2} verifiedLabel={t.verified} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <a href="#contact" className="mt-12 bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition">
+        {t.feedbackBtn}
+      </a>
+    </section>
+  );
+}
+
+
+===== FILE: src\app\sections\VisitorGuide.js =====
+
+"use client";
+import { useLanguage } from "../components/LanguageContext";
+
+const text = {
+    hi: {
+        title: "Visitor Guide",
+        subtitle: "Simhastha 2028 ki yatra plan karne ke liye zaroori jaankari",
+        reachTitle: "Kaise Pahunchein",
+        reachTrain: "Train",
+        reachTrainDesc: "Ujjain Junction — Delhi, Mumbai, Ahmedabad se seedhi trains. Simhastha ke dauraan special trains bhi chalengi.",
+        reachAir: "Hawai Yatra",
+        reachAirDesc: "Sabse nazdeek airport Indore (Devi Ahilyabai Holkar Airport), Ujjain se lagbhag 55-65 km door. Wahan se taxi/bus se aasaani se pahunch sakte hain.",
+        reachRoad: "Sadak Marg",
+        reachRoadDesc: "NH52 se achhi tarah connected. Indore-Ujjain highway 2028 tak 6-lane ho jayegi. Regular state-run aur private buses uplabdh hain.",
+        foodTitle: "Khaan-Paan",
+        foodDesc: "Sirf authorized/verified stalls se hi khana-paani lein. Mahakal ka prasad aur Ujjain ke traditional sweets zaroor try karein.",
+        transportTitle: "Sthaniya Transport",
+        transportDesc: "Auto-rickshaw aur taxi sthaniya yatra ke liye aasaani se milenge. Bus stands aur railway station hamare interactive map par pehle se marked hain.",
+        transportLink: "Map par dekhein →",
+        parkingTitle: "Parking",
+        parkingDesc: "Simhastha 2028 ke liye 500 Acre ka dedicated parking zone planned hai. Nanakheda area map par 'Parking Zone' tag ke saath marked hai.",
+        accommodationTitle: "Thaharne Ki Jagah",
+        accommodationDesc: "Verified stays aur sarkari-verified pricing ke saath poori list humare Stay Booking section me uplabdh hai.",
+        accommodationLink: "Poori list yahan dekhein →",
+        emergencyTitle: "Emergency Sahayta",
+        emergencyDesc: "Kisi bhi zaroorat ke liye ye helpline numbers hamesha yaad rakhein:",
+        footNote: "Ye jaankari planning ke liye hai — Simhastha ke dauraan sthaniya prashasan ke real-time updates ko priority dein.",
+    },
+    en: {
+        title: "Visitor Guide",
+        subtitle: "Essential information to plan your Simhastha 2028 visit",
+        reachTitle: "How to Reach",
+        reachTrain: "Train",
+        reachTrainDesc: "Ujjain Junction has direct trains from Delhi, Mumbai, and Ahmedabad. Special trains will also run during Simhastha.",
+        reachAir: "By Air",
+        reachAirDesc: "The nearest airport is Indore (Devi Ahilyabai Holkar Airport), about 55-65 km from Ujjain. Easily reachable from there by taxi or bus.",
+        reachRoad: "By Road",
+        reachRoadDesc: "Well connected via NH52. The Indore-Ujjain highway will be widened to 6 lanes by 2028. Regular state-run and private buses are available.",
+        foodTitle: "Food",
+        foodDesc: "Only use authorized/verified stalls for food and water. Don't miss the Mahakal prasad and Ujjain's traditional sweets.",
+        transportTitle: "Local Transportation",
+        transportDesc: "Auto-rickshaws and taxis are easily available for local travel. Bus stands and the railway station are already marked on our interactive map.",
+        transportLink: "View on Map →",
+        parkingTitle: "Parking",
+        parkingDesc: "A dedicated 500 Acre parking zone is planned for Simhastha 2028. The Nanakheda area is marked on the map with a 'Parking Zone' tag.",
+        accommodationTitle: "Accommodation",
+        accommodationDesc: "Verified stays with government-verified pricing are available in full in our Stay Booking section.",
+        accommodationLink: "View full list here →",
+        emergencyTitle: "Emergency Assistance",
+        emergencyDesc: "Keep these helpline numbers handy for any need:",
+        footNote: "This information is for planning purposes — during Simhastha, please prioritize real-time updates from local administration.",
+    },
+};
+
+const emergencyNumbers = [
+    { icon: "🚓", label: { hi: "Police", en: "Police" }, number: "100" },
+    { icon: "🚑", label: { hi: "Ambulance", en: "Ambulance" }, number: "108" },
+    { icon: "🚒", label: { hi: "Fire", en: "Fire" }, number: "101" },
+    { icon: "☎️", label: { hi: "Tourist Helpline", en: "Tourist Helpline" }, number: "1364" },
+];
+
+export default function VisitorGuide() {
+    const { lang } = useLanguage();
+    const t = text[lang];
+
+    return (
+        <section
+            id="visitor-guide"
+            className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+        >
+            <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+                {t.title}
+            </h2>
+            <p className="text-ujjain-cream mb-12 text-center max-w-xl">{t.subtitle}</p>
+
+            {/* How to Reach */}
+            <div className="w-full max-w-4xl mb-6">
+                <h3 className="text-xl font-bold text-ujjain-gold mb-4">{t.reachTitle}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+                        <div className="text-3xl mb-3">🚆</div>
+                        <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.reachTrain}</h4>
+                        <p className="text-ujjain-cream/80 text-sm">{t.reachTrainDesc}</p>
+                    </div>
+                    <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+                        <div className="text-3xl mb-3">✈️</div>
+                        <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.reachAir}</h4>
+                        <p className="text-ujjain-cream/80 text-sm">{t.reachAirDesc}</p>
+                    </div>
+                    <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+                        <div className="text-3xl mb-3">🛣️</div>
+                        <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.reachRoad}</h4>
+                        <p className="text-ujjain-cream/80 text-sm">{t.reachRoadDesc}</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Food + Transport + Parking */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-4xl mb-6">
+                <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+                    <div className="text-3xl mb-3">🍽️</div>
+                    <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.foodTitle}</h4>
+                    <p className="text-ujjain-cream/80 text-sm">{t.foodDesc}</p>
+                </div>
+
+                <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col">
+                    <div className="text-3xl mb-3">🛺</div>
+                    <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.transportTitle}</h4>
+                    <p className="text-ujjain-cream/80 text-sm flex-1">{t.transportDesc}</p>
+                    <a href="#map" className="text-ujjain-gold text-sm font-semibold mt-4 hover:underline">
+                        {t.transportLink}
+                    </a>
+                </div>
+
+                <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6">
+                    <div className="text-3xl mb-3">🅿️</div>
+                    <h4 className="text-lg font-bold text-ujjain-gold mb-2">{t.parkingTitle}</h4>
+                    <p className="text-ujjain-cream/80 text-sm">{t.parkingDesc}</p>
+                </div>
+            </div>
+
+            {/* Accommodation link */}
+            <div className="w-full max-w-4xl mb-6">
+                <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h4 className="text-lg font-bold text-ujjain-gold mb-1">{t.accommodationTitle}</h4>
+                        <p className="text-ujjain-cream/80 text-sm">{t.accommodationDesc}</p>
+                    </div>
+
+                    <a
+                        href="#hotel-booking"
+                        className="text-ujjain-gold text-sm font-semibold whitespace-nowrap hover:underline"
+                    >
+                        {t.accommodationLink}
+                    </a>
+                </div>
+        </div>
+
+      {/* Emergency numbers */ }
+      <div className="w-full max-w-4xl">
+        <h3 className="text-xl font-bold text-ujjain-gold mb-4">{t.emergencyTitle}</h3>
+        <p className="text-ujjain-cream/80 text-sm mb-4">{t.emergencyDesc}</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {emergencyNumbers.map((item) => (
+            <div
+              key={item.number}
+              className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center"
+            >
+              <div className="text-2xl mb-1">{item.icon}</div>
+              <div className="text-xl font-bold text-ujjain-gold">{item.number}</div>
+              <div className="text-ujjain-cream/60 text-[11px] mt-1">{item.label[lang]}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
+    </section >
+  );
+}
+
+
+===== FILE: src\app\sections\VR360.js =====
+
+"use client";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
+import { useRef, useState, useMemo, Suspense } from "react";
+import * as THREE from "three";
+import { useLanguage } from "../components/LanguageContext";
+
+// ---------------------------------------------------------------------------
+// Waypoints — camera position + look-at target for each landmark.
+// Reuses the same landmark names as SimhasthaZone.js for consistency.
+// ---------------------------------------------------------------------------
+const waypoints = [
+  {
+    id: "ramghat",
+    nameHi: "Ram Ghat",
+    nameEn: "Ram Ghat",
+    icon: "🛕",
+    camPos: [0, 1.6, 9],
+    lookAt: [0, 0, 0],
+  },
+  {
+    id: "mahakal",
+    nameHi: "Mahakaleshwar Mandir",
+    nameEn: "Mahakaleshwar Temple",
+    icon: "🙏",
+    camPos: [-9, 2.5, -3],
+    lookAt: [-11, 4, -8],
+  },
+  {
+    id: "corridor",
+    nameHi: "Mahakal Lok Corridor",
+    nameEn: "Mahakal Lok Corridor",
+    icon: "🏛️",
+    camPos: [7, 2, -2],
+    lookAt: [11, 1.5, -6],
+  },
+  {
+    id: "kalbhairav",
+    nameHi: "Kal Bhairav Ghat",
+    nameEn: "Kal Bhairav Ghat",
+    icon: "🌊",
+    camPos: [3, 1.4, 6],
+    lookAt: [8, 0.5, 10],
+  },
+];
+
+const text = {
+  hi: {
+    title: "360° Simhastha Walkthrough",
+    subtitle: "Neeche button dabao, ghumo aur khud dekho",
+  },
+  en: {
+    title: "360° Simhastha Walkthrough",
+    subtitle: "Tap a spot below, then drag to look around",
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Sky dome
+// ---------------------------------------------------------------------------
+function SkyDome() {
+  return (
+    <mesh scale={[-1, 1, 1]}>
+      <sphereGeometry args={[60, 32, 32]} />
+      <meshBasicMaterial color="#1a1a2e" side={THREE.BackSide} />
+    </mesh>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Animated river — a plane whose vertices ripple over time (no textures)
+// ---------------------------------------------------------------------------
+function River() {
+  const geo = useMemo(() => new THREE.PlaneGeometry(30, 8, 60, 16), []);
+  const base = useMemo(() => {
+    const arr = new Float32Array(geo.attributes.position.array.length);
+    arr.set(geo.attributes.position.array);
+    return arr;
+  }, [geo]);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    const pos = geo.attributes.position;
+    const arr = pos.array;
+    for (let i = 0; i < pos.count; i++) {
+      const ix = i * 3;
+      const x = base[ix];
+      const y = base[ix + 1];
+      arr[ix + 2] = Math.sin(x * 0.4 + t * 1.2) * 0.08 + Math.cos(y * 0.6 + t * 0.8) * 0.06;
+    }
+    pos.needsUpdate = true;
+  });
+
+  return (
+    <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 4]}>
+      <meshStandardMaterial
+        color="#2b4d6b"
+        metalness={0.6}
+        roughness={0.25}
+        transparent
+        opacity={0.9}
+      />
+    </mesh>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Ghat steps (Ram Ghat) with a row of flickering diyas
+// ---------------------------------------------------------------------------
+function GhatSteps() {
+  const steps = 5;
+  return (
+    <group position={[0, -0.3, -1]}>
+      {[...Array(steps)].map((_, i) => (
+        <mesh key={i} position={[0, -i * 0.35, i * 0.9]}>
+          <boxGeometry args={[8 - i * 0.3, 0.3, 1]} />
+          <meshStandardMaterial color="#c9a876" roughness={0.9} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function Diyas() {
+  const groupRef = useRef();
+  const count = 14;
+  const flick = useRef(new Float32Array(count).map(() => Math.random() * Math.PI * 2));
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (!groupRef.current) return;
+    groupRef.current.children.forEach((diya, i) => {
+      const s = 0.9 + Math.sin(t * 4 + flick.current[i]) * 0.25;
+      diya.scale.setScalar(s);
+    });
+  });
+
+  const positions = useMemo(() => {
+    return [...Array(count)].map((_, i) => {
+      const x = -6 + (i / (count - 1)) * 12;
+      return [x, 0.05, 2.6];
+    });
+  }, []);
+
+  return (
+    <group ref={groupRef}>
+      {positions.map((p, i) => (
+        <mesh key={i} position={p}>
+          <sphereGeometry args={[0.08, 8, 8]} />
+          <meshStandardMaterial color="#ffb347" emissive="#ff8c00" emissiveIntensity={2} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Detailed tiered temple (Mahakaleshwar-style shikhara)
+// ---------------------------------------------------------------------------
+function Temple({ position = [-11, 0, -8] }) {
+  const tiers = 4;
+  return (
+    <group position={position}>
+      {/* base plinth */}
+      <mesh position={[0, 0.3, 0]}>
+        <boxGeometry args={[4, 0.6, 4]} />
+        <meshStandardMaterial color="#8a6d3b" roughness={0.8} />
+      </mesh>
+      {/* main sanctum */}
+      <mesh position={[0, 1.6, 0]}>
+        <boxGeometry args={[2.6, 2.4, 2.6]} />
+        <meshStandardMaterial color="#D4AF37" metalness={0.5} roughness={0.4} />
+      </mesh>
+      {/* stacked shikhara tiers, shrinking upward */}
+      {[...Array(tiers)].map((_, i) => {
+        const scale = 1 - i * 0.18;
+        const y = 3 + i * 1.1;
+        return (
+          <mesh key={i} position={[0, y, 0]}>
+            <coneGeometry args={[1.3 * scale, 1.3, 4]} />
+            <meshStandardMaterial color="#FF9933" metalness={0.55} roughness={0.35} />
+          </mesh>
+        );
+      })}
+      {/* golden finial */}
+      <mesh position={[0, 3 + tiers * 1.1 + 0.3, 0]}>
+        <sphereGeometry args={[0.18, 12, 12]} />
+        <meshStandardMaterial
+          color="#FFD700"
+          metalness={0.9}
+          roughness={0.1}
+          emissive="#FFD700"
+          emissiveIntensity={0.4}
+        />
+      </mesh>
+      <pointLight position={[0, 3, 2]} intensity={1.2} color="#FFD700" distance={12} />
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mahakal Lok Corridor — a row of pillars/statues forming a walkway
+// ---------------------------------------------------------------------------
+function Corridor({ position = [11, 0, -6] }) {
+  const pillarCount = 6;
+  return (
+    <group position={position}>
+      {[...Array(pillarCount)].map((_, i) => {
+        const z = -i * 1.8;
+        return (
+          <group key={i}>
+            <mesh position={[-1.4, 1.2, z]}>
+              <cylinderGeometry args={[0.18, 0.22, 2.4, 8]} />
+              <meshStandardMaterial color="#c9a876" roughness={0.7} />
+            </mesh>
+            <mesh position={[1.4, 1.2, z]}>
+              <cylinderGeometry args={[0.18, 0.22, 2.4, 8]} />
+              <meshStandardMaterial color="#c9a876" roughness={0.7} />
+            </mesh>
+            <mesh position={[0, 1.4, z]}>
+              <coneGeometry args={[0.35, 0.6, 4]} />
+              <meshStandardMaterial color="#D4AF37" metalness={0.5} roughness={0.4} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Kal Bhairav Ghat — a small shrine + steps on the far bank
+// ---------------------------------------------------------------------------
+function KalBhairavGhat({ position = [8, 0, 10] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.9, 0]}>
+        <boxGeometry args={[1.6, 1.8, 1.6]} />
+        <meshStandardMaterial color="#800000" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 2.1, 0]}>
+        <coneGeometry args={[1, 1.2, 4]} />
+        <meshStandardMaterial color="#D4AF37" metalness={0.5} roughness={0.4} />
+      </mesh>
+      <pointLight position={[0, 2, 1.5]} intensity={0.8} color="#FF9933" distance={8} />
+    </group>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Ground
+// ---------------------------------------------------------------------------
+function Ground() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.35, 0]}>
+      <circleGeometry args={[30, 48]} />
+      <meshStandardMaterial color="#2d2440" />
+    </mesh>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Camera rig — smoothly flies to the active waypoint, then hands control
+// back to OrbitControls for free-look until the next waypoint is chosen.
+// ---------------------------------------------------------------------------
+function CameraRig({ target, controlsRef }) {
+  useFrame((state, delta) => {
+    const lerpFactor = 1 - Math.pow(0.001, delta);
+    state.camera.position.lerp(new THREE.Vector3(...target.camPos), lerpFactor);
+    if (controlsRef.current) {
+      controlsRef.current.target.lerp(new THREE.Vector3(...target.lookAt), lerpFactor);
+      controlsRef.current.update();
+    }
+  });
+  return null;
+}
+
+function Scene({ activeWaypoint, controlsRef }) {
+  return (
+    <>
+      <SkyDome />
+      <Ground />
+      <River />
+      <GhatSteps />
+      <Diyas />
+      <Temple />
+      <Corridor />
+      <KalBhairavGhat />
+
+      <ambientLight intensity={0.55} />
+      <hemisphereLight args={["#4a3d6b", "#1a1a2e", 0.4]} />
+
+      <CameraRig target={activeWaypoint} controlsRef={controlsRef} />
+      <OrbitControls
+        ref={controlsRef}
+        enableZoom={true}
+        enablePan={false}
+        minDistance={2}
+        maxDistance={20}
+        rotateSpeed={-0.5}
+      />
+    </>
+  );
+}
+
+export default function VR360() {
+  const { lang } = useLanguage();
+  const t = text[lang];
+  const [activeId, setActiveId] = useState(waypoints[0].id);
+  const [dpr, setDpr] = useState(1.5);
+  const controlsRef = useRef();
+
+  const activeWaypoint = waypoints.find((w) => w.id === activeId);
+
+  return (
+    <section id="vr-zone" className="h-screen w-full bg-ujjain-dark relative overflow-hidden">
+      <div className="absolute top-10 left-0 right-0 text-center z-10 pointer-events-none px-4">
+        <h2 className="text-3xl md:text-5xl font-bold text-ujjain-gold">{t.title}</h2>
+        <p className="text-ujjain-cream mt-2">{t.subtitle}</p>
+      </div>
+
+      <Canvas
+        dpr={dpr}
+        camera={{ position: waypoints[0].camPos, fov: 60 }}
+        gl={{ antialias: true, powerPreference: "high-performance" }}
+      >
+        <PerformanceMonitor
+          onDecline={() => setDpr(1)}
+          onIncline={() => setDpr(Math.min(2, typeof window !== "undefined" ? window.devicePixelRatio || 1.5 : 1.5))}
+        />
+        <Suspense fallback={null}>
+          <Scene activeWaypoint={activeWaypoint} controlsRef={controlsRef} />
+        </Suspense>
+      </Canvas>
+
+      {/* Waypoint navigation */}
+      <div className="absolute bottom-8 left-0 right-0 z-10 flex flex-wrap justify-center gap-2 px-4">
+        {waypoints.map((w) => (
+          <button
+            key={w.id}
+            onClick={() => setActiveId(w.id)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${activeId === w.id
+              ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
+              : "bg-black/40 text-ujjain-cream border-ujjain-gold/40 hover:border-ujjain-gold"
+              }`}
+          >
+            <span className="mr-1">{w.icon}</span>
+            {lang === "hi" ? w.nameHi : w.nameEn}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}

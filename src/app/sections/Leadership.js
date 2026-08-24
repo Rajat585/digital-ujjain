@@ -3,16 +3,22 @@ import { useLanguage } from "../components/LanguageContext";
 
 const text = {
   hi: {
-    title: "Neta Ka Sandesh",
-    subtitle: "Ujjain ke vikas aur Simhastha 2028 ke vision par ek sandesh",
-    alt: "Ujjain Vision",
-    comingSoon: "Video jald hi upload hoga",
+    title: "नेता का संदेश",
+    subtitle: "उज्जैन के विकास और सिंहस्थ 2028 के विज़न पर एक संदेश",
+    alt: "उज्जैन विज़न",
+    comingSoon: "वीडियो जल्द ही अपलोड होगा",
   },
   en: {
     title: "Leader's Message",
     subtitle: "A message on Ujjain's development and the vision for Simhastha 2028",
     alt: "Ujjain Vision",
     comingSoon: "Video coming soon",
+  },
+  hinglish: {
+    title: "Neta Ka Sandesh",
+    subtitle: "Ujjain ke vikas aur Simhastha 2028 ke vision par ek sandesh",
+    alt: "Ujjain Vision",
+    comingSoon: "Video jald hi upload hoga",
   },
 };
 

@@ -1,7 +1,9 @@
 "use client";
 import { useLanguage } from "./LanguageContext";
 
-const label = { hi: "Book Now ↓", en: "Book Now ↓" };
+const label = { hi: "अभी बुक करें ↓", en: "Book Now ↓" };
+
+label.hinglish = "Book Now ↓";
 
 export default function StickyBookButton() {
   const { lang } = useLanguage();

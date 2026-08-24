@@ -4,10 +4,10 @@ import { useLanguage } from "./LanguageContext";
 
 const badgesData = {
   hi: [
-    { threshold: 20, name: "History Buff", icon: "📜" },
-    { threshold: 45, name: "Vikas Explorer", icon: "🏗️" },
-    { threshold: 70, name: "Future Visionary", icon: "🔮" },
-    { threshold: 95, name: "Ghat Explorer", icon: "🛕" },
+    { threshold: 20, name: "इतिहास प्रेमी", icon: "📜" },
+    { threshold: 45, name: "विकास अन्वेषक", icon: "🏗️" },
+    { threshold: 70, name: "भविष्य दृष्टा", icon: "🔮" },
+    { threshold: 95, name: "घाट अन्वेषक", icon: "🛕" },
   ],
   en: [
     { threshold: 20, name: "History Buff", icon: "📜" },
@@ -15,11 +15,18 @@ const badgesData = {
     { threshold: 70, name: "Future Visionary", icon: "🔮" },
     { threshold: 95, name: "Ghat Explorer", icon: "🛕" },
   ],
+  hinglish: [
+    { threshold: 20, name: "History Buff", icon: "📜" },
+    { threshold: 45, name: "Vikas Explorer", icon: "🏗️" },
+    { threshold: 70, name: "Future Visionary", icon: "🔮" },
+    { threshold: 95, name: "Ghat Explorer", icon: "🛕" },
+  ],
 };
 
 const text = {
-  hi: { unlocked: "Badge Unlocked!" },
+  hi: { unlocked: "बैज अनलॉक हुआ!" },
   en: { unlocked: "Badge Unlocked!" },
+  hinglish: { unlocked: "Badge Unlocked!" },
 };
 
 export default function BadgeSystem() {
@@ -32,11 +39,15 @@ export default function BadgeSystem() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
 
       badges.forEach((badge) => {
-        if (scrollPercent >= badge.threshold && !unlocked.includes(badge.name)) {
+        if (
+          scrollPercent >= badge.threshold &&
+          !unlocked.includes(badge.name)
+        ) {
           setUnlocked((prev) => [...prev, badge.name]);
           setToast(badge);
           setTimeout(() => setToast(null), 3000);
@@ -65,7 +76,9 @@ export default function BadgeSystem() {
           <div
             key={index}
             className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border transition ${
-              unlocked.includes(badge.name) ? "bg-ujjain-gold border-ujjain-gold" : "bg-white/5 border-ujjain-gold/20 opacity-40"
+              unlocked.includes(badge.name)
+                ? "bg-ujjain-gold border-ujjain-gold"
+                : "bg-white/5 border-ujjain-gold/20 opacity-40"
             }`}
             title={badge.name}
           >

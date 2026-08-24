@@ -13,14 +13,14 @@ const avatarColors = [
 
 const testimonialsData = {
   hi: [
-    { name: "Priya Sharma", text: "Mahakal Lok dekh kar dil khush ho gaya! Bahut sundar development hua hai.", category: "Vikas" },
-    { name: "Rahul Vishwakarma", text: "Ghat ki safai aur roads ka kaam sach mein kaabil-e-tareef hai.", category: "Safai" },
-    { name: "Anita Patidar", text: "Simhastha 2028 ki planning dekh kar lagta hai is baar sab kuch bahut organized hoga.", category: "Simhastha" },
-    { name: "Mohan Rathore", text: "Smart City ban ne ke baad Ujjain ka pura vibe hi badal gaya hai.", category: "Smart City" },
-    { name: "Sunita Joshi", text: "CCTV aur WiFi zones se shehar ab bahut safe aur modern lagta hai.", category: "Suraksha" },
-    { name: "Deepak Malviya", text: "Kshipra ghat par ab pehle se kahi zyada saaf paani dikhta hai.", category: "Jal" },
-    { name: "Kavita Chouhan", text: "Digital Ujjain website dekh kar laga sarkar sach mein technology use kar rahi hai.", category: "Technology" },
-    { name: "Amit Sharma", text: "Parking aur route planning agar aisi hi rahi toh Simhastha bahut smooth hoga.", category: "Parking" },
+    { name: "प्रिया शर्मा", text: "महाकाल लोक देखकर दिल खुश हो गया! बहुत सुंदर विकास हुआ है।", category: "विकास" },
+    { name: "राहुल विश्वकर्मा", text: "घाट की सफाई और सड़कों का काम सच में काबिल-ए-तारीफ है।", category: "सफाई" },
+    { name: "अनिता पाटीदार", text: "सिंहस्थ 2028 की योजना देखकर लगता है इस बार सब कुछ बहुत व्यवस्थित होगा।", category: "सिंहस्थ" },
+    { name: "मोहन राठौर", text: "स्मार्ट सिटी बनने के बाद उज्जैन का पूरा माहौल ही बदल गया है।", category: "स्मार्ट सिटी" },
+    { name: "सुनीता जोशी", text: "सीसीटीवी और वाईफाई ज़ोन से शहर अब बहुत सुरक्षित और आधुनिक लगता है।", category: "सुरक्षा" },
+    { name: "दीपक मालवीय", text: "क्षिप्रा घाट पर अब पहले से कहीं ज्यादा साफ पानी दिखता है।", category: "जल" },
+    { name: "कविता चौहान", text: "डिजिटल उज्जैन वेबसाइट देखकर लगा सरकार सच में तकनीक का उपयोग कर रही है।", category: "तकनीक" },
+    { name: "अमित शर्मा", text: "पार्किंग और मार्ग योजना अगर ऐसी ही रही तो सिंहस्थ बहुत सुगम होगा।", category: "पार्किंग" },
   ],
   en: [
     { name: "Priya Sharma", text: "Seeing Mahakal Lok made my heart happy! Truly beautiful development.", category: "Development" },
@@ -34,13 +34,24 @@ const testimonialsData = {
   ],
 };
 
+testimonialsData.hinglish = [
+  { name: "Priya Sharma", text: "Mahakal Lok dekh kar dil khush ho gaya! Bahut sundar development hua hai.", category: "Vikas" },
+  { name: "Rahul Vishwakarma", text: "Ghat ki safai aur roads ka kaam sach mein kaabil-e-tareef hai.", category: "Safai" },
+  { name: "Anita Patidar", text: "Simhastha 2028 ki planning dekh kar lagta hai is baar sab kuch bahut organized hoga.", category: "Simhastha" },
+  { name: "Mohan Rathore", text: "Smart City ban ne ke baad Ujjain ka pura vibe hi badal gaya hai.", category: "Smart City" },
+  { name: "Sunita Joshi", text: "CCTV aur WiFi zones se shehar ab bahut safe aur modern lagta hai.", category: "Suraksha" },
+  { name: "Deepak Malviya", text: "Kshipra ghat par ab pehle se kahi zyada saaf paani dikhta hai.", category: "Jal" },
+  { name: "Kavita Chouhan", text: "Digital Ujjain website dekh kar laga sarkar sach mein technology use kar rahi hai.", category: "Technology" },
+  { name: "Amit Sharma", text: "Parking aur route planning agar aisi hi rahi toh Simhastha bahut smooth hoga.", category: "Parking" },
+];
+
 const text = {
   hi: {
-    title: "Aapki Awaaz, Ujjain Ka Vikas",
-    subtitle: "Nagrikon ke vichar is pahal ke baare mein",
-    supportText: "logo ne is pahal ko support kiya",
-    verified: "Verified Citizen",
-    feedbackBtn: "Apna Feedback Dein",
+    title: "आपकी आवाज़, उज्जैन का विकास",
+    subtitle: "इस पहल के बारे में नागरिकों के विचार",
+    supportText: "लोगों ने इस पहल का समर्थन किया",
+    verified: "सत्यापित नागरिक",
+    feedbackBtn: "अपनी प्रतिक्रिया दें",
   },
   en: {
     title: "Your Voice, Ujjain's Development",
@@ -48,6 +59,13 @@ const text = {
     supportText: "people have supported this initiative",
     verified: "Verified Citizen",
     feedbackBtn: "Share Your Feedback",
+  },
+  hinglish: {
+    title: "Aapki Awaaz, Ujjain Ka Vikas",
+    subtitle: "Nagrikon ke vichar is pahal ke baare mein",
+    supportText: "logo ne is pahal ko support kiya",
+    verified: "Verified Citizen",
+    feedbackBtn: "Apna Feedback Dein",
   },
 };
 

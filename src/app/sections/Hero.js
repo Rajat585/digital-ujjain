@@ -6,19 +6,27 @@ export default function Hero() {
 
   const text = {
     hi: {
-      title: "Digital Ujjain",
-      subtitle: "Mahakal Ki Nagri — Itihaas Se Bhavishya Tak Ek Yatra",
-      scroll: "Scroll Karo",
+      title: "डिजिटल उज्जैन",
+      subtitle: "महाकाल की नगरी — इतिहास से भविष्य तक एक यात्रा",
+      scroll: "स्क्रॉल करें",
     },
     en: {
       title: "Digital Ujjain",
       subtitle: "City of Mahakal — A Journey From History To The Future",
       scroll: "Scroll Down",
     },
+    hinglish: {
+      title: "Digital Ujjain",
+      subtitle: "Mahakal Ki Nagri — Itihaas Se Bhavishya Tak Ek Yatra",
+      scroll: "Scroll Karo",
+    },
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden"
+    >
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center scale-110"

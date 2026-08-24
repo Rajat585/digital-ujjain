@@ -11,229 +11,229 @@ const galleryData = {
   hi: [
     {
       key: "simhastha2016",
-      label: "Purani Simhastha (2016)",
+      label: "पुरानी सिंहस्थ (2016)",
       images: [
         {
           file: "Simhasth2016 Panchayati akhada nirmal Shahi Snan Leading.jpg",
-          caption: "2016 Simhastha mein Akhada ki Shahi Snan shobha yatra",
+          caption: "2016 सिंहस्थ में अखाड़े की शाही स्नान शोभा यात्रा",
         },
         {
           file: "Simhasth2016 Ujjain Piligrims.jpg",
-          caption: "2016 mein Shipra tat par ekatrit shraddhalu",
+          caption: "2016 में क्षिप्रा तट पर एकत्रित श्रद्धालु",
         },
         {
           file: "Simhasth2016 Ujjain Ram Ghat.jpg",
-          caption: "Ram Ghat par 2016 Simhastha ke dauraan ka drishya",
+          caption: "राम घाट पर 2016 सिंहस्थ के दौरान का दृश्य",
         },
         {
           file: "Swami Nardanand Maha Guru of Swami Tridevi Ma Paramahansa tirth on in Kumba Mela Ujjain India 2016.jpg",
-          caption: "2016 Kumbh mein ek sant",
+          caption: "2016 कुंभ में एक संत",
         },
         {
           file: "Simhasth2016 Ujjain Gau Ghat.jpg",
-          caption: "Gau Ghat, 2016 Simhastha ke dauraan",
+          caption: "गौ घाट, 2016 सिंहस्थ के दौरान",
         },
         {
           file: "Simhasth2016 Ujjain Piligrims1.jpg",
-          caption: "Shipra tat par shraddhaluon ki bheed, 2016",
+          caption: "क्षिप्रा तट पर श्रद्धालुओं की भीड़, 2016",
         },
         {
           file: "Simhasth2016 Ujjain Security.jpg",
-          caption: "2016 Simhastha mein suraksha vyavastha",
+          caption: "2016 सिंहस्थ में सुरक्षा व्यवस्था",
         },
         {
           file: "Simhasth2016 Ujjain Snan1.jpg",
-          caption: "Shahi Snan ka drishya, 2016",
+          caption: "शाही स्नान का दृश्य, 2016",
         },
         {
           file: "Simhasth2016 Ujjain Snan2.jpg",
-          caption: "Shraddhalu Shipra mein snan karte hue, 2016",
+          caption: "श्रद्धालु क्षिप्रा में स्नान करते हुए, 2016",
         },
         {
           file: "A sadhu attired in the dress made of Rudraksha during Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
-          caption: "Rudraksha dharan kiye ek sadhu, 2004 Kumbh",
+          caption: "रुद्राक्ष धारण किए एक साधु, 2004 कुंभ",
         },
         {
           file: "A sadhu in deep meditation after performing Shahi Snan at Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
-          caption: "Shahi Snan ke baad dhyaan mein ek sadhu, 2004",
+          caption: "शाही स्नान के बाद ध्यान में एक साधु, 2004",
         },
         {
           file: "A view of the Simhasth Kumbh Mela, on the occasion of Akshaya Tritiya Shahi Snaan Day, in Ujjain on May 09, 2016.jpg",
-          caption: "Akshaya Tritiya Shahi Snan ke din ka drishya, 2016",
+          caption: "अक्षय तृतीया शाही स्नान के दिन का दृश्य, 2016",
         },
         {
           file: "A view of the Simhasth Kumbh Mela, on the occasion of Akshaya Tritiya Shahi Snaan Day, in Ujjain on May 09, 2016 (1).jpg",
-          caption: "Akshaya Tritiya Shahi Snan, ek aur drishya",
+          caption: "अक्षय तृतीया शाही स्नान, एक और दृश्य",
         },
         {
           file: "Devotees taking holy dip for Shahi Snan during Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
-          caption: "Shraddhalu Shahi Snan ke liye dubki lagate hue, 2004",
+          caption: "श्रद्धालु शाही स्नान के लिए डुबकी लगाते हुए, 2004",
         },
         {
           file: "Sadhus waiting eagerly for their turn to take a dip for Shahi Snan at Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
-          caption: "Sadhu apni baari ka intezar karte hue, 2004",
+          caption: "साधु अपनी बारी का इंतज़ार करते हुए, 2004",
         },
         {
           file: "A flag at Mahakumbh mela at Ujjain (India, 2016).jpg",
-          caption: "2016 Mahakumbh mele mein lahraata jhanda",
+          caption: "2016 महाकुंभ मेले में लहराता झंडा",
         },
       ],
     },
     {
       key: "temples",
-      label: "Mandir",
+      label: "मंदिर",
       images: [
         {
           file: "Mahakal Temple Ujjain.JPG",
-          caption: "Mahakaleshwar Jyotirlinga Mandir",
+          caption: "महाकालेश्वर ज्योतिर्लिंग मंदिर",
         },
         {
           file: "Kal Bhairav temple Ujjain.jpg",
-          caption: "Kal Bhairav Mandir, Shipra tat",
+          caption: "काल भैरव मंदिर, क्षिप्रा तट",
         },
         {
           file: "HarsiddhiMataTemple.jpg",
-          caption: "Harsiddhi Mandir aur uske deep stambh",
+          caption: "हर्षिद्धि मंदिर और उसके दीप स्तंभ",
         },
         {
           file: "Shri juna Mahakaleshwar Temple Ujjain - panoramio.jpg",
-          caption: "Shri Mahakaleshwar Mandir ka ek aur drishya",
+          caption: "श्री महाकालेश्वर मंदिर का एक और दृश्य",
         },
         {
           file: "Kalabhairava Temple Ujjain.JPG",
-          caption: "Kal Bhairav Mandir ka bahari drishya",
+          caption: "काल भैरव मंदिर का बाहरी दृश्य",
         },
         {
           file: "Lord Kal Bhairav, Ujjain.jpg",
-          caption: "Kal Bhairav ki murti",
+          caption: "काल भैरव की मूर्ति",
         },
         {
           file: "Shri Kaal Bhairav Mandir Main Gate Ujjain - panoramio.jpg",
-          caption: "Kal Bhairav Mandir ka mukhya dwar",
+          caption: "काल भैरव मंदिर का मुख्य द्वार",
         },
         {
           file: "Harsiddhi Temple, Ujjain 04.jpg",
-          caption: "Harsiddhi Mandir, ek aur drishya",
+          caption: "हर्षिद्धि मंदिर, एक और दृश्य",
         },
         {
           file: "Harsiddhi Temple, Ujjain 01.jpg",
-          caption: "Harsiddhi Mandir ka pramukh drishya",
+          caption: "हर्षिद्धि मंदिर का प्रमुख दृश्य",
         },
         {
           file: "Harsidhhi Mata Temple Ujjjain - panoramio.jpg",
-          caption: "Harsiddhi Mata Mandir",
+          caption: "हर्षिद्धि माता मंदिर",
         },
         {
           file: "Akrureshwar Mahadev.jpg",
-          caption: "Akrureshwar Mahadev Mandir",
+          caption: "अक्रूरेश्वर महादेव मंदिर",
         },
-        { file: "Bade Ganeshji.JPG", caption: "Bade Ganeshji ka Mandir" },
-        { file: "Bhadrakali Ujjain.JPG", caption: "Bhadrakali Mandir, Ujjain" },
+        { file: "Bade Ganeshji.JPG", caption: "बड़े गणेशजी का मंदिर" },
+        { file: "Bhadrakali Ujjain.JPG", caption: "भद्रकाली मंदिर, उज्जैन" },
         {
           file: "Chintamann Ganesh Temple Ujjain - panoramio.jpg",
-          caption: "Chintaman Ganesh Mandir",
+          caption: "चिंतामण गणेश मंदिर",
         },
         {
           file: "Gadh Kalika Mata Temple ujjain - panoramio.jpg",
-          caption: "Gadh Kalika Mata Mandir",
+          caption: "गढ़ कालिका माता मंदिर",
         },
-        { file: "ISKCON Temple Ujjain.jpg", caption: "ISKCON Mandir, Ujjain" },
+        { file: "ISKCON Temple Ujjain.jpg", caption: "इस्कॉन मंदिर, उज्जैन" },
         {
           file: "Harsiddhi Marg, Ujjain 01.jpg",
-          caption: "Harsiddhi Marg ka drishya",
+          caption: "हर्षिद्धि मार्ग का दृश्य",
         },
         {
           file: "Harsiddhi Marg, Ujjain 02.jpg",
-          caption: "Harsiddhi Marg, ek aur kon se",
+          caption: "हर्षिद्धि मार्ग, एक और कोण से",
         },
-        { file: "Lord kartikeya.jpg", caption: "Bhagwan Kartikeya ki murti" },
+        { file: "Lord kartikeya.jpg", caption: "भगवान कार्तिकेय की मूर्ति" },
         {
           file: "Narmada river from mahakaleshwar temple, Ujjain.jpg",
-          caption: "Mahakaleshwar Mandir se Narmada nadi ka drishya",
+          caption: "महाकालेश्वर मंदिर से नर्मदा नदी का दृश्य",
         },
         {
           file: "Shri Mahakaleshwar Jyotirling Ujjain.jpg",
-          caption: "Shri Mahakaleshwar Jyotirlinga",
+          caption: "श्री महाकालेश्वर ज्योतिर्लिंग",
         },
         {
           file: "Shri Mahakaleshwar Temple Ujjain - panoramio (2).jpg",
-          caption: "Mahakaleshwar Mandir, doosra drishya",
+          caption: "महाकालेश्वर मंदिर, दूसरा दृश्य",
         },
         {
           file: "Shri Mahakaleshwar Temple Ujjain - panoramio (3).jpg",
-          caption: "Mahakaleshwar Mandir, teesra drishya",
+          caption: "महाकालेश्वर मंदिर, तीसरा दृश्य",
         },
         {
           file: "Shri Mahakaleshwar Temple Ujjain - panoramio (4).jpg",
-          caption: "Mahakaleshwar Mandir, chautha drishya",
+          caption: "महाकालेश्वर मंदिर, चौथा दृश्य",
         },
         {
           file: "Shri Mahakaleshwer Temple - panoramio.jpg",
-          caption: "Mahakaleshwar Mandir ka bahari roop",
+          caption: "महाकालेश्वर मंदिर का बाहरी रूप",
         },
         {
           file: "Shri Mahakaleshwer Temple at Night ujjain - panoramio.jpg",
-          caption: "Raat mein Mahakaleshwar Mandir",
+          caption: "रात में महाकालेश्वर मंदिर",
         },
         {
           file: "Ujjain Mahakal Temple.jpg",
-          caption: "Ujjain ka Mahakal Mandir",
+          caption: "उज्जैन का महाकाल मंदिर",
         },
-        { file: "Ujjain Mandir.jpg", caption: "Ujjain ka ek pracheen mandir" },
-        { file: "Ujjain temple.jpg", caption: "Ujjain shehar ka mandir" },
+        { file: "Ujjain Mandir.jpg", caption: "उज्जैन का एक प्राचीन मंदिर" },
+        { file: "Ujjain temple.jpg", caption: "उज्जैन शहर का मंदिर" },
         {
           file: "Ujjain temple 007.jpg",
-          caption: "Ujjain ke mandiron mein se ek",
+          caption: "उज्जैन के मंदिरों में से एक",
         },
       ],
     },
     {
       key: "ghats",
-      label: "Ghat",
+      label: "घाट",
       images: [
         {
           file: "Shri Ram Ghat 02.jpg",
-          caption: "Ram Ghat — Simhastha ka mukhya snan sthal",
+          caption: "राम घाट — सिंहस्थ का मुख्य स्नान स्थल",
         },
         {
           file: "Ujjain, Ram Ghat (9840921865).jpg",
-          caption: "Ram Ghat ka drishya",
+          caption: "राम घाट का दृश्य",
         },
         {
           file: "Ram Ghat, Ujjain 01.jpg",
-          caption: "Ram Ghat, Shipra nadi ke kinare",
+          caption: "राम घाट, क्षिप्रा नदी के किनारे",
         },
         {
           file: "Ram Ghat and Kshipra river , Ujjain - panoramio.jpg",
-          caption: "Ram Ghat aur Shipra nadi ka drishya",
+          caption: "राम घाट और क्षिप्रा नदी का दृश्य",
         },
-        { file: "Shri Ram Ghat 01.jpg", caption: "Ram Ghat, ek aur drishya" },
-        { file: "Ram ghat ujjain.jpg", caption: "Ram Ghat, Ujjain" },
+        { file: "Shri Ram Ghat 01.jpg", caption: "राम घाट, एक और दृश्य" },
+        { file: "Ram ghat ujjain.jpg", caption: "राम घाट, उज्जैन" },
       ],
     },
     {
       key: "culture",
-      label: "Sanskritik Karyakram",
+      label: "सांस्कृतिक कार्यक्रम",
       images: [
         {
           file: "Simhasth2016 Panchayati akhada nirmal Shahi Snan sawari.jpg",
-          caption: "Akhada ki shobha yatra, Shahi Snan ke dauraan",
+          caption: "अखाड़े की शोभा यात्रा, शाही स्नान के दौरान",
         },
         {
           file: "Simhasth2016 Ujjain Saadhu 1.jpg",
-          caption: "Simhastha mein ek sadhu",
+          caption: "सिंहस्थ में एक साधु",
         },
         {
           file: "Simhasth2016 Shree Panchayati Bada Udaseen Akhada.jpg",
-          caption: "Shree Panchayati Bada Udaseen Akhada",
+          caption: "श्री पंचायती बड़ा उदासीन अखाड़ा",
         },
         {
           file: "Simhasth2016 Ujjain Saadhu 2.jpg",
-          caption: "Simhastha mein ek sadhu, 2016",
+          caption: "सिंहस्थ में एक साधु, 2016",
         },
         {
           file: "Simhasth2016 Ujjain Saadhu 3.jpg",
-          caption: "Simhastha mein ek aur sadhu, 2016",
+          caption: "सिंहस्थ में एक और साधु, 2016",
         },
       ],
     },
@@ -475,21 +475,258 @@ const galleryData = {
 
 const headings = {
   hi: {
-    title: "Gallery",
+    title: "गैलरी",
     subtitle:
-      "Purani Simhastha, mandir, ghat aur sanskritik pal, ek jhalak mein",
+      "पुरानी सिंहस्थ, मंदिर, घाट और सांस्कृतिक पल, एक झलक में",
   },
   en: {
     title: "Gallery",
     subtitle:
       "A glimpse of the previous Simhastha, temples, ghats, and cultural moments",
   },
+  hinglish: {
+    title: "Gallery",
+    subtitle:
+      "Purani Simhastha, mandir, ghat aur sanskritik pal, ek jhalak mein",
+  },
 };
 
-const allLabel = { hi: "Sabhi", en: "All" };
-const viewMoreLabel = { hi: "Aur Dekhein ↓", en: "View More ↓" };
-const viewLessLabel = { hi: "Kam Dekhein ↑", en: "View Less ↑" };
+const allLabel = { hi: "सभी", en: "All", hinglish: "Sabhi" };
+const viewMoreLabel = { hi: "और देखें ↓", en: "View More ↓", hinglish: "Aur Dekhein ↓" };
+const viewLessLabel = { hi: "कम देखें ↑", en: "View Less ↑", hinglish: "Kam Dekhein ↑" };
 const INITIAL_COUNT = 9;
+
+galleryData.hinglish = [
+    {
+      key: "simhastha2016",
+      label: "Purani Simhastha (2016)",
+      images: [
+        {
+          file: "Simhasth2016 Panchayati akhada nirmal Shahi Snan Leading.jpg",
+          caption: "2016 Simhastha mein Akhada ki Shahi Snan shobha yatra",
+        },
+        {
+          file: "Simhasth2016 Ujjain Piligrims.jpg",
+          caption: "2016 mein Shipra tat par ekatrit shraddhalu",
+        },
+        {
+          file: "Simhasth2016 Ujjain Ram Ghat.jpg",
+          caption: "Ram Ghat par 2016 Simhastha ke dauraan ka drishya",
+        },
+        {
+          file: "Swami Nardanand Maha Guru of Swami Tridevi Ma Paramahansa tirth on in Kumba Mela Ujjain India 2016.jpg",
+          caption: "2016 Kumbh mein ek sant",
+        },
+        {
+          file: "Simhasth2016 Ujjain Gau Ghat.jpg",
+          caption: "Gau Ghat, 2016 Simhastha ke dauraan",
+        },
+        {
+          file: "Simhasth2016 Ujjain Piligrims1.jpg",
+          caption: "Shipra tat par shraddhaluon ki bheed, 2016",
+        },
+        {
+          file: "Simhasth2016 Ujjain Security.jpg",
+          caption: "2016 Simhastha mein suraksha vyavastha",
+        },
+        {
+          file: "Simhasth2016 Ujjain Snan1.jpg",
+          caption: "Shahi Snan ka drishya, 2016",
+        },
+        {
+          file: "Simhasth2016 Ujjain Snan2.jpg",
+          caption: "Shraddhalu Shipra mein snan karte hue, 2016",
+        },
+        {
+          file: "A sadhu attired in the dress made of Rudraksha during Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
+          caption: "Rudraksha dharan kiye ek sadhu, 2004 Kumbh",
+        },
+        {
+          file: "A sadhu in deep meditation after performing Shahi Snan at Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
+          caption: "Shahi Snan ke baad dhyaan mein ek sadhu, 2004",
+        },
+        {
+          file: "A view of the Simhasth Kumbh Mela, on the occasion of Akshaya Tritiya Shahi Snaan Day, in Ujjain on May 09, 2016.jpg",
+          caption: "Akshaya Tritiya Shahi Snan ke din ka drishya, 2016",
+        },
+        {
+          file: "A view of the Simhasth Kumbh Mela, on the occasion of Akshaya Tritiya Shahi Snaan Day, in Ujjain on May 09, 2016 (1).jpg",
+          caption: "Akshaya Tritiya Shahi Snan, ek aur drishya",
+        },
+        {
+          file: "Devotees taking holy dip for Shahi Snan during Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
+          caption: "Shraddhalu Shahi Snan ke liye dubki lagate hue, 2004",
+        },
+        {
+          file: "Sadhus waiting eagerly for their turn to take a dip for Shahi Snan at Simhastha Kumbh (2004), Ujjain on April 22, 2004.jpg",
+          caption: "Sadhu apni baari ka intezar karte hue, 2004",
+        },
+        {
+          file: "A flag at Mahakumbh mela at Ujjain (India, 2016).jpg",
+          caption: "2016 Mahakumbh mele mein lahraata jhanda",
+        },
+      ],
+    },
+    {
+      key: "temples",
+      label: "Mandir",
+      images: [
+        {
+          file: "Mahakal Temple Ujjain.JPG",
+          caption: "Mahakaleshwar Jyotirlinga Mandir",
+        },
+        {
+          file: "Kal Bhairav temple Ujjain.jpg",
+          caption: "Kal Bhairav Mandir, Shipra tat",
+        },
+        {
+          file: "HarsiddhiMataTemple.jpg",
+          caption: "Harsiddhi Mandir aur uske deep stambh",
+        },
+        {
+          file: "Shri juna Mahakaleshwar Temple Ujjain - panoramio.jpg",
+          caption: "Shri Mahakaleshwar Mandir ka ek aur drishya",
+        },
+        {
+          file: "Kalabhairava Temple Ujjain.JPG",
+          caption: "Kal Bhairav Mandir ka bahari drishya",
+        },
+        {
+          file: "Lord Kal Bhairav, Ujjain.jpg",
+          caption: "Kal Bhairav ki murti",
+        },
+        {
+          file: "Shri Kaal Bhairav Mandir Main Gate Ujjain - panoramio.jpg",
+          caption: "Kal Bhairav Mandir ka mukhya dwar",
+        },
+        {
+          file: "Harsiddhi Temple, Ujjain 04.jpg",
+          caption: "Harsiddhi Mandir, ek aur drishya",
+        },
+        {
+          file: "Harsiddhi Temple, Ujjain 01.jpg",
+          caption: "Harsiddhi Mandir ka pramukh drishya",
+        },
+        {
+          file: "Harsidhhi Mata Temple Ujjjain - panoramio.jpg",
+          caption: "Harsiddhi Mata Mandir",
+        },
+        {
+          file: "Akrureshwar Mahadev.jpg",
+          caption: "Akrureshwar Mahadev Mandir",
+        },
+        { file: "Bade Ganeshji.JPG", caption: "Bade Ganeshji ka Mandir" },
+        { file: "Bhadrakali Ujjain.JPG", caption: "Bhadrakali Mandir, Ujjain" },
+        {
+          file: "Chintamann Ganesh Temple Ujjain - panoramio.jpg",
+          caption: "Chintaman Ganesh Mandir",
+        },
+        {
+          file: "Gadh Kalika Mata Temple ujjain - panoramio.jpg",
+          caption: "Gadh Kalika Mata Mandir",
+        },
+        { file: "ISKCON Temple Ujjain.jpg", caption: "ISKCON Mandir, Ujjain" },
+        {
+          file: "Harsiddhi Marg, Ujjain 01.jpg",
+          caption: "Harsiddhi Marg ka drishya",
+        },
+        {
+          file: "Harsiddhi Marg, Ujjain 02.jpg",
+          caption: "Harsiddhi Marg, ek aur kon se",
+        },
+        { file: "Lord kartikeya.jpg", caption: "Bhagwan Kartikeya ki murti" },
+        {
+          file: "Narmada river from mahakaleshwar temple, Ujjain.jpg",
+          caption: "Mahakaleshwar Mandir se Narmada nadi ka drishya",
+        },
+        {
+          file: "Shri Mahakaleshwar Jyotirling Ujjain.jpg",
+          caption: "Shri Mahakaleshwar Jyotirlinga",
+        },
+        {
+          file: "Shri Mahakaleshwar Temple Ujjain - panoramio (2).jpg",
+          caption: "Mahakaleshwar Mandir, doosra drishya",
+        },
+        {
+          file: "Shri Mahakaleshwar Temple Ujjain - panoramio (3).jpg",
+          caption: "Mahakaleshwar Mandir, teesra drishya",
+        },
+        {
+          file: "Shri Mahakaleshwar Temple Ujjain - panoramio (4).jpg",
+          caption: "Mahakaleshwar Mandir, chautha drishya",
+        },
+        {
+          file: "Shri Mahakaleshwer Temple - panoramio.jpg",
+          caption: "Mahakaleshwar Mandir ka bahari roop",
+        },
+        {
+          file: "Shri Mahakaleshwer Temple at Night ujjain - panoramio.jpg",
+          caption: "Raat mein Mahakaleshwar Mandir",
+        },
+        {
+          file: "Ujjain Mahakal Temple.jpg",
+          caption: "Ujjain ka Mahakal Mandir",
+        },
+        { file: "Ujjain Mandir.jpg", caption: "Ujjain ka ek pracheen mandir" },
+        { file: "Ujjain temple.jpg", caption: "Ujjain shehar ka mandir" },
+        {
+          file: "Ujjain temple 007.jpg",
+          caption: "Ujjain ke mandiron mein se ek",
+        },
+      ],
+    },
+    {
+      key: "ghats",
+      label: "Ghat",
+      images: [
+        {
+          file: "Shri Ram Ghat 02.jpg",
+          caption: "Ram Ghat — Simhastha ka mukhya snan sthal",
+        },
+        {
+          file: "Ujjain, Ram Ghat (9840921865).jpg",
+          caption: "Ram Ghat ka drishya",
+        },
+        {
+          file: "Ram Ghat, Ujjain 01.jpg",
+          caption: "Ram Ghat, Shipra nadi ke kinare",
+        },
+        {
+          file: "Ram Ghat and Kshipra river , Ujjain - panoramio.jpg",
+          caption: "Ram Ghat aur Shipra nadi ka drishya",
+        },
+        { file: "Shri Ram Ghat 01.jpg", caption: "Ram Ghat, ek aur drishya" },
+        { file: "Ram ghat ujjain.jpg", caption: "Ram Ghat, Ujjain" },
+      ],
+    },
+    {
+      key: "culture",
+      label: "Sanskritik Karyakram",
+      images: [
+        {
+          file: "Simhasth2016 Panchayati akhada nirmal Shahi Snan sawari.jpg",
+          caption: "Akhada ki shobha yatra, Shahi Snan ke dauraan",
+        },
+        {
+          file: "Simhasth2016 Ujjain Saadhu 1.jpg",
+          caption: "Simhastha mein ek sadhu",
+        },
+        {
+          file: "Simhasth2016 Shree Panchayati Bada Udaseen Akhada.jpg",
+          caption: "Shree Panchayati Bada Udaseen Akhada",
+        },
+        {
+          file: "Simhasth2016 Ujjain Saadhu 2.jpg",
+          caption: "Simhastha mein ek sadhu, 2016",
+        },
+        {
+          file: "Simhasth2016 Ujjain Saadhu 3.jpg",
+          caption: "Simhastha mein ek aur sadhu, 2016",
+        },
+      ],
+    },
+  ];
+
 
 export default function Gallery() {
   const { lang } = useLanguage();

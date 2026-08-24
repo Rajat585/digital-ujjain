@@ -5,57 +5,71 @@ const newsItems = [
     {
         id: 1,
         date: { hi: "18 Aug 2026", en: "18 Aug 2026" },
-        category: { hi: "Infrastructure", en: "Infrastructure" },
+        category: { hi: "अवसंरचना", en: "Infrastructure" },
         title: {
-            hi: "Simhastha 2028 ke liye ₹18,840 crore ka infrastructure plan ghoshit",
+            hi: "सिंहस्थ 2028 के लिए ₹18,840 करोड़ की अवसंरचना योजना घोषित",
             en: "₹18,840 crore infrastructure plan announced for Simhastha 2028",
         },
         desc: {
-            hi: "Sadak, ghat, aur riverfront vikas ke liye state government ne bada budget allocate kiya hai.",
+            hi: "सड़क, घाट और रिवरफ्रंट विकास के लिए राज्य सरकार ने बड़ा बजट आवंटित किया है।",
             en: "The state government has allocated a major budget for roads, ghats, and riverfront development.",
         },
     },
     {
         id: 2,
         date: { hi: "10 Aug 2026", en: "10 Aug 2026" },
-        category: { hi: "Riverfront", en: "Riverfront" },
+        category: { hi: "रिवरफ्रंट", en: "Riverfront" },
         title: {
-            hi: "29-km Kshipra riverfront corridor — permanent ghats ka nirmaan jaari",
+            hi: "29-किमी क्षिप्रा रिवरफ्रंट कॉरिडोर — स्थायी घाटों का निर्माण जारी",
             en: "29-km Kshipra riverfront corridor — permanent ghats under construction",
         },
         desc: {
-            hi: "Shipra nadi ke kinare permanent ghat banaye ja rahe hain taaki Simhastha ke baad bhi ye kaam aayein.",
+            hi: "क्षिप्रा नदी के किनारे स्थायी घाट बनाए जा रहे हैं ताकि सिंहस्थ के बाद भी ये काम आएं।",
             en: "Permanent ghats are being built along the Kshipra river for long-term use beyond Simhastha.",
         },
     },
     {
         id: 3,
         date: { hi: "2 Aug 2026", en: "2 Aug 2026" },
-        category: { hi: "Transport", en: "Transport" },
+        category: { hi: "परिवहन", en: "Transport" },
         title: {
-            hi: "Naya 6-lane Indore-Ujjain highway — pragati update",
+            hi: "नया 6-लेन इंदौर-उज्जैन हाईवे — प्रगति अपडेट",
             en: "New 6-lane Indore-Ujjain highway — progress update",
         },
         desc: {
-            hi: "Airport se Ujjain tak yatra aasan banane ke liye highway ko 6-lane kiya ja raha hai.",
+            hi: "एयरपोर्ट से उज्जैन तक यात्रा आसान बनाने के लिए हाईवे को 6-लेन किया जा रहा है।",
             en: "The highway is being widened to 6 lanes to make travel from the airport to Ujjain easier.",
         },
     },
     {
         id: 4,
         date: { hi: "25 Jul 2026", en: "25 Jul 2026" },
-        category: { hi: "Accommodation", en: "Accommodation" },
+        category: { hi: "आवास", en: "Accommodation" },
         title: {
-            hi: "Accommodation booking guidelines jaari ki gayi",
+            hi: "आवास बुकिंग दिशानिर्देश जारी किए गए",
             en: "Accommodation booking guidelines released",
         },
         desc: {
-            hi: "Verified stays kaise book karein, iski official guidelines aa chuki hain.",
+            hi: "सत्यापित ठहराव कैसे बुक करें, इसके आधिकारिक दिशानिर्देश आ चुके हैं।",
             en: "Official guidelines on how to book verified stays are now available.",
         },
         link: "#hotel-booking",
     },
 ];
+
+const newsItemsHinglish = [
+    { category: "Infrastructure", title: "Simhastha 2028 ke liye ₹18,840 crore ka infrastructure plan ghoshit", desc: "Sadak, ghat, aur riverfront vikas ke liye state government ne bada budget allocate kiya hai." },
+    { category: "Riverfront", title: "29-km Kshipra riverfront corridor — permanent ghats ka nirmaan jaari", desc: "Shipra nadi ke kinare permanent ghat banaye ja rahe hain taaki Simhastha ke baad bhi ye kaam aayein." },
+    { category: "Transport", title: "Naya 6-lane Indore-Ujjain highway — pragati update", desc: "Airport se Ujjain tak yatra aasan banane ke liye highway ko 6-lane kiya ja raha hai." },
+    { category: "Accommodation", title: "Accommodation booking guidelines jaari ki gayi", desc: "Verified stays kaise book karein, iski official guidelines aa chuki hain." },
+];
+
+newsItems.forEach((item, i) => {
+    item.date.hinglish = item.date.hi;
+    item.category.hinglish = newsItemsHinglish[i].category;
+    item.title.hinglish = newsItemsHinglish[i].title;
+    item.desc.hinglish = newsItemsHinglish[i].desc;
+});
 
 const categoryColors = {
     Infrastructure: "text-blue-400 border-blue-400/30 bg-blue-400/10",
@@ -67,16 +81,22 @@ const categoryColors = {
 
 const text = {
     hi: {
-        title: "News & Updates",
-        subtitle: "Simhastha 2028 se juri taaza ghoshnayein aur updates",
-        viewLink: "Yahan dekhein →",
-        footNote: "Sabhi updates official sources par aadharit hain — naveentam jaankari ke liye Simhastha 2028 ki adhikarik website check karein.",
+        title: "समाचार एवं अपडेट",
+        subtitle: "सिंहस्थ 2028 से जुड़ी ताज़ा घोषणाएं और अपडेट",
+        viewLink: "यहां देखें →",
+        footNote: "सभी अपडेट आधिकारिक स्रोतों पर आधारित हैं — नवीनतम जानकारी के लिए सिंहस्थ 2028 की आधिकारिक वेबसाइट देखें।",
     },
     en: {
         title: "News & Updates",
         subtitle: "Latest Simhastha 2028 announcements and updates",
         viewLink: "View here →",
         footNote: "All updates are based on official sources — check the official Simhastha 2028 website for the latest information.",
+    },
+    hinglish: {
+        title: "News & Updates",
+        subtitle: "Simhastha 2028 se juri taaza ghoshnayein aur updates",
+        viewLink: "Yahan dekhein →",
+        footNote: "Sabhi updates official sources par aadharit hain — naveentam jaankari ke liye Simhastha 2028 ki adhikarik website check karein.",
     },
 };
 

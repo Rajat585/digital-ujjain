@@ -4,12 +4,12 @@ import { useLanguage } from "../components/LanguageContext";
 
 const text = {
   hi: {
-    title: "Purani Ujjain vs Nayi Ujjain",
-    subtitle: "Slider ko draw karke dekho kitna badlaav aaya hai",
-    newLabel: "✨ Nayi Ujjain — 2026",
-    oldLabel: "📜 Purani Ujjain",
-    newAlt: "Nayi Ujjain - Mahakal Lok",
-    oldAlt: "Purani Ujjain",
+    title: "पुरानी उज्जैन बनाम नई उज्जैन",
+    subtitle: "स्लाइडर को खींचकर देखिए कितना बदलाव आया है",
+    newLabel: "✨ नई उज्जैन — 2026",
+    oldLabel: "📜 पुरानी उज्जैन",
+    newAlt: "नई उज्जैन - महाकाल लोक",
+    oldAlt: "पुरानी उज्जैन",
   },
   en: {
     title: "Old Ujjain vs New Ujjain",
@@ -18,6 +18,14 @@ const text = {
     oldLabel: "📜 Old Ujjain",
     newAlt: "New Ujjain - Mahakal Lok",
     oldAlt: "Old Ujjain",
+  },
+  hinglish: {
+    title: "Purani Ujjain vs Nayi Ujjain",
+    subtitle: "Slider ko draw karke dekho kitna badlaav aaya hai",
+    newLabel: "✨ Nayi Ujjain — 2026",
+    oldLabel: "📜 Purani Ujjain",
+    newAlt: "Nayi Ujjain - Mahakal Lok",
+    oldAlt: "Purani Ujjain",
   },
 };
 

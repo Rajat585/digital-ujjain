@@ -6,79 +6,79 @@ const timelineData = {
   hi: [
     {
       year: "2024",
-      title: "Smart City Roads",
-      desc: "Shehar ke pramukh maargon ka chaudikaran aur naveenikaran kiya gaya.",
+      title: "स्मार्ट सिटी सड़कें",
+      desc: "शहर के प्रमुख मार्गों का चौड़ीकरण और नवीनीकरण किया गया।",
       stat: "45 KM",
-      label: "Roads Improved",
+      label: "सड़कें सुधरीं",
       extraStats: [
-        { value: "45 KM", label: "Sadkein Sudhri" },
-        { value: "18", label: "Junctions Improved" },
-        { value: "₹120 Cr", label: "Nivesh" },
+        { value: "45 KM", label: "सड़कें सुधरीं" },
+        { value: "18", label: "जंक्शन सुधरे" },
+        { value: "₹120 Cr", label: "निवेश" },
       ],
       highlights: [
-        "Freeganj se Mahakal Marg tak 4-lane chaudikaran",
-        "Naye footpath aur street lighting sabhi mukhya sadkon par",
-        "18 pramukh junctions par traffic signal aur smart crossing",
-        "Barsat mein jalbhraav rokne ke liye naye drainage system",
+        "फ्रीगंज से महाकाल मार्ग तक 4-लेन चौड़ीकरण",
+        "नए फुटपाथ और स्ट्रीट लाइटिंग सभी मुख्य सड़कों पर",
+        "18 प्रमुख जंक्शनों पर ट्रैफिक सिग्नल और स्मार्ट क्रॉसिंग",
+        "बरसात में जलभराव रोकने के लिए नई जल निकासी व्यवस्था",
       ],
-      impact: "Is project se shehar ke andar aane-jaane ka samay lagbhag 30% kam hua hai, aur Simhastha ke doraan bhaari bheed sambhalne ki taiyari bhi majboot hui hai.",
+      impact: "इस परियोजना से शहर के अंदर आने-जाने का समय लगभग 30% कम हुआ है, और सिंहस्थ के दौरान भारी भीड़ संभालने की तैयारी भी मज़बूत हुई है।",
     },
     {
       year: "2025",
-      title: "Mahakal Lok Vistar",
-      desc: "Mahakal corridor ka vistar aur beautification project poora hua.",
+      title: "महाकाल लोक विस्तार",
+      desc: "महाकाल कॉरिडोर का विस्तार और सौंदर्यीकरण परियोजना पूरी हुई।",
       stat: "900+",
-      label: "Crore Invested",
+      label: "करोड़ निवेशित",
       extraStats: [
-        { value: "900+ Cr", label: "Kul Nivesh" },
-        { value: "6 Lakh", label: "Sq. Ft. Vistar" },
-        { value: "108", label: "Naye Stambh" },
+        { value: "900+ Cr", label: "कुल निवेश" },
+        { value: "6 Lakh", label: "वर्ग फुट विस्तार" },
+        { value: "108", label: "नए स्तंभ" },
       ],
       highlights: [
-        "Mandir parisar ka do guna vistar, darshan capacity badhi",
-        "Shiv-leela wall aur mahakal plaza ka naveenikaran",
-        "Bhakton ke liye chhaya-yukt walking corridor",
-        "Naye parking aur e-rickshaw pickup zones",
+        "मंदिर परिसर का दोगुना विस्तार, दर्शन क्षमता बढ़ी",
+        "शिव-लीला दीवार और महाकाल प्लाज़ा का नवीनीकरण",
+        "भक्तों के लिए छाया-युक्त वॉकिंग कॉरिडोर",
+        "नए पार्किंग और ई-रिक्शा पिकअप ज़ोन",
       ],
-      impact: "Ab pratidin lagbhag 40,000 se zyada shraddhalu aasani se darshan kar pa rahe hain, jo Simhastha 2028 ke liye ek majboot aadhar hai.",
+      impact: "अब प्रतिदिन लगभग 40,000 से ज़्यादा श्रद्धालु आसानी से दर्शन कर पा रहे हैं, जो सिंहस्थ 2028 के लिए एक मज़बूत आधार है।",
     },
     {
       year: "2025",
-      title: "Digital Infrastructure",
-      desc: "Free WiFi zones aur smart surveillance system shehar bhar mein lagaya gaya.",
+      title: "डिजिटल अवसंरचना",
+      desc: "मुफ्त वाईफाई ज़ोन और स्मार्ट निगरानी प्रणाली पूरे शहर में लगाई गई।",
       stat: "200+",
-      label: "CCTV Cameras",
+      label: "सीसीटीवी कैमरे",
       extraStats: [
-        { value: "200+", label: "CCTV Cameras" },
-        { value: "35", label: "Free WiFi Zones" },
-        { value: "1", label: "Integrated Control Room" },
+        { value: "200+", label: "सीसीटीवी कैमरे" },
+        { value: "35", label: "मुफ्त वाईफाई ज़ोन" },
+        { value: "1", label: "एकीकृत कंट्रोल रूम" },
       ],
       highlights: [
-        "AI-based crowd monitoring pramukh ghats aur mandir par",
-        "Ek kendriya command-and-control centre se live nigrani",
-        "Emergency alert system SMS aur app ke through",
-        "Tourist information kiosks digital screens ke saath",
+        "एआई-आधारित भीड़ निगरानी प्रमुख घाटों और मंदिर पर",
+        "एक केंद्रीय कमांड-एंड-कंट्रोल सेंटर से लाइव निगरानी",
+        "आपातकालीन अलर्ट प्रणाली एसएमएस और ऐप के ज़रिए",
+        "पर्यटक सूचना कियोस्क डिजिटल स्क्रीन के साथ",
       ],
-      impact: "Digital nigrani se surakhsha response time kam hua hai, aur bhakton ko real-time bheed jaankari milna aasan ho gaya hai.",
+      impact: "डिजिटल निगरानी से सुरक्षा प्रतिक्रिया समय कम हुआ है, और भक्तों को रीयल-टाइम भीड़ जानकारी मिलना आसान हो गया है।",
     },
     {
       year: "2026",
-      title: "Ghat Renovation",
-      desc: "Ram Ghat aur Kshipra tat ka poora renovation aur cleaning drive.",
+      title: "घाट नवीनीकरण",
+      desc: "राम घाट और क्षिप्रा तट का पूरा नवीनीकरण और सफाई अभियान।",
       stat: "12",
-      label: "Ghats Renovated",
+      label: "घाट नवीनीकृत",
       extraStats: [
-        { value: "12", label: "Ghats Renovated" },
-        { value: "3.5 KM", label: "Riverfront Cover" },
-        { value: "24x7", label: "Cleaning Drive" },
+        { value: "12", label: "घाट नवीनीकृत" },
+        { value: "3.5 KM", label: "रिवरफ्रंट कवर" },
+        { value: "24x7", label: "सफाई अभियान" },
       ],
       highlights: [
-        "Ram Ghat par naye stone platforms aur safety railings",
-        "Kshipra nadi ki safai ke liye sthayi treatment plant",
-        "Naye changing rooms aur locker facility snan ke liye",
-        "Ghat par saundarya-samvardhan roshni aur landscaping",
+        "राम घाट पर नए पत्थर के प्लेटफॉर्म और सुरक्षा रेलिंग",
+        "क्षिप्रा नदी की सफाई के लिए स्थायी ट्रीटमेंट प्लांट",
+        "नए चेंजिंग रूम और लॉकर सुविधा स्नान के लिए",
+        "घाट पर सौंदर्य-संवर्धन रोशनी और लैंडस्केपिंग",
       ],
-      impact: "Renovation ke baad ghat na sirf zyada surakshit hue hain balki Kshipra ka jal-star bhi pehle se saaf dikh raha hai.",
+      impact: "नवीनीकरण के बाद घाट न सिर्फ ज़्यादा सुरक्षित हुए हैं बल्कि क्षिप्रा का जल-स्तर भी पहले से साफ दिख रहा है।",
     },
   ],
   en: [
@@ -162,16 +162,20 @@ const timelineData = {
 };
 
 const headings = {
-  hi: { title: "2 Saal Ka Vikas", subtitle: "Ujjain mein hue pramukh vikas karyon ki jhalak" },
+  hi: { title: "2 साल का विकास", subtitle: "उज्जैन में हुए प्रमुख विकास कार्यों की झलक" },
   en: { title: "2 Years of Development", subtitle: "A glimpse of the major development projects in Ujjain" },
+  hinglish: { title: "2 Saal Ka Vikas", subtitle: "Ujjain mein hue pramukh vikas karyon ki jhalak" },
 };
 
 const modalLabels = {
-  hi: { highlights: "Mukhya Baatein", impact: "Prabhav" },
+  hi: { highlights: "मुख्य बातें", impact: "प्रभाव" },
   en: { highlights: "Key Highlights", impact: "Impact" },
+  hinglish: { highlights: "Mukhya Baatein", impact: "Prabhav" },
 };
 
-const readMoreLabel = { hi: "Aur Padhein →", en: "Read More →" };
+const readMoreLabel = { hi: "और पढ़ें →", en: "Read More →", hinglish: "Aur Padhein →" };
+
+timelineData.hinglish = timelineData.hi;
 
 export default function Timeline() {
   const { lang } = useLanguage();

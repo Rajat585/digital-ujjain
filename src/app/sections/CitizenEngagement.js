@@ -5,14 +5,14 @@ import { api } from "../lib/api";
 
 const text = {
   hi: {
-    title: "Aapka Yogdaan",
-    subtitle: "Simhastha 2028 ki behtar planning ke liye apne sujhaav dein",
-    namePlaceholder: "Aapka Naam",
-    suggestionPlaceholder: "Aapka Sujhaav Likhein...",
-    submitBtn: "Sujhaav Bhejein",
-    sendingBtn: "Bheja Ja Raha Hai...",
-    successMsg: "Dhanyavaad! Aapka sujhaav safaltapoorvak bhej diya gaya hai.",
-    errorMsg: "Kuch gadbad ho gayi. Kripya dobara koshish karein.",
+    title: "आपका योगदान",
+    subtitle: "सिंहस्थ 2028 की बेहतर योजना के लिए अपने सुझाव दें",
+    namePlaceholder: "आपका नाम",
+    suggestionPlaceholder: "अपना सुझाव लिखें...",
+    submitBtn: "सुझाव भेजें",
+    sendingBtn: "भेजा जा रहा है...",
+    successMsg: "धन्यवाद! आपका सुझाव सफलतापूर्वक भेज दिया गया है।",
+    errorMsg: "कुछ गड़बड़ हो गई। कृपया दोबारा कोशिश करें।",
   },
   en: {
     title: "Your Contribution",
@@ -23,6 +23,16 @@ const text = {
     sendingBtn: "Sending...",
     successMsg: "Thank you! Your suggestion has been sent successfully.",
     errorMsg: "Something went wrong. Please try again.",
+  },
+  hinglish: {
+    title: "Aapka Yogdaan",
+    subtitle: "Simhastha 2028 ki behtar planning ke liye apne sujhaav dein",
+    namePlaceholder: "Aapka Naam",
+    suggestionPlaceholder: "Aapka Sujhaav Likhein...",
+    submitBtn: "Sujhaav Bhejein",
+    sendingBtn: "Bheja Ja Raha Hai...",
+    successMsg: "Dhanyavaad! Aapka sujhaav safaltapoorvak bhej diya gaya hai.",
+    errorMsg: "Kuch gadbad ho gayi. Kripya dobara koshish karein.",
   },
 };
 

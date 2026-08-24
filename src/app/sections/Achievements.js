@@ -5,84 +5,84 @@ import { useLanguage } from "../components/LanguageContext";
 const achievementsData = {
   hi: [
     {
-      title: "Smart City Award",
-      desc: "Bharat Sarkar dwara Smart City Mission mein utkrisht pradarshan ke liye samman.",
+      title: "स्मार्ट सिटी अवार्ड",
+      desc: "भारत सरकार द्वारा स्मार्ट सिटी मिशन में उत्कृष्ट प्रदर्शन के लिए सम्मान।",
       icon: "🏆",
       year: "2024",
-      awardedBy: "Bharat Sarkar, Awas evam Shahri Karya Mantralaya",
+      awardedBy: "भारत सरकार, आवास एवं शहरी कार्य मंत्रालय",
       extraStats: [
-        { value: "Top 20", label: "Rashtriya Rank" },
-        { value: "45+", label: "Smart Projects" },
-        { value: "₹900+ Cr", label: "Mission Nivesh" },
+        { value: "Top 20", label: "राष्ट्रीय रैंक" },
+        { value: "45+", label: "स्मार्ट परियोजनाएं" },
+        { value: "₹900+ Cr", label: "मिशन निवेश" },
       ],
       highlights: [
-        "Smart traffic, digital surveillance aur e-governance mein utkrisht kaam",
-        "Integrated Command & Control Centre ki safal sthapna",
-        "Digital infrastructure ke liye rashtriya star par pehchaan",
-        "Simhastha 2028 taiyari ko dhyan mein rakhkar innovative planning",
+        "स्मार्ट ट्रैफिक, डिजिटल निगरानी और ई-गवर्नेंस में उत्कृष्ट काम",
+        "इंटीग्रेटेड कमांड एंड कंट्रोल सेंटर की सफल स्थापना",
+        "डिजिटल अवसंरचना के लिए राष्ट्रीय स्तर पर पहचान",
+        "सिंहस्थ 2028 तैयारी को ध्यान में रखकर नवाचारी योजना",
       ],
       impact:
-        "Is samman ne Ujjain ko Madhya Pradesh ke agraniya smart shehron mein sthapit kiya hai, aur aane wale Simhastha mahaparv ke liye ek majboot digital aadhar taiyar kiya hai.",
+        "इस सम्मान ने उज्जैन को मध्य प्रदेश के अग्रणी स्मार्ट शहरों में स्थापित किया है, और आने वाले सिंहस्थ महापर्व के लिए एक मज़बूत डिजिटल आधार तैयार किया है।",
     },
     {
-      title: "Swachh Sarvekshan Rank",
-      desc: "Rashtriya Swachhata Sarvekshan mein Madhya Pradesh ke top shehron mein sthan.",
+      title: "स्वच्छ सर्वेक्षण रैंक",
+      desc: "राष्ट्रीय स्वच्छता सर्वेक्षण में मध्य प्रदेश के शीर्ष शहरों में स्थान।",
       icon: "🥇",
       year: "2024",
-      awardedBy: "Swachh Bharat Mission, Bharat Sarkar",
+      awardedBy: "स्वच्छ भारत मिशन, भारत सरकार",
       extraStats: [
-        { value: "Top 10", label: "MP Mein Rank" },
-        { value: "95%", label: "Door-to-Door Collection" },
-        { value: "12", label: "Ghat Cleaning Drives" },
+        { value: "Top 10", label: "एमपी में रैंक" },
+        { value: "95%", label: "डोर-टू-डोर कलेक्शन" },
+        { value: "12", label: "घाट सफाई अभियान" },
       ],
       highlights: [
-        "Ghar-ghar kachra sangrahan aur segregation mein utkrisht pradarshan",
-        "Kshipra tat aur pramukh ghaton par niyamit safai abhiyaan",
-        "Public toilets aur waste-management infrastructure mein sudhar",
-        "Nagarikon ki bhaagidari se Swachhata jaagrukta abhiyaan",
+        "घर-घर कचरा संग्रहण और पृथक्करण में उत्कृष्ट प्रदर्शन",
+        "क्षिप्रा तट और प्रमुख घाटों पर नियमित सफाई अभियान",
+        "सार्वजनिक शौचालय और अपशिष्ट-प्रबंधन अवसंरचना में सुधार",
+        "नागरिकों की भागीदारी से स्वच्छता जागरूकता अभियान",
       ],
       impact:
-        "Ye rank Ujjain ke safai vyavastha mein lagatar sudhar ko darshata hai, jo teerth-yatriyon ke liye ek saaf-suthra aur swasth anubhav sunishchit karta hai.",
+        "यह रैंक उज्जैन की सफाई व्यवस्था में लगातार सुधार को दर्शाता है, जो तीर्थ-यात्रियों के लिए एक साफ-सुथरा और स्वस्थ अनुभव सुनिश्चित करता है।",
     },
     {
-      title: "Heritage City Recognition",
-      desc: "Dharmik aur aitihasik mahatva ke liye Heritage City ka darja.",
+      title: "हेरिटेज सिटी मान्यता",
+      desc: "धार्मिक और ऐतिहासिक महत्व के लिए हेरिटेज सिटी का दर्जा।",
       icon: "🏛️",
       year: "2023",
-      awardedBy: "Bharat Sarkar, Sanskritik Mantralaya (HRIDAY Yojna)",
+      awardedBy: "भारत सरकार, संस्कृति मंत्रालय (हृदय योजना)",
       extraStats: [
-        { value: "2,500+", label: "Saal Purana Itihaas" },
-        { value: "1", label: "Jyotirlinga Sthal" },
-        { value: "50+", label: "Heritage Structures" },
+        { value: "2,500+", label: "साल पुराना इतिहास" },
+        { value: "1", label: "ज्योतिर्लिंग स्थल" },
+        { value: "50+", label: "हेरिटेज संरचनाएं" },
       ],
       highlights: [
-        "HRIDAY (Heritage City Development Yojna) mein shaamil kiya gaya",
-        "Prachin mandiron aur smaarakon ke sanrakshan ke liye vishesh fund",
-        "Mahakaleshwar Jyotirlinga sahit kai aitihasik dharohron ki suraksha",
-        "Sanskritik paryatan ko badhava dene wali yojnayein shuru hui",
+        "हृदय (हेरिटेज सिटी डेवलपमेंट योजना) में शामिल किया गया",
+        "प्राचीन मंदिरों और स्मारकों के संरक्षण के लिए विशेष फंड",
+        "महाकालेश्वर ज्योतिर्लिंग सहित कई ऐतिहासिक धरोहरों की सुरक्षा",
+        "सांस्कृतिक पर्यटन को बढ़ावा देने वाली योजनाएं शुरू हुईं",
       ],
       impact:
-        "Ye maanyata Ujjain ki hazaaron saal purani sanskritik virasat ko sanrakshit karne ke saath-saath ise ek vishwastariya dharmik-paryatan kendra ke roop mein sthapit karti hai.",
+        "यह मान्यता उज्जैन की हज़ारों साल पुरानी सांस्कृतिक विरासत को संरक्षित करने के साथ-साथ इसे एक विश्वस्तरीय धार्मिक-पर्यटन केंद्र के रूप में स्थापित करती है।",
     },
     {
-      title: "Best Tourism Destination",
-      desc: "Rajya paryatan puraskar mein Ujjain ko shreshtha dharmik paryatan sthal chuna gaya.",
+      title: "सर्वश्रेष्ठ पर्यटन गंतव्य",
+      desc: "राज्य पर्यटन पुरस्कार में उज्जैन को श्रेष्ठ धार्मिक पर्यटन स्थल चुना गया।",
       icon: "⭐",
       year: "2024",
-      awardedBy: "Madhya Pradesh Paryatan Vikas Nigam",
+      awardedBy: "मध्य प्रदेश पर्यटन विकास निगम",
       extraStats: [
-        { value: "1.2 Cr+", label: "Vaarshik Paryatak" },
-        { value: "#1", label: "Dharmik Paryatan MP Mein" },
-        { value: "4.6★", label: "Ausat Yatri Rating" },
+        { value: "1.2 Cr+", label: "वार्षिक पर्यटक" },
+        { value: "#1", label: "धार्मिक पर्यटन एमपी में" },
+        { value: "4.6★", label: "औसत यात्री रेटिंग" },
       ],
       highlights: [
-        "Rajya ke sarvashreshtha dharmik paryatan sthal ke roop mein samman",
-        "Behtar connectivity, guide services aur yatri suvidhaon ke liye pehchaan",
-        "Simhastha 2028 se pehle infrastructure taiyari ki sarahna",
-        "Desh-videsh ke shraddhaluon dwara sabse zyada pasand kiya gaya sthal",
+        "राज्य के सर्वश्रेष्ठ धार्मिक पर्यटन स्थल के रूप में सम्मान",
+        "बेहतर कनेक्टिविटी, गाइड सेवाओं और यात्री सुविधाओं के लिए पहचान",
+        "सिंहस्थ 2028 से पहले अवसंरचना तैयारी की सराहना",
+        "देश-विदेश के श्रद्धालुओं द्वारा सबसे ज़्यादा पसंद किया गया स्थल",
       ],
       impact:
-        "Ye puraskar Ujjain ke paryatan anubhav ko rashtriya star par pramaanit karta hai aur Simhastha 2028 ke liye ek vishwasneey aadhar taiyar karta hai.",
+        "यह पुरस्कार उज्जैन के पर्यटन अनुभव को राष्ट्रीय स्तर पर प्रमाणित करता है और सिंहस्थ 2028 के लिए एक विश्वसनीय आधार तैयार करता है।",
     },
   ],
   en: [
@@ -171,29 +171,121 @@ const achievementsData = {
 
 const headings = {
   hi: {
-    title: "Ujjain Ki Uplabdhiyan",
-    subtitle: "Shehar ko mile samman aur pehchaan",
+    title: "उज्जैन की उपलब्धियां",
+    subtitle: "शहर को मिले सम्मान और पहचान",
   },
   en: {
     title: "Ujjain's Achievements",
     subtitle: "Recognitions and honours earned by the city",
   },
+  hinglish: {
+    title: "Ujjain Ki Uplabdhiyan",
+    subtitle: "Shehar ko mile samman aur pehchaan",
+  },
 };
 
 const modalLabels = {
   hi: {
-    highlights: "Mukhya Baatein",
-    impact: "Prabhav",
-    awardedBy: "Pradaan Karta",
+    highlights: "मुख्य बातें",
+    impact: "प्रभाव",
+    awardedBy: "प्रदान कर्ता",
   },
   en: {
     highlights: "Key Highlights",
     impact: "Impact",
     awardedBy: "Awarded By",
   },
+  hinglish: {
+    highlights: "Mukhya Baatein",
+    impact: "Prabhav",
+    awardedBy: "Pradaan Karta",
+  },
 };
 
-const readMoreLabel = { hi: "Aur Padhein →", en: "Read More →" };
+const readMoreLabel = { hi: "और पढ़ें →", en: "Read More →", hinglish: "Aur Padhein →" };
+
+achievementsData.hinglish = [
+  {
+    title: "Smart City Award",
+    desc: "Bharat Sarkar dwara Smart City Mission mein utkrisht pradarshan ke liye samman.",
+    icon: "🏆",
+    year: "2024",
+    awardedBy: "Bharat Sarkar, Awas evam Shahri Karya Mantralaya",
+    extraStats: [
+      { value: "Top 20", label: "Rashtriya Rank" },
+      { value: "45+", label: "Smart Projects" },
+      { value: "₹900+ Cr", label: "Mission Nivesh" },
+    ],
+    highlights: [
+      "Smart traffic, digital surveillance aur e-governance mein utkrisht kaam",
+      "Integrated Command & Control Centre ki safal sthapna",
+      "Digital infrastructure ke liye rashtriya star par pehchaan",
+      "Simhastha 2028 taiyari ko dhyan mein rakhkar innovative planning",
+    ],
+    impact:
+      "Is samman ne Ujjain ko Madhya Pradesh ke agraniya smart shehron mein sthapit kiya hai, aur aane wale Simhastha mahaparv ke liye ek majboot digital aadhar taiyar kiya hai.",
+  },
+  {
+    title: "Swachh Sarvekshan Rank",
+    desc: "Rashtriya Swachhata Sarvekshan mein Madhya Pradesh ke top shehron mein sthan.",
+    icon: "🥇",
+    year: "2024",
+    awardedBy: "Swachh Bharat Mission, Bharat Sarkar",
+    extraStats: [
+      { value: "Top 10", label: "MP Mein Rank" },
+      { value: "95%", label: "Door-to-Door Collection" },
+      { value: "12", label: "Ghat Cleaning Drives" },
+    ],
+    highlights: [
+      "Ghar-ghar kachra sangrahan aur segregation mein utkrisht pradarshan",
+      "Kshipra tat aur pramukh ghaton par niyamit safai abhiyaan",
+      "Public toilets aur waste-management infrastructure mein sudhar",
+      "Nagarikon ki bhaagidari se Swachhata jaagrukta abhiyaan",
+    ],
+    impact:
+      "Ye rank Ujjain ke safai vyavastha mein lagatar sudhar ko darshata hai, jo teerth-yatriyon ke liye ek saaf-suthra aur swasth anubhav sunishchit karta hai.",
+  },
+  {
+    title: "Heritage City Recognition",
+    desc: "Dharmik aur aitihasik mahatva ke liye Heritage City ka darja.",
+    icon: "🏛️",
+    year: "2023",
+    awardedBy: "Bharat Sarkar, Sanskritik Mantralaya (HRIDAY Yojna)",
+    extraStats: [
+      { value: "2,500+", label: "Saal Purana Itihaas" },
+      { value: "1", label: "Jyotirlinga Sthal" },
+      { value: "50+", label: "Heritage Structures" },
+    ],
+    highlights: [
+      "HRIDAY (Heritage City Development Yojna) mein shaamil kiya gaya",
+      "Prachin mandiron aur smaarakon ke sanrakshan ke liye vishesh fund",
+      "Mahakaleshwar Jyotirlinga sahit kai aitihasik dharohron ki suraksha",
+      "Sanskritik paryatan ko badhava dene wali yojnayein shuru hui",
+    ],
+    impact:
+      "Ye maanyata Ujjain ki hazaaron saal purani sanskritik virasat ko sanrakshit karne ke saath-saath ise ek vishwastariya dharmik-paryatan kendra ke roop mein sthapit karti hai.",
+  },
+  {
+    title: "Best Tourism Destination",
+    desc: "Rajya paryatan puraskar mein Ujjain ko shreshtha dharmik paryatan sthal chuna gaya.",
+    icon: "⭐",
+    year: "2024",
+    awardedBy: "Madhya Pradesh Paryatan Vikas Nigam",
+    extraStats: [
+      { value: "1.2 Cr+", label: "Vaarshik Paryatak" },
+      { value: "#1", label: "Dharmik Paryatan MP Mein" },
+      { value: "4.6★", label: "Ausat Yatri Rating" },
+    ],
+    highlights: [
+      "Rajya ke sarvashreshtha dharmik paryatan sthal ke roop mein samman",
+      "Behtar connectivity, guide services aur yatri suvidhaon ke liye pehchaan",
+      "Simhastha 2028 se pehle infrastructure taiyari ki sarahna",
+      "Desh-videsh ke shraddhaluon dwara sabse zyada pasand kiya gaya sthal",
+    ],
+    impact:
+      "Ye puraskar Ujjain ke paryatan anubhav ko rashtriya star par pramaanit karta hai aur Simhastha 2028 ke liye ek vishwasneey aadhar taiyar karta hai.",
+  },
+];
 
 export default function Achievements() {
   const { lang } = useLanguage();

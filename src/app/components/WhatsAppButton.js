@@ -4,8 +4,9 @@ import { useLanguage } from "./LanguageContext";
 const WHATSAPP_NUMBER = "919685431574"; // country code + number, no + or spaces
 
 const text = {
-  hi: { label: "WhatsApp par sahayata" },
+  hi: { label: "व्हाट्सएप पर सहायता" },
   en: { label: "WhatsApp support" },
+  hinglish: { label: "WhatsApp par sahayata" },
 };
 
 export default function WhatsAppButton() {

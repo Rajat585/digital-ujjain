@@ -20,8 +20,9 @@ const templeSchedules = {
 };
 
 const crowdLevels = {
-  hi: { veryHigh: "Bahut Zyada", high: "Zyada", moderate: "Madhyam", low: "Kam" },
+  hi: { veryHigh: "बहुत ज़्यादा", high: "ज़्यादा", moderate: "मध्यम", low: "कम" },
   en: { veryHigh: "Very High", high: "High", moderate: "Moderate", low: "Low" },
+  hinglish: { veryHigh: "Bahut Zyada", high: "Zyada", moderate: "Madhyam", low: "Kam" },
 };
 
 function getCrowdForHour(hour, isBhasmaWindow, lang) {
@@ -40,19 +41,19 @@ function getNextEvent(schedule, currentDecimal, tomorrowText) {
 
 const text = {
   hi: {
-    title: "Live Yatri Sahayta Dashboard",
-    subtitle: "Abhi ki sthiti — yatra plan karne ke liye kaam ki jaankari",
-    mahakalTitle: "Mahakaleshwar Mandir",
-    kalBhairavTitle: "Kal Bhairav Mandir",
-    nextAarti: "Agli Aarti",
-    currentCrowd: "Abhi Ki Bhid",
-    temperature: "Tapmaan",
-    lowCrowdTime: "Kam Bhid Ka Samay",
-    lowCrowdWindow: "10 AM – 4 PM",
-    verifiedStalls: "Verified Stalls",
-    verifiedStallsNote: "Authorized paani/khana hi lein",
-    tomorrowMorning: "kal subah",
-    footNote: "Aarti samay aur bhid typical patterns par aadharit hain — Simhastha ke dauraan prashasan ke real-time updates ko priority dein.",
+    title: "लाइव यात्री सहायता डैशबोर्ड",
+    subtitle: "अभी की स्थिति — यात्रा योजना बनाने के लिए काम की जानकारी",
+    mahakalTitle: "महाकालेश्वर मंदिर",
+    kalBhairavTitle: "काल भैरव मंदिर",
+    nextAarti: "अगली आरती",
+    currentCrowd: "अभी की भीड़",
+    temperature: "तापमान",
+    lowCrowdTime: "कम भीड़ का समय",
+    lowCrowdWindow: "सुबह 10 – शाम 4 बजे",
+    verifiedStalls: "सत्यापित स्टॉल",
+    verifiedStallsNote: "अधिकृत पानी/खाना ही लें",
+    tomorrowMorning: "कल सुबह",
+    footNote: "आरती समय और भीड़ सामान्य पैटर्न पर आधारित हैं — सिंहस्थ के दौरान प्रशासन के रीयल-टाइम अपडेट को प्राथमिकता दें।",
   },
   en: {
     title: "Live Visitor Assistance Dashboard",
@@ -68,6 +69,21 @@ const text = {
     verifiedStallsNote: "Only use authorized food/water stalls",
     tomorrowMorning: "tomorrow morning",
     footNote: "Aarti timings and crowd levels are based on typical patterns — during Simhastha, please prioritize real-time updates from the administration.",
+  },
+  hinglish: {
+    title: "Live Yatri Sahayta Dashboard",
+    subtitle: "Abhi ki sthiti — yatra plan karne ke liye kaam ki jaankari",
+    mahakalTitle: "Mahakaleshwar Mandir",
+    kalBhairavTitle: "Kal Bhairav Mandir",
+    nextAarti: "Agli Aarti",
+    currentCrowd: "Abhi Ki Bhid",
+    temperature: "Tapmaan",
+    lowCrowdTime: "Kam Bhid Ka Samay",
+    lowCrowdWindow: "10 AM – 4 PM",
+    verifiedStalls: "Verified Stalls",
+    verifiedStallsNote: "Authorized paani/khana hi lein",
+    tomorrowMorning: "kal subah",
+    footNote: "Aarti samay aur bhid typical patterns par aadharit hain — Simhastha ke dauraan prashasan ke real-time updates ko priority dein.",
   },
 };
 
