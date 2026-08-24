@@ -126,12 +126,12 @@ export default function VR360() {
   const activeWaypoint = waypoints.find((w) => w.id === activeId);
 
   return (
-    <section id="vr-zone" className="h-screen w-full bg-ujjain-dark relative overflow-hidden">
-      <div className="absolute top-10 left-0 right-0 text-center z-10 pointer-events-none px-4">
+    <section id="vr-zone" className="h-dvh min-h-[560px] w-full bg-ujjain-dark relative overflow-hidden">
+      <div className="absolute top-8 sm:top-10 left-0 right-0 text-center z-10 pointer-events-none px-4">
         <h2 className="text-3xl md:text-5xl font-bold text-ujjain-gold drop-shadow-lg">
           {t.title}
         </h2>
-        <p className="text-ujjain-cream mt-2 drop-shadow">{t.subtitle}</p>
+        <p className="text-ujjain-cream mt-2 drop-shadow text-sm sm:text-base">{t.subtitle}</p>
       </div>
 
       {/* key={activeId} forces a clean remount so each landmark's carousel
@@ -141,7 +141,7 @@ export default function VR360() {
         slides={activeWaypoint.slides}
         lang={lang}
         intervalMs={4000}
-        heightClass="h-screen"
+        heightClass="h-full"
         credit="Photos via Wikimedia Commons"
       />
 
@@ -152,8 +152,8 @@ export default function VR360() {
             key={w.id}
             onClick={() => setActiveId(w.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${activeId === w.id
-                ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
-                : "bg-black/40 text-ujjain-cream border-ujjain-gold/40 hover:border-ujjain-gold"
+              ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
+              : "bg-black/40 text-ujjain-cream border-ujjain-gold/40 hover:border-ujjain-gold"
               }`}
           >
             <span className="mr-1">{w.icon}</span>

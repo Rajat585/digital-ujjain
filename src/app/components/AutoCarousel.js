@@ -1,137 +1,189 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import Image from "next/image";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css/core";
 
 /**
- * AutoCarousel — lightweight, dependency-free, high-performance auto-playing
- * image carousel. Replaces the old procedural Three.js "360°" scenes.
+ * AutoCarousel — T.RICKS-style wave drag-slider, rebuilt on Splide.js.
+ * 3-up center-focused row on desktop, 1-up with side-peeks on mobile,
+ * loop + drag + auto-advance, static wave clip-path over the whole row,
+ * and a floating "DRAG" cursor that follows the pointer (desktop only).
  *
- * Perf notes:
- * - Only opacity + transform are animated (both GPU-compositable, no layout
- *   thrash). No per-frame JS (no useFrame/rAF loop) — CSS transitions do the
- *   work, so this is dramatically cheaper than a WebGL canvas.
- * - Images use native lazy-loading except the first (priority) slide.
- * - Auto-play pauses on hover/touch/focus so it never fights the user.
- *
- * Props:
+ * Props: same API as before —
  *   slides: [{ src, alt, captionHi, captionEn }]
  *   intervalMs: number (default 4500)
  *   lang: "hi" | "en"
- *   heightClass: tailwind height classes for the frame
- *   credit: optional string shown bottom-right (e.g. "Photos via Wikimedia Commons")
+ *   credit: optional string shown bottom-left
+ *   priority: true for the first carousel on the page (helps LCP)
  */
 export default function AutoCarousel({
   slides,
   intervalMs = 4500,
   lang = "hi",
-  heightClass = "h-screen",
   credit,
+  priority = false,
 }) {
-  const [index, setIndex] = useState(0);
+  const t =
+    lang === "hi"
+      ? { prev: "Pichhli photo", next: "Agli photo", play: "Auto-play shuru karo", pause: "Auto-play roko" }
+      : { prev: "Previous photo", next: "Next photo", play: "Start autoplay", pause: "Pause autoplay" };
+
+  const [brokenSrcs, setBrokenSrcs] = useState(() => new Set());
+  const liveSlides = useMemo(
+    () => (slides || []).filter((s) => !brokenSrcs.has(s.src)),
+    [slides, brokenSrcs]
+  );
+  const [loadedSrcs, setLoadedSrcs] = useState(() => new Set());
   const [paused, setPaused] = useState(false);
-  const touchStartX = useRef(null);
-  const count = slides?.length || 0;
+  const [cursorOn, setCursorOn] = useState(false);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const splideRef = useRef(null);
+  const wrapRef = useRef(null);
 
-  const goTo = useCallback((i) => setIndex(((i % count) + count) % count), [count]);
-  const next = useCallback(() => goTo(index + 1), [goTo, index]);
-  const prev = useCallback(() => goTo(index - 1), [goTo, index]);
+  const markLoaded = (src) =>
+    setLoadedSrcs((prev) => (prev.has(src) ? prev : new Set(prev).add(src)));
+  const markBroken = (src) =>
+    setBrokenSrcs((prev) => (prev.has(src) ? prev : new Set(prev).add(src)));
 
-  useEffect(() => {
-    if (paused || count <= 1) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % count), intervalMs);
-    return () => clearInterval(id);
-  }, [paused, count, intervalMs]);
+  const options = useMemo(
+    () => ({
+      type: "loop",
+      perPage: 3,
+      perMove: 1,
+      focus: "center",
+      gap: "1.25rem",
+      arrows: false,
+      pagination: false,
+      drag: true,
+      autoplay: !paused,
+      interval: intervalMs,
+      pauseOnHover: true,
+      pauseOnFocus: true,
+      speed: 700,
+      easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+      breakpoints: {
+        767: {
+          perPage: 1,
+          padding: { left: "12%", right: "12%" },
+          gap: "0.75rem",
+        },
+      },
+    }),
+    [paused, intervalMs]
+  );
 
-  if (!count) return null;
+  const onPointerMove = useCallback((e) => {
+    const rect = wrapRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
+
+  if (!liveSlides.length) return null;
 
   return (
-    <div
-      className={`relative w-full ${heightClass} overflow-hidden bg-ujjain-dark`}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => {
-        setPaused(true);
-        touchStartX.current = e.touches[0].clientX;
-      }}
-      onTouchEnd={(e) => {
-        const dx = e.changedTouches[0].clientX - (touchStartX.current ?? 0);
-        if (dx > 40) prev();
-        else if (dx < -40) next();
-        setTimeout(() => setPaused(false), 2000);
-      }}
+    <section
+      className="relative w-full bg-ujjain-dark py-16 sm:py-24 overflow-hidden"
+      aria-roledescription="carousel"
+      aria-label={lang === "hi" ? "Simhastha photo slider" : "Simhastha photo slider"}
     >
-      {slides.map((slide, i) => (
-        <img
-          key={slide.src}
-          src={slide.src}
-          alt={slide.alt || ""}
-          loading={i === 0 ? "eager" : "lazy"}
-          fetchPriority={i === 0 ? "high" : "auto"}
-          className="absolute inset-0 w-full h-full object-cover will-change-transform"
-          style={{
-            opacity: i === index ? 1 : 0,
-            transform: i === index ? "scale(1.06)" : "scale(1)",
-            transition:
-              i === index
-                ? "opacity 1s ease, transform 8s ease-out"
-                : "opacity 1s ease",
-            zIndex: i === index ? 1 : 0,
-          }}
-        />
-      ))}
+      <div
+        ref={wrapRef}
+        className="relative"
+        onMouseEnter={() => setCursorOn(true)}
+        onMouseLeave={() => setCursorOn(false)}
+        onMouseMove={onPointerMove}
+        style={{
+          clipPath: "polygon(0% 6%, 100% 0%, 100% 94%, 0% 100%)",
+        }}
+      >
+        <Splide
+          ref={splideRef}
+          options={options}
+          hasTrack={false}
+          aria-label={lang === "hi" ? "Mandir photos" : "Temple photos"}
+        >
+          <div className="splide__track">
+            <ul className="splide__list">
+              {liveSlides.map((slide, i) => {
+                const isLoaded = loadedSrcs.has(slide.src);
+                return (
+                  <SplideSlide key={slide.src}>
+                    <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] bg-ujjain-dark overflow-hidden">
+                      {!isLoaded && <div className="absolute inset-0 carousel-shimmer" />}
+                      <Image
+                        src={slide.src}
+                        alt={slide.alt || ""}
+                        fill
+                        sizes="(max-width: 767px) 76vw, 33vw"
+                        priority={priority && i === 0}
+                        loading={priority && i === 0 ? "eager" : "lazy"}
+                        className="object-cover"
+                        onLoad={() => markLoaded(slide.src)}
+                        onError={() => markBroken(slide.src)}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                  </SplideSlide>
+                );
+              })}
+            </ul>
+          </div>
+        </Splide>
 
-      {/* darken for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black/70 z-[2] pointer-events-none" />
-
-      {/* caption */}
-      {(slides[index].captionHi || slides[index].captionEn) && (
-        <div className="absolute bottom-20 left-0 right-0 text-center z-[3] px-4 pointer-events-none">
-          <p className="text-ujjain-cream/90 text-sm md:text-base">
-            {lang === "hi" ? slides[index].captionHi : slides[index].captionEn}
-          </p>
-        </div>
-      )}
-
-      {/* prev/next arrows */}
-      {count > 1 && (
-        <>
-          <button
-            aria-label="Previous"
-            onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-[3] w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-ujjain-gold text-lg flex items-center justify-center transition-colors"
+        {cursorOn && (
+          <div
+            className="hidden sm:flex pointer-events-none absolute z-10 w-16 h-16 rounded-full bg-ujjain-dark/90 border border-ujjain-gold items-center justify-center text-ujjain-gold text-[11px] tracking-wide"
+            style={{ left: cursorPos.x - 32, top: cursorPos.y - 32 }}
           >
-            ‹
+            {lang === "hi" ? "GHASEETO" : "DRAG"}
+          </div>
+        )}
+      </div>
+
+      {liveSlides.length > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-8 sm:mt-10">
+          <button
+            type="button"
+            aria-label={t.prev}
+            onClick={() => splideRef.current?.splide?.go("-1")}
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-ujjain-gold/40 hover:border-ujjain-gold text-ujjain-gold flex items-center justify-center transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
           </button>
           <button
-            aria-label="Next"
-            onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-[3] w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-ujjain-gold text-lg flex items-center justify-center transition-colors"
+            type="button"
+            aria-label={paused ? t.play : t.pause}
+            aria-pressed={paused}
+            onClick={() => setPaused((p) => !p)}
+            className="w-8 h-8 rounded-full border border-ujjain-gold/40 hover:border-ujjain-gold text-ujjain-gold flex items-center justify-center transition-colors"
           >
-            ›
+            {paused ? (
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3" /></svg>
+            ) : (
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
+            )}
           </button>
-        </>
-      )}
-
-      {/* dots */}
-      {count > 1 && (
-        <div className="absolute bottom-8 left-0 right-0 z-[3] flex justify-center gap-2">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              aria-label={`Go to slide ${i + 1}`}
-              onClick={() => goTo(i)}
-              className={`h-2 rounded-full transition-all ${
-                i === index ? "w-6 bg-ujjain-gold" : "w-2 bg-ujjain-cream/40 hover:bg-ujjain-cream/70"
-              }`}
-            />
-          ))}
+          <button
+            type="button"
+            aria-label={t.next}
+            onClick={() => splideRef.current?.splide?.go("+1")}
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-ujjain-gold/40 hover:border-ujjain-gold text-ujjain-gold flex items-center justify-center transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
       )}
 
       {credit && (
-        <div className="absolute bottom-2 right-3 z-[3] text-[10px] text-ujjain-cream/50">
+        <div className="text-center text-[10px] tracking-wide text-ujjain-cream/40 mt-4">
           {credit}
         </div>
       )}
-    </div>
+    </section>
   );
 }

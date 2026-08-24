@@ -34,36 +34,18 @@ const slides = [
   },
 ];
 
-const text = {
-  hi: {
-    title: "Mahamrityunjay Dwar",
-    subtitle: "Simhastha ke pavitra pravesh dwar — asli tasveerein",
-  },
-  en: {
-    title: "Mahamrityunjay Dwar",
-    subtitle: "The sacred gateway to Simhastha — real photographs",
-  },
-};
-
 export default function Gateway3D() {
   const { lang } = useLanguage();
-  const t = text[lang] || text.hi;
 
   return (
-    <section className="h-screen w-full bg-ujjain-dark relative overflow-hidden">
-      <div className="absolute top-10 left-0 right-0 text-center z-10 pointer-events-none px-4">
-        <h2 className="text-3xl md:text-5xl font-bold text-ujjain-gold drop-shadow-lg">
-          {t.title}
-        </h2>
-        <p className="text-ujjain-cream mt-2 drop-shadow">{t.subtitle}</p>
-      </div>
-
+    <section className="h-dvh min-h-[560px] w-full bg-ujjain-dark relative overflow-hidden">
       <AutoCarousel
         slides={slides}
         lang={lang}
         intervalMs={4500}
-        heightClass="h-screen"
+        heightClass="h-full"
         credit="Photos via Wikimedia Commons"
+        priority
       />
     </section>
   );
