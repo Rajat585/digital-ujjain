@@ -6,7 +6,7 @@ import { useLanguage } from "../components/LanguageContext";
 const templeSchedules = {
   mahakal: [
     { name: "Bhasma Aarti", hour: 4 },
-    { name: "Prathakal Aarti", hour: 7 },
+    { name: "Bal Bhog Aarti", hour: 7 },
     { name: "Bhog Aarti", hour: 10.5 },
     { name: "Sandhya Aarti", hour: 19 },
     { name: "Shayan Aarti", hour: 22.5 },
@@ -51,7 +51,10 @@ const text = {
     lowCrowdTime: "कम भीड़ का समय",
     lowCrowdWindow: "सुबह 10 – शाम 4 बजे",
     verifiedStalls: "सत्यापित स्टॉल",
-    verifiedStallsNote: "अधिकृत पानी/खाना ही लें",
+    verifiedStallsNote: "FSSAI-लाइसेंस प्राप्त और नगर निगम से सत्यापित पानी/खाना ही लें",
+    emergencyNumbers: "100 / 108 / 112",
+    emergencyLabel: "पुलिस / एम्बुलेंस / आपातकालीन",
+    emergencyNote: "महाकाल मंदिर पूछताछ: 0734-2550563",
     tomorrowMorning: "कल सुबह",
     footNote: "आरती समय और भीड़ सामान्य पैटर्न पर आधारित हैं — सिंहस्थ के दौरान प्रशासन के रीयल-टाइम अपडेट को प्राथमिकता दें।",
   },
@@ -66,7 +69,10 @@ const text = {
     lowCrowdTime: "Low Crowd Time",
     lowCrowdWindow: "10 AM – 4 PM",
     verifiedStalls: "Verified Stalls",
-    verifiedStallsNote: "Only use authorized food/water stalls",
+    verifiedStallsNote: "Only use FSSAI-licensed, municipality-verified food/water stalls",
+    emergencyNumbers: "100 / 108 / 112",
+    emergencyLabel: "Police / Ambulance / Emergency",
+    emergencyNote: "Mahakal Temple Enquiry: 0734-2550563",
     tomorrowMorning: "tomorrow morning",
     footNote: "Aarti timings and crowd levels are based on typical patterns — during Simhastha, please prioritize real-time updates from the administration.",
   },
@@ -81,7 +87,10 @@ const text = {
     lowCrowdTime: "Kam Bhid Ka Samay",
     lowCrowdWindow: "10 AM – 4 PM",
     verifiedStalls: "Verified Stalls",
-    verifiedStallsNote: "Authorized paani/khana hi lein",
+    verifiedStallsNote: "FSSAI-licensed aur nagar nigam se verified paani/khana hi lein",
+    emergencyNumbers: "100 / 108 / 112",
+    emergencyLabel: "Police / Ambulance / Emergency",
+    emergencyNote: "Mahakal Mandir Enquiry: 0734-2550563",
     tomorrowMorning: "kal subah",
     footNote: "Aarti samay aur bhid typical patterns par aadharit hain — Simhastha ke dauraan prashasan ke real-time updates ko priority dein.",
   },
@@ -185,8 +194,9 @@ export default function LiveDashboard() {
 
         <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
           <div className="text-2xl mb-1">🚨</div>
-          <div className="text-sm font-bold text-ujjain-gold">100 / 108</div>
-          <div className="text-ujjain-cream/60 text-[11px] mt-1">Police / Ambulance</div>
+          <div className="text-sm font-bold text-ujjain-gold">{t.emergencyNumbers}</div>
+          <div className="text-ujjain-cream/60 text-[11px] mt-1">{t.emergencyLabel}</div>
+          <div className="text-ujjain-cream/40 text-[10px] mt-1">{t.emergencyNote}</div>
         </div>
 
         <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center">
