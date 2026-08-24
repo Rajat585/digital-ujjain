@@ -7,19 +7,17 @@ import dynamic from "next/dynamic";
 // instead of directly inside the (server) page.js.
 
 export const Gateway3D = dynamic(() => import("../sections/Gateway3D"), {
-  ssr: false,
   loading: () => (
-    <div className="h-[50vh] flex items-center justify-center text-ujjain-gold/50 text-sm">
-      Loading 3D gateway…
+    <div className="h-screen flex items-center justify-center text-ujjain-gold/50 text-sm">
+      Loading gateway…
     </div>
   ),
 });
 
 export const VR360 = dynamic(() => import("../sections/VR360"), {
-  ssr: false,
   loading: () => (
-    <div className="min-h-[60vh] flex items-center justify-center text-ujjain-gold/50 text-sm">
-      Loading VR experience…
+    <div className="h-screen flex items-center justify-center text-ujjain-gold/50 text-sm">
+      Loading Simhastha Darshan…
     </div>
   ),
 });
