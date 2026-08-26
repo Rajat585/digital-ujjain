@@ -6,7 +6,7 @@ import VoiceNarrator from "./components/VoiceNarrator";
 import Footer from "./components/Footer";
 import FadeIn from "./components/FadeIn";
 import Hero from "./sections/Hero";
-import { Gateway3D, VR360, MahakalMitra } from "./components/LazySections";
+import { Gateway3D, MahakalMitra } from "./components/LazySections";
 import LiveDashboard from "./sections/LiveDashboard";
 import OldVsNew from "./sections/OldVsNew";
 import Timeline from "./sections/Timeline";
@@ -85,7 +85,7 @@ export default function Home() {
         <FadeIn>
           <Gallery />
         </FadeIn>
-        <VR360 />
+        {/* <VR360 /> */}
         <FadeIn>
           <Leadership />
         </FadeIn>

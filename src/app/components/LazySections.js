@@ -14,13 +14,7 @@ export const Gateway3D = dynamic(() => import("../sections/Gateway3D"), {
   ),
 });
 
-export const VR360 = dynamic(() => import("../sections/VR360"), {
-  loading: () => (
-    <div className="h-screen flex items-center justify-center text-ujjain-gold/50 text-sm">
-      Loading Simhastha Darshan…
-    </div>
-  ),
-});
+
 
 // The chatbot's knowledge base is large (700+ lines) and not needed for the
 // very first paint — load it after the shell mounts instead of blocking it.
