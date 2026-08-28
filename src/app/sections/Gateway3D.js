@@ -2,35 +2,43 @@
 import AutoCarousel from "../components/AutoCarousel";
 import { useLanguage } from "../components/LanguageContext";
 
-// Real photos, sourced the same way as Gallery.js — Wikimedia Commons
-// Special:FilePath redirects, so no binary assets need to live in this repo.
-const wikiImg = (filename) =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}`;
-
+// ─────────────────────────────────────────────────────────────
+// Apni photos yahan daalo: public/media/gateway/1.jpg, 2.jpg, ...
+// Naya slide add karna ho — bas neeche ek naya entry jodo aur
+// matching filename public/media/gateway/ folder mein daal do.
+// Photo hatani/replace karni ho — bas file replace karo (same
+// naam rakhna) ya neeche se entry hata do.
+// ─────────────────────────────────────────────────────────────
 const slides = [
   {
-    src: wikiImg("MAHAKAL LOK UJJAIN.jpg"),
-    alt: "Mahakal Lok corridor gateway, Ujjain",
-    captionHi: "Mahakal Lok — Mahakaleshwar Mandir ka bhavya dwar",
-    captionEn: "Mahakal Lok — the grand gateway to Mahakaleshwar Temple",
+    src: "/media/gateway/1.jpg",
+    alt: "Mahamrityunjay Dwar",
+    captionHi: "Mahamrityunjay Dwar — Simhastha ka pavitra pravesh",
+    captionEn: "Mahamrityunjay Dwar — the sacred gateway to Simhastha",
   },
   {
-    src: wikiImg("Shri Kaal Bhairav Mandir Main Gate Ujjain - panoramio.jpg"),
-    alt: "Kal Bhairav Mandir main gate, Ujjain",
-    captionHi: "Kal Bhairav Mandir ka mukhya dwar",
-    captionEn: "The main gate of Kal Bhairav Temple",
+    src: "/media/gateway/2.jpg",
+    alt: "Shahi Sawari",
+    captionHi: "Shahi Sawari — Mahakal ki rajsi savaari",
+    captionEn: "Shahi Sawari — the royal procession of Lord Mahakal",
   },
   {
-    src: wikiImg("Mahakal Temple Ujjain.JPG"),
-    alt: "Mahakaleshwar Temple, Ujjain",
-    captionHi: "Shri Mahakaleshwar Jyotirlinga Mandir",
-    captionEn: "Shri Mahakaleshwar Jyotirlinga Temple",
+    src: "/media/gateway/3.jpg",
+    alt: "Mahakaleshwar Mandir light show",
+    captionHi: "Mahakaleshwar Mandir — bhavya light show",
+    captionEn: "Mahakaleshwar Temple — the grand light show",
   },
   {
-    src: wikiImg("Ujjain Mahakal Temple.jpg"),
-    alt: "Mahakal Temple exterior, Ujjain",
-    captionHi: "Mahakaleshwar Mandir, ek aur drishya",
-    captionEn: "Mahakaleshwar Temple, another view",
+    src: "/media/gateway/4.jpg",
+    alt: "Ghat Maha Aarti",
+    captionHi: "Ghat par Maha Aarti — Shipra tat ka drishya",
+    captionEn: "Maha Aarti at the ghat — on the banks of the Shipra",
+  },
+  {
+    src: "/media/gateway/5.jpg",
+    alt: "Mahakal Lok Corridor",
+    captionHi: "Mahakal Lok — bhavya corridor",
+    captionEn: "Mahakal Lok — the grand corridor",
   },
 ];
 
@@ -44,7 +52,7 @@ export default function Gateway3D() {
         lang={lang}
         intervalMs={4500}
         heightClass="h-full"
-        credit="Photos via Wikimedia Commons"
+        credit=""
         priority
       />
     </section>
