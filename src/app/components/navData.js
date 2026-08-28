@@ -17,11 +17,6 @@ export const NAV_GROUPS = {
           desc: "इंटरैक्टिव मानचित्र से घाट/मंदिर खोजें",
         },
         {
-          href: "#vr-zone",
-          title: "वीआर वॉकथ्रू",
-          desc: "360° में घाट और मंदिर घूमें",
-        },
-        {
           href: "#hotel-booking",
           title: "होटल बुकिंग",
           desc: "ठहरने के लिए जगह बुक करें",
@@ -109,11 +104,6 @@ export const NAV_GROUPS = {
           desc: "Find ghats/temples on the map",
         },
         {
-          href: "#vr-zone",
-          title: "VR Walkthrough",
-          desc: "360° tour of ghats & temples",
-        },
-        {
           href: "#hotel-booking",
           title: "Hotel Booking",
           desc: "Book a place to stay",
@@ -199,11 +189,6 @@ export const NAV_GROUPS = {
           href: "#map",
           title: "Simhastha Zone",
           desc: "Map pe ghat/mandir dhoondo",
-        },
-        {
-          href: "#vr-zone",
-          title: "VR Walkthrough",
-          desc: "360° mein ghat aur mandir ghoomo",
         },
         {
           href: "#hotel-booking",

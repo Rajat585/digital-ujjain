@@ -40,6 +40,18 @@ const slides = [
     captionHi: "Mahakal Lok — bhavya corridor",
     captionEn: "Mahakal Lok — the grand corridor",
   },
+  {
+    src: "/media/gateway/6.jpg",
+    alt: "Ujjain gateway photo 6",
+    captionHi: "Simhastha 2028",
+    captionEn: "Simhastha 2028",
+  },
+  {
+    src: "/media/gateway/7.jpg",
+    alt: "Ujjain gateway photo 7",
+    captionHi: "Simhastha 2028",
+    captionEn: "Simhastha 2028",
+  },
 ];
 
 export default function Gateway3D() {
