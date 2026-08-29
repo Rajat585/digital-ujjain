@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "../components/LanguageContext";
 import { api, openRazorpayCheckout } from "../lib/api";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 const sathiListData = {
   hi: [
@@ -229,6 +231,43 @@ export default function SathiBooking() {
   const [releasing, setReleasing] = useState(false);
   const [bookingError, setBookingError] = useState("");
 
+  // Scroll-triggered entrance for the whole section.
+  const [sectionVisible, setSectionVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSectionVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Staggered reveal for the Sathi list whenever step 1 mounts.
+  const [listVisible, setListVisible] = useState(false);
+  useEffect(() => {
+    if (step === 1) {
+      setListVisible(false);
+      const raf1 = requestAnimationFrame(() => {
+        const raf2 = requestAnimationFrame(() => setListVisible(true));
+        return () => cancelAnimationFrame(raf2);
+      });
+      return () => cancelAnimationFrame(raf1);
+    }
+    return undefined;
+  }, [step]);
+
+  // Fade-in for the "how verification works" info line.
+  const [verifyInfoVisible, setVerifyInfoVisible] = useState(false);
+
   const handleVerify = () => {
     setVerifying(true);
     setTimeout(() => {
@@ -352,6 +391,18 @@ export default function SathiBooking() {
   const [regRefId, setRegRefId] = useState("");
   const [showVerifyInfo, setShowVerifyInfo] = useState(false);
 
+  useEffect(() => {
+    if (showVerifyInfo) {
+      const raf1 = requestAnimationFrame(() => {
+        const raf2 = requestAnimationFrame(() => setVerifyInfoVisible(true));
+        return () => cancelAnimationFrame(raf2);
+      });
+      return () => cancelAnimationFrame(raf1);
+    }
+    setVerifyInfoVisible(false);
+    return undefined;
+  }, [showVerifyInfo]);
+
   const toggleFromList = (list, setList, value) => {
     setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
   };
@@ -392,210 +443,214 @@ export default function SathiBooking() {
   };
 
   return (
-    <section id="sathi-booking" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
-      <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">{t.eyebrow}</span>
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
-      <p className="text-ujjain-cream mb-4 text-center max-w-xl">{t.subtitle}</p>
-      <div className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center">
-        <span>✓</span> {t.trustBar}
-        <button
-          onClick={() => setShowVerifyInfo((v) => !v)}
-          className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20"
-          aria-label={t.howVerified}
-        >
-          ⓘ
-        </button>
-      </div>
-      {showVerifyInfo && (
-        <p className="text-ujjain-cream/60 text-xs max-w-lg text-center mb-8 -mt-1">{t.howVerifiedText}</p>
-      )}
-      {!showVerifyInfo && <div className="mb-8" />}
+    <section id="sathi-booking" ref={sectionRef} className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden">
+      <div style={{ opacity: sectionVisible ? 1 : 0, transform: sectionVisible ? "translateY(0)" : "translateY(24px)", transition: `opacity 700ms ${EASE}, transform 700ms ${EASE}` }} className="flex flex-col items-center w-full">
+        <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">{t.eyebrow}</span>
+        <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
+        <p className="text-ujjain-cream mb-4 text-center max-w-xl">{t.subtitle}</p>
+        <div className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center hover:border-ujjain-saffron/60 transition-colors duration-300">
+          <span>✓</span> {t.trustBar}
+          <button
+            onClick={() => setShowVerifyInfo((v) => !v)}
+            className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20 hover:rotate-12 transition-all duration-300"
+            aria-label={t.howVerified}
+          >
+            ⓘ
+          </button>
+        </div>
+        {showVerifyInfo && (
+          <p style={{ opacity: verifyInfoVisible ? 1 : 0, transform: verifyInfoVisible ? "translateY(0)" : "translateY(-4px)", transition: `opacity 300ms ${EASE}, transform 300ms ${EASE}` }} className="text-ujjain-cream/60 text-xs max-w-lg text-center mb-8 -mt-1">{t.howVerifiedText}</p>
+        )}
+        {!showVerifyInfo && <div className="mb-8" />}
 
-      <div className="flex gap-2 mb-8 bg-white/5 border border-ujjain-gold/20 rounded-full p-1">
-        <button onClick={() => setMode("book")} className={`px-5 py-2 rounded-full text-sm font-semibold transition ${mode === "book" ? "bg-ujjain-gold text-ujjain-dark" : "text-ujjain-cream/70"}`}>
-          {t.tabBook}
-        </button>
-        <button onClick={() => setMode("register")} className={`px-5 py-2 rounded-full text-sm font-semibold transition ${mode === "register" ? "bg-ujjain-gold text-ujjain-dark" : "text-ujjain-cream/70"}`}>
-          {t.tabRegister}
-        </button>
-      </div>
+        <div className="relative flex gap-2 mb-8 bg-white/5 border border-ujjain-gold/20 rounded-full p-1 w-full max-w-xs">
+          <div style={{ left: mode === "book" ? "4px" : "50%", transition: `left 400ms ${EASE}` }} className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-ujjain-gold" />
+          <button onClick={() => setMode("book")} className={`relative z-10 flex-1 px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${mode === "book" ? "text-ujjain-dark" : "text-ujjain-cream/70 hover:text-ujjain-cream"}`}>
+            {t.tabBook}
+          </button>
+          <button onClick={() => setMode("register")} className={`relative z-10 flex-1 px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${mode === "register" ? "text-ujjain-dark" : "text-ujjain-cream/70 hover:text-ujjain-cream"}`}>
+            {t.tabRegister}
+          </button>
+        </div>
 
-      {mode === "book" && (
-        <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8">
-          {step === 0 && (
-            <div>
-              <p className="text-ujjain-cream mb-6 text-center">{t.verifyIntro}</p>
-              <div className="flex flex-col gap-3 mb-4">
-                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={touristName} onChange={(e) => setTouristName(e.target.value)} disabled={verified}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
-                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={touristPhone} onChange={(e) => setTouristPhone(e.target.value)} disabled={verified}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
-                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={touristId} onChange={(e) => setTouristId(e.target.value)} disabled={verified}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50" />
-              </div>
-              {!verified && (
-                <button onClick={handleVerify} disabled={!canVerify || verifying}
-                  className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
-                  {verifying ? t.verifying : t.verifyBtn}
-                </button>
-              )}
-              {verified && (
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 text-ujjain-saffron bg-ujjain-saffron/10 border border-ujjain-saffron/40 rounded-full px-4 py-2 text-sm mb-4">
-                    {t.verifiedMsg}
-                  </div>
-                  <button onClick={() => setStep(1)} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition">
-                    {t.continueBtn}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {step === 1 && (
-            <div>
-              <p className="text-ujjain-cream mb-6 text-center">{t.greetSathiList(touristName)}</p>
-              <div className="flex flex-col gap-3">
-                {sathiList.map((s) => (
-                  <button key={s.id} onClick={() => { setSelectedSathi(s); setStep(2); }}
-                    className="bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 hover:border-ujjain-gold transition text-left">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <div className="text-ujjain-gold font-semibold flex items-center gap-2 flex-wrap">
-                          {s.name}
-                          <span className="text-xs bg-ujjain-saffron/20 text-ujjain-saffron px-2 py-0.5 rounded-full">{t.aadharVerified}</span>
-                        </div>
-                        <div className="text-ujjain-cream/50 text-xs mt-0.5">{t.idLabel} {s.aadharMasked}</div>
-                      </div>
-                      <div className="text-ujjain-gold font-bold whitespace-nowrap">₹{s.pricePerDay}/{t.perDay}</div>
-                    </div>
-                    <div className="text-ujjain-cream/70 text-xs mb-1">⭐ {s.rating} &nbsp;•&nbsp; {s.experience} &nbsp;•&nbsp; 📍 {s.zone}</div>
-                    <div className="text-ujjain-cream/60 text-xs mb-1">{t.languagesLabel} {s.languages.join(", ")}</div>
-                    <div className="text-ujjain-cream/60 text-xs">{t.areasLabel} {s.areas.join(", ")}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 2 && selectedSathi && (
-            <div>
-              <p className="text-ujjain-cream mb-4 text-center">
-                {t.youChose} <span className="text-ujjain-gold font-semibold">{selectedSathi.name}</span>
-              </p>
-              <div className="flex justify-center gap-3 mb-6">
-                {[1, 2, 3].map((d) => (
-                  <button key={d} onClick={() => setDays(d)}
-                    className={`px-5 py-2 rounded-full border transition ${days === d ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/40 text-ujjain-cream hover:border-ujjain-gold"}`}>
-                    {d} {t.days}
-                  </button>
-                ))}
-              </div>
-              <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-6">
-                <div className="text-ujjain-gold font-semibold mb-2 text-sm">{t.itineraryTitle}</div>
-                {Array.from({ length: days }).map((_, i) => (
-                  <div key={i} className="text-ujjain-cream/80 text-sm mb-1">
-                    <span className="text-ujjain-saffron">{t.dayLabel} {i + 1}:</span> {selectedSathi.areas[i % selectedSathi.areas.length]} {t.darshanText}
-                  </div>
-                ))}
-              </div>
-              <div className="text-center mb-6">
-                <div className="text-3xl font-bold text-ujjain-gold">₹{totalAmount}</div>
-                <div className="text-ujjain-cream/60 text-xs">{t.perDayCalc(days, selectedSathi.pricePerDay)}</div>
-              </div>
-              <button onClick={confirmSathiBooking} disabled={confirming} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
-                {confirming ? t.confirmingBtn : t.confirmBookingBtn}
-              </button>
-            </div>
-          )}
-
-          {step === 3 && selectedSathi && (
-            <div className="text-center">
-              <p className="text-ujjain-cream mb-6">{t.congrats}</p>
-              <div className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-4">
-                <QRCodeSVG value={bookingId} size={120} bgColor="transparent" fgColor="#D4AF37" />
-                <div className="text-ujjain-gold font-bold">{bookingId}</div>
-                <div className="text-ujjain-cream text-sm">{selectedSathi.name} — {days} {t.days}</div>
-                <div className="text-2xl font-bold text-ujjain-gold">
-                  ₹{totalAmount} <span className="text-xs text-ujjain-cream/60">{paymentReleased ? t.released : t.lockedTag}</span>
-                </div>
-                <div className="text-xs text-ujjain-cream/50 max-w-sm">{paymentReleased ? t.releasedNote : t.lockedNote}</div>
-              </div>
-              {bookingError && <p className="text-red-400 text-xs mt-3">{bookingError}</p>}
-              {!paymentReleased && (
-                <button onClick={handleMarkComplete} disabled={releasing} className="mt-6 w-full max-w-xs bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
-                  {releasing ? t.releasingBtn : t.releaseBtn}
-                </button>
-              )}
-              <button onClick={handleReport} className="mt-4 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 transition block mx-auto">
-                {t.reportBtn}
-              </button>
-              {reportSent && <p className="text-ujjain-saffron text-sm mt-3">{t.reportSentMsg}</p>}
+        {mode === "book" && (
+          <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-ujjain-gold/50">
+            {step === 0 && (
               <div>
-                <button onClick={resetBooking} className="mt-6 text-ujjain-cream/60 text-sm underline">{t.newBooking}</button>
+                <p className="text-ujjain-cream mb-6 text-center">{t.verifyIntro}</p>
+                <div className="flex flex-col gap-3 mb-4">
+                  <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={touristName} onChange={(e) => setTouristName(e.target.value)} disabled={verified}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50 transition-colors duration-300" />
+                  <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={touristPhone} onChange={(e) => setTouristPhone(e.target.value)} disabled={verified}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50 transition-colors duration-300" />
+                  <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={touristId} onChange={(e) => setTouristId(e.target.value)} disabled={verified}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold disabled:opacity-50 transition-colors duration-300" />
+                </div>
+                {!verified && (
+                  <button onClick={handleVerify} disabled={!canVerify || verifying}
+                    className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none">
+                    {verifying ? t.verifying : t.verifyBtn}
+                  </button>
+                )}
+                {verified && (
+                  <div className="text-center">
+                    <div className="inline-flex items-center gap-2 text-ujjain-saffron bg-ujjain-saffron/10 border border-ujjain-saffron/40 rounded-full px-4 py-2 text-sm mb-4">
+                      {t.verifiedMsg}
+                    </div>
+                    <button onClick={() => setStep(1)} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300">
+                      {t.continueBtn}
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
 
-      {mode === "register" && (
-        <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8">
-          {!regSubmitted ? (
-            <div>
-              <p className="text-ujjain-cream mb-6 text-center">{t.regIntro}</p>
-              <div className="flex flex-col gap-3 mb-4">
-                <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={regName} onChange={(e) => setRegName(e.target.value)}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={regPhone} onChange={(e) => setRegPhone(e.target.value)}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={regAadhar} onChange={(e) => setRegAadhar(e.target.value)}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-                <input type="text" placeholder={t.experiencePlaceholder} aria-label={t.experiencePlaceholder} value={regExperience} onChange={(e) => setRegExperience(e.target.value)}
-                  className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold" />
-              </div>
-              <div className="mb-4">
-                <div className="text-ujjain-cream/80 text-sm mb-2">{t.languagesQ}</div>
-                <div className="flex flex-wrap gap-2">
-                  {languageOptions.map((lng) => (
-                    <button key={lng} onClick={() => toggleFromList(regLanguages, setRegLanguages, lng)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition ${regLanguages.includes(lng) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
-                      {lng}
+            {step === 1 && (
+              <div>
+                <p className="text-ujjain-cream mb-6 text-center">{t.greetSathiList(touristName)}</p>
+                <div className="flex flex-col gap-3">
+                  {sathiList.map((s, i) => (
+                    <button key={s.id} onClick={() => { setSelectedSathi(s); setStep(2); }}
+                      style={{ opacity: listVisible ? 1 : 0, transform: listVisible ? undefined : "translateY(16px)", transition: `opacity 500ms ${EASE}, transform 500ms ${EASE}`, transitionDelay: `${i * 100}ms` }}
+                      className="bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 hover:border-ujjain-gold hover:-translate-y-1.5 hover:shadow-lg hover:shadow-ujjain-gold/10 transition-all duration-300 text-left">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <div className="text-ujjain-gold font-semibold flex items-center gap-2 flex-wrap">
+                            {s.name}
+                            <span className="text-xs bg-ujjain-saffron/20 text-ujjain-saffron px-2 py-0.5 rounded-full">{t.aadharVerified}</span>
+                          </div>
+                          <div className="text-ujjain-cream/50 text-xs mt-0.5">{t.idLabel} {s.aadharMasked}</div>
+                        </div>
+                        <div className="text-ujjain-gold font-bold whitespace-nowrap">₹{s.pricePerDay}/{t.perDay}</div>
+                      </div>
+                      <div className="text-ujjain-cream/70 text-xs mb-1">⭐ {s.rating} &nbsp;•&nbsp; {s.experience} &nbsp;•&nbsp; 📍 {s.zone}</div>
+                      <div className="text-ujjain-cream/60 text-xs mb-1">{t.languagesLabel} {s.languages.join(", ")}</div>
+                      <div className="text-ujjain-cream/60 text-xs">{t.areasLabel} {s.areas.join(", ")}</div>
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="mb-6">
-                <div className="text-ujjain-cream/80 text-sm mb-2">{t.areasQ}</div>
-                <div className="flex flex-wrap gap-2">
-                  {areaOptions.map((area) => (
-                    <button key={area} onClick={() => toggleFromList(regAreas, setRegAreas, area)}
-                      className={`px-3 py-1.5 rounded-full text-xs border transition ${regAreas.includes(area) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
-                      {area}
+            )}
+
+            {step === 2 && selectedSathi && (
+              <div>
+                <p className="text-ujjain-cream mb-4 text-center">
+                  {t.youChose} <span className="text-ujjain-gold font-semibold">{selectedSathi.name}</span>
+                </p>
+                <div className="flex justify-center gap-3 mb-6">
+                  {[1, 2, 3].map((d) => (
+                    <button key={d} onClick={() => setDays(d)}
+                      className={`px-5 py-2 rounded-full border transition-all duration-300 hover:-translate-y-0.5 ${days === d ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold shadow-lg shadow-ujjain-gold/20" : "border-ujjain-gold/40 text-ujjain-cream hover:border-ujjain-gold"}`}>
+                      {d} {t.days}
                     </button>
                   ))}
                 </div>
+                <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-6">
+                  <div className="text-ujjain-gold font-semibold mb-2 text-sm">{t.itineraryTitle}</div>
+                  {Array.from({ length: days }).map((_, i) => (
+                    <div key={i} className="text-ujjain-cream/80 text-sm mb-1">
+                      <span className="text-ujjain-saffron">{t.dayLabel} {i + 1}:</span> {selectedSathi.areas[i % selectedSathi.areas.length]} {t.darshanText}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center mb-6">
+                  <div className="text-3xl font-bold text-ujjain-gold">₹{totalAmount}</div>
+                  <div className="text-ujjain-cream/60 text-xs">{t.perDayCalc(days, selectedSathi.pricePerDay)}</div>
+                </div>
+                <button onClick={confirmSathiBooking} disabled={confirming} className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none">
+                  {confirming ? t.confirmingBtn : t.confirmBookingBtn}
+                </button>
               </div>
-              <button onClick={handleRegSubmit} disabled={!canSubmitReg || regSubmitting}
-                className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40">
-                {regSubmitting ? t.submittingApp : t.submitApp}
-              </button>
-              {regError && <p className="text-red-400 text-xs text-center mt-2">{regError}</p>}
-              <p className="text-ujjain-cream/40 text-xs text-center mt-3">{t.privacyNote}</p>
-            </div>
-          ) : (
-            <div className="text-center">
-              <div className="text-4xl mb-4">✅</div>
-              <h3 className="text-xl font-bold text-ujjain-gold mb-2">{t.receivedTitle}</h3>
-              <p className="text-ujjain-cream mb-4">{t.receivedMsg(regName)}</p>
-              <div className="text-ujjain-cream/60 text-xs mb-6">
-                {t.refId} {regRefId}
+            )}
+
+            {step === 3 && selectedSathi && (
+              <div className="text-center">
+                <p className="text-ujjain-cream mb-6">{t.congrats}</p>
+                <div className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-4 transition-all duration-300 hover:border-ujjain-gold/50 hover:shadow-lg hover:shadow-ujjain-gold/10">
+                  <QRCodeSVG value={bookingId} size={120} bgColor="transparent" fgColor="#D4AF37" />
+                  <div className="text-ujjain-gold font-bold">{bookingId}</div>
+                  <div className="text-ujjain-cream text-sm">{selectedSathi.name} — {days} {t.days}</div>
+                  <div className="text-2xl font-bold text-ujjain-gold">
+                    ₹{totalAmount} <span className="text-xs text-ujjain-cream/60">{paymentReleased ? t.released : t.lockedTag}</span>
+                  </div>
+                  <div className="text-xs text-ujjain-cream/50 max-w-sm">{paymentReleased ? t.releasedNote : t.lockedNote}</div>
+                </div>
+                {bookingError && <p className="text-red-400 text-xs mt-3">{bookingError}</p>}
+                {!paymentReleased && (
+                  <button onClick={handleMarkComplete} disabled={releasing} className="mt-6 w-full max-w-xs bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none">
+                    {releasing ? t.releasingBtn : t.releaseBtn}
+                  </button>
+                )}
+                <button onClick={handleReport} className="mt-4 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 hover:-translate-y-0.5 transition-all duration-300 block mx-auto">
+                  {t.reportBtn}
+                </button>
+                {reportSent && <p className="text-ujjain-saffron text-sm mt-3">{t.reportSentMsg}</p>}
+                <div>
+                  <button onClick={resetBooking} className="mt-6 text-ujjain-cream/60 text-sm underline hover:text-ujjain-gold transition-colors duration-300">{t.newBooking}</button>
+                </div>
               </div>
-              <button onClick={resetReg} className="text-ujjain-cream/60 text-sm underline">{t.newApp}</button>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+
+        {mode === "register" && (
+          <div className="w-full max-w-xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-ujjain-gold/50">
+            {!regSubmitted ? (
+              <div>
+                <p className="text-ujjain-cream mb-6 text-center">{t.regIntro}</p>
+                <div className="flex flex-col gap-3 mb-4">
+                  <input type="text" placeholder={t.fullName} aria-label={t.fullName} value={regName} onChange={(e) => setRegName(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold transition-colors duration-300" />
+                  <input type="tel" placeholder={t.mobile} aria-label={t.mobile} value={regPhone} onChange={(e) => setRegPhone(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold transition-colors duration-300" />
+                  <input type="text" placeholder={t.idNumber} aria-label={t.idNumber} value={regAadhar} onChange={(e) => setRegAadhar(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold transition-colors duration-300" />
+                  <input type="text" placeholder={t.experiencePlaceholder} aria-label={t.experiencePlaceholder} value={regExperience} onChange={(e) => setRegExperience(e.target.value)}
+                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold transition-colors duration-300" />
+                </div>
+                <div className="mb-4">
+                  <div className="text-ujjain-cream/80 text-sm mb-2">{t.languagesQ}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {languageOptions.map((lng) => (
+                      <button key={lng} onClick={() => toggleFromList(regLanguages, setRegLanguages, lng)}
+                        className={`px-3 py-1.5 rounded-full text-xs border transition-all duration-300 hover:-translate-y-0.5 ${regLanguages.includes(lng) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
+                        {lng}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <div className="text-ujjain-cream/80 text-sm mb-2">{t.areasQ}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {areaOptions.map((area) => (
+                      <button key={area} onClick={() => toggleFromList(regAreas, setRegAreas, area)}
+                        className={`px-3 py-1.5 rounded-full text-xs border transition-all duration-300 hover:-translate-y-0.5 ${regAreas.includes(area) ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold" : "border-ujjain-gold/30 text-ujjain-cream/80 hover:border-ujjain-gold"}`}>
+                        {area}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button onClick={handleRegSubmit} disabled={!canSubmitReg || regSubmitting}
+                  className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none">
+                  {regSubmitting ? t.submittingApp : t.submitApp}
+                </button>
+                {regError && <p className="text-red-400 text-xs text-center mt-2">{regError}</p>}
+                <p className="text-ujjain-cream/40 text-xs text-center mt-3">{t.privacyNote}</p>
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="text-4xl mb-4">✅</div>
+                <h3 className="text-xl font-bold text-ujjain-gold mb-2">{t.receivedTitle}</h3>
+                <p className="text-ujjain-cream mb-4">{t.receivedMsg(regName)}</p>
+                <div className="text-ujjain-cream/60 text-xs mb-6">
+                  {t.refId} {regRefId}
+                </div>
+                <button onClick={resetReg} className="text-ujjain-cream/60 text-sm underline hover:text-ujjain-gold transition-colors duration-300">{t.newApp}</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
