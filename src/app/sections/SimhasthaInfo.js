@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 const infoData = {
   hi: [
@@ -146,7 +148,11 @@ const modalLabels = {
   hinglish: { points: "Mukhya Baatein", impact: "Vishesh" },
 };
 
-const readMoreLabel = { hi: "और पढ़ें →", en: "Read More →", hinglish: "Aur Padhein →" };
+const readMoreLabel = {
+  hi: "और पढ़ें →",
+  en: "Read More →",
+  hinglish: "Aur Padhein →",
+};
 const ctaLabel = {
   hi: "पूरी सूची मानचित्र पर देखें ↓",
   en: "See Full List On Map ↓",
@@ -155,7 +161,8 @@ const ctaLabel = {
 const disclaimer = {
   hi: "सिंहस्थ 2028 की तारीखें आधिकारिक घोषणा के अनुसार अपडेट होंगी।",
   en: "Simhastha 2028 dates will be updated as per the official announcement.",
-  hinglish: "Simhastha 2028 ki tareekhein official ghoshna ke anusaar update hongi.",
+  hinglish:
+    "Simhastha 2028 ki tareekhein official ghoshna ke anusaar update hongi.",
 };
 
 infoData.hinglish = [
@@ -217,26 +224,90 @@ infoData.hinglish = [
 export default function SimhasthaInfo() {
   const { lang } = useLanguage();
   const info = infoData[lang];
+
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Standard modal pattern: showModal mounts it, modalVisible (delayed via
+  // nested rAF) drives the transition-in; closeModal reverses it and only
+  // unmounts after the 300ms transition-out completes.
   const [activeIndex, setActiveIndex] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const activeItem = activeIndex !== null ? info[activeIndex] : null;
 
+  const openModal = (index) => {
+    setActiveIndex(index);
+    setShowModal(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setModalVisible(true));
+    });
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setTimeout(() => {
+      setShowModal(false);
+      setActiveIndex(null);
+    }, 300);
+  };
+
   const scrollToMap = () => {
-    setActiveIndex(null);
+    closeModal();
     document.getElementById("map")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="simhastha-info"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+      ref={sectionRef}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
     >
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+      <h2
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-16px)",
+          transition: `opacity 0.7s ${EASE}, transform 0.7s ${EASE}`,
+        }}
+      >
         {headings[lang].title}
       </h2>
-      <p className="text-ujjain-cream mb-4 text-center max-w-xl">
+      <p
+        className="text-ujjain-cream mb-4 text-center max-w-xl"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-12px)",
+          transition: `opacity 0.7s ${EASE} 0.1s, transform 0.7s ${EASE} 0.1s`,
+        }}
+      >
         {headings[lang].subtitle}
       </p>
-      <p className="text-ujjain-cream/50 text-xs mb-12 text-center max-w-md italic">
+      <p
+        className="text-ujjain-cream/50 text-xs mb-12 text-center max-w-md italic"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity 0.7s ${EASE} 0.2s`,
+        }}
+      >
         {disclaimer[lang]}
       </p>
 
@@ -244,24 +315,36 @@ export default function SimhasthaInfo() {
         {info.map((item, index) => (
           <div
             key={index}
-            className="relative flex flex-col overflow-hidden bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 hover:border-ujjain-gold hover:-translate-y-2 hover:shadow-lg hover:shadow-ujjain-gold/10 transition-all duration-300"
+            className="group relative flex flex-col overflow-hidden bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 hover:border-ujjain-gold hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(212,175,55,0.35)]"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(24px)",
+              transition: `opacity 0.7s ${EASE}, transform 0.7s ${EASE}, border-color 0.4s ${EASE}, box-shadow 0.4s ${EASE}`,
+              transitionDelay: visible ? `${150 + index * 120}ms` : "0ms",
+            }}
           >
             <img
               src={wikiImg(cardBgImages[index])}
               alt=""
               loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover blur-sm scale-110 opacity-60 pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover blur-sm scale-110 opacity-60 pointer-events-none transition-transform duration-700 group-hover:scale-125"
+              style={{ transitionTimingFunction: EASE }}
             />
             <div className="absolute inset-0 bg-ujjain-dark/75 pointer-events-none" />
             <div className="relative z-10 flex flex-col h-full">
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="text-lg font-bold text-ujjain-gold mb-2">
+              <div className="text-4xl mb-4 w-fit transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                {item.icon}
+              </div>
+              <h3 className="text-lg font-bold text-ujjain-gold mb-2 transition-colors duration-300 group-hover:text-ujjain-saffron">
                 {item.title}
               </h3>
               <p className="text-ujjain-cream/70 text-sm mb-4">{item.desc}</p>
               <button
-                onClick={() => setActiveIndex(index)}
-                className="mt-auto self-start px-4 py-1.5 rounded-full bg-ujjain-gold text-ujjain-dark text-xs font-semibold hover:bg-ujjain-saffron transition"
+                onClick={() => openModal(index)}
+                className="mt-auto self-start px-4 py-1.5 rounded-full bg-ujjain-gold text-ujjain-dark text-xs font-semibold hover:bg-ujjain-saffron hover:scale-105 hover:shadow-[0_4px_14px_-4px_rgba(212,175,55,0.6)]"
+                style={{
+                  transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                }}
               >
                 {readMoreLabel[lang]}
               </button>
@@ -270,18 +353,32 @@ export default function SimhasthaInfo() {
         ))}
       </div>
 
-      {activeItem && (
+      {showModal && activeItem && (
         <div
           className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4"
-          onClick={() => setActiveIndex(null)}
+          style={{
+            opacity: modalVisible ? 1 : 0,
+            transition: `opacity 0.3s ${EASE}`,
+          }}
+          onClick={closeModal}
         >
           <div
             className="w-full max-w-xl bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-6 md:p-8 relative max-h-[85vh] overflow-y-auto"
+            style={{
+              opacity: modalVisible ? 1 : 0,
+              transform: modalVisible
+                ? "scale(1) translateY(0)"
+                : "scale(0.94) translateY(12px)",
+              transition: `opacity 0.3s ${EASE}, transform 0.3s ${EASE}`,
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setActiveIndex(null)}
-              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold text-2xl leading-none"
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold hover:rotate-90 text-2xl leading-none"
+              style={{
+                transition: `color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+              }}
             >
               ×
             </button>
@@ -296,7 +393,18 @@ export default function SimhasthaInfo() {
             </h4>
             <ul className="text-ujjain-cream/90 text-sm mb-6 space-y-2 text-left">
               {activeItem.points.map((p, i) => (
-                <li key={i} className="flex gap-2">
+                <li
+                  key={i}
+                  className="flex gap-2"
+                  style={{
+                    opacity: modalVisible ? 1 : 0,
+                    transform: modalVisible
+                      ? "translateX(0)"
+                      : "translateX(-8px)",
+                    transition: `opacity 0.4s ${EASE}, transform 0.4s ${EASE}`,
+                    transitionDelay: modalVisible ? `${150 + i * 70}ms` : "0ms",
+                  }}
+                >
                   <span className="text-ujjain-saffron">✓</span>
                   <span>{p}</span>
                 </li>
@@ -317,7 +425,10 @@ export default function SimhasthaInfo() {
             {activeItem.cta && (
               <button
                 onClick={scrollToMap}
-                className="w-full mt-2 px-4 py-2 rounded-full bg-ujjain-gold text-ujjain-dark text-sm font-semibold hover:bg-ujjain-saffron transition"
+                className="w-full mt-2 px-4 py-2 rounded-full bg-ujjain-gold text-ujjain-dark text-sm font-semibold hover:bg-ujjain-saffron hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.6)]"
+                style={{
+                  transition: `background-color 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                }}
               >
                 {ctaLabel[lang]}
               </button>

@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 // NOTE: Exact 2028 dates vary across sources — confirm with Rajat that
 // these match whatever target date the Countdown Timer section uses,
@@ -168,11 +170,31 @@ const categoryStyle = {
     cultural: "text-purple-400 border-purple-400/30 bg-purple-400/10",
 };
 
-
 export default function EventsSchedule() {
     const { lang } = useLanguage();
     const t = text[lang];
     const [activeFilter, setActiveFilter] = useState("all");
+
+    const sectionRef = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setVisible(true);
+                        observer.disconnect();
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     const filters = [
         { key: "all", label: t.filterAll },
@@ -187,39 +209,69 @@ export default function EventsSchedule() {
     return (
         <section
             id="events-schedule"
-            className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+            ref={sectionRef}
+            className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
         >
-            <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+            <h2
+                className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+                style={{
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? "translateY(0)" : "translateY(-16px)",
+                    transition: `opacity 0.7s ${EASE}, transform 0.7s ${EASE}`,
+                }}
+            >
                 {t.title}
             </h2>
-            <p className="text-ujjain-cream mb-8 text-center max-w-xl">{t.subtitle}</p>
+            <p
+                className="text-ujjain-cream mb-8 text-center max-w-xl"
+                style={{
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? "translateY(0)" : "translateY(-12px)",
+                    transition: `opacity 0.7s ${EASE} 0.1s, transform 0.7s ${EASE} 0.1s`,
+                }}
+            >
+                {t.subtitle}
+            </p>
 
             {/* Filter buttons */}
             <div className="flex flex-wrap justify-center gap-3 mb-10">
-                {filters.map((f) => (
+                {filters.map((f, i) => (
                     <button
                         key={f.key}
                         onClick={() => setActiveFilter(f.key)}
-                        className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${activeFilter === f.key
-                                ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
-                                : "text-ujjain-cream border-ujjain-gold/30 hover:border-ujjain-gold/60"
-                            }`}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold border hover:-translate-y-0.5 active:scale-95 ${activeFilter === f.key ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold shadow-[0_4px_16px_-4px_rgba(212,175,55,0.5)]" : "text-ujjain-cream border-ujjain-gold/30 hover:border-ujjain-gold/60 hover:bg-white/5"}`}
+                        style={{
+                            opacity: visible ? 1 : 0,
+                            transform: visible ? "translateY(0)" : "translateY(-10px)",
+                            transition: `opacity 0.5s ${EASE}, transform 0.5s ${EASE}, background-color 0.3s ${EASE}, border-color 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                            transitionDelay: visible ? `${200 + i * 80}ms` : "0ms",
+                        }}
                     >
                         {f.label}
                     </button>
                 ))}
             </div>
 
-            {/* Event cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
-                {filteredEvents.map((event) => (
+            {/* Event cards — remounts on filter change so the stagger replays */}
+            <div key={activeFilter} className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
+                {filteredEvents.map((event, index) => (
                     <div
                         key={event.id}
-                        className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col"
+                        className="event-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col overflow-hidden hover:border-ujjain-gold/70 hover:-translate-y-1.5 hover:shadow-[0_12px_32px_-8px_rgba(212,175,55,0.35)]"
+                        style={{
+                            transition: `border-color 0.4s ${EASE}, box-shadow 0.4s ${EASE}, transform 0.4s ${EASE}`,
+                            animation: visible ? `eventCardIn 0.55s ${EASE} both` : "none",
+                            animationDelay: visible ? `${index * 80}ms` : "0ms",
+                            opacity: visible ? undefined : 0,
+                        }}
                     >
+                        <span
+                            className="absolute left-0 top-0 h-full w-[3px] bg-ujjain-gold origin-top scale-y-0 group-hover:scale-y-100"
+                            style={{ transition: `transform 0.5s ${EASE}` }}
+                        />
                         <div className="flex items-center justify-between mb-3">
                             <span
-                                className={`text-xs font-semibold px-3 py-1 rounded-full border ${categoryStyle[event.category]}`}
+                                className={`text-xs font-semibold px-3 py-1 rounded-full border transition-transform duration-300 group-hover:scale-105 ${categoryStyle[event.category]}`}
                             >
                                 {event.category === "shahi-snan"
                                     ? t.filterShahi
@@ -229,17 +281,47 @@ export default function EventsSchedule() {
                             </span>
                             <span className="text-ujjain-cream/50 text-xs">{event.date[lang]}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-ujjain-gold mb-2">{event.title[lang]}</h3>
+                        <h3 className="text-lg font-bold text-ujjain-gold mb-2 transition-colors duration-300 group-hover:text-ujjain-saffron">
+                            {event.title[lang]}
+                        </h3>
                         <p className="text-ujjain-cream/80 text-sm">{event.desc[lang]}</p>
                     </div>
                 ))}
             </div>
 
             {filteredEvents.length === 0 && (
-                <p className="text-ujjain-cream/60 text-sm mt-8">{t.noResults}</p>
+                <p
+                    key={`empty-${activeFilter}`}
+                    className="text-ujjain-cream/60 text-sm mt-8"
+                    style={{ animation: `eventCardIn 0.5s ${EASE} both` }}
+                >
+                    {t.noResults}
+                </p>
             )}
 
-            <p className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md">{t.footNote}</p>
+            <p
+                className="text-ujjain-cream/40 text-xs mt-8 text-center max-w-md"
+                style={{
+                    opacity: visible ? 1 : 0,
+                    transition: `opacity 0.8s ${EASE}`,
+                    transitionDelay: visible ? "600ms" : "0ms",
+                }}
+            >
+                {t.footNote}
+            </p>
+
+            <style jsx>{`
+                @keyframes eventCardIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `}</style>
         </section>
     );
 }
