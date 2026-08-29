@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "./LanguageContext";
 import { NAV_GROUPS } from "./navData";
 
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
+
 const icons = {
   home: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -72,6 +74,9 @@ const icons = {
 export default function MobileBottomNav() {
   const { lang } = useLanguage();
   const [sheetOpen, setSheetOpen] = useState(false);
+  // Separate "mounted" flag so the sheet stays in the DOM long enough to
+  // play its closing transition instead of vanishing instantly.
+  const [sheetMounted, setSheetMounted] = useState(false);
   const groups = NAV_GROUPS[lang];
 
   const text = {
@@ -102,6 +107,19 @@ export default function MobileBottomNav() {
   };
   const t = text[lang];
 
+  const openSheet = () => {
+    setSheetMounted(true);
+    // next tick so the mount happens first, then the transition plays
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => setSheetOpen(true)),
+    );
+  };
+
+  const closeSheet = () => {
+    setSheetOpen(false);
+    setTimeout(() => setSheetMounted(false), 350); // matches the sheet's transition duration
+  };
+
   useEffect(() => {
     document.body.style.overflow = sheetOpen ? "hidden" : "";
     return () => {
@@ -111,7 +129,7 @@ export default function MobileBottomNav() {
 
   useEffect(() => {
     function handleKey(e) {
-      if (e.key === "Escape") setSheetOpen(false);
+      if (e.key === "Escape") closeSheet();
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
@@ -130,23 +148,28 @@ export default function MobileBottomNav() {
         <div className="grid grid-cols-5 items-end px-1 pt-2 pb-1.5">
           <a
             href={navItems[0].href}
-            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron transition"
+            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron active:scale-90 transition-all duration-200 ease-out"
           >
             {navItems[0].icon}
             <span className="text-[10px] font-medium">{navItems[0].label}</span>
           </a>
           <a
             href={navItems[1].href}
-            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron transition"
+            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron active:scale-90 transition-all duration-200 ease-out"
           >
             {navItems[1].icon}
             <span className="text-[10px] font-medium">{navItems[1].label}</span>
           </a>
 
           {/* Elevated Book button — the one thing every visitor needs */}
-          <a href="#hotel-booking" className="flex flex-col items-center -mt-6">
-            <span className="flex items-center justify-center w-14 h-14 rounded-full bg-ujjain-saffron text-ujjain-dark shadow-lg shadow-ujjain-saffron/40 border-4 border-ujjain-dark animate-pulse">
-              {icons.bed}
+          <a
+            href="#hotel-booking"
+            className="flex flex-col items-center -mt-6 active:scale-90 transition-transform duration-200 ease-out"
+          >
+            <span className="relative flex items-center justify-center w-14 h-14 rounded-full bg-ujjain-saffron text-ujjain-dark shadow-lg shadow-ujjain-saffron/40 border-4 border-ujjain-dark">
+              {/* soft breathing ring instead of a plain opacity pulse — calmer, more premium */}
+              <span className="absolute inset-0 rounded-full bg-ujjain-saffron animate-ping opacity-20" />
+              <span className="relative">{icons.bed}</span>
             </span>
             <span className="text-[10px] font-semibold text-ujjain-saffron mt-1">
               {t.book}
@@ -155,50 +178,79 @@ export default function MobileBottomNav() {
 
           <a
             href={navItems[2].href}
-            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron transition"
+            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron active:scale-90 transition-all duration-200 ease-out"
           >
             {navItems[2].icon}
             <span className="text-[10px] font-medium">{navItems[2].label}</span>
           </a>
 
           <button
-            onClick={() => setSheetOpen(true)}
+            onClick={openSheet}
             aria-expanded={sheetOpen}
-            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron transition"
+            className="flex flex-col items-center gap-1 text-ujjain-cream/70 active:text-ujjain-saffron active:scale-90 transition-all duration-200 ease-out"
           >
-            {icons.more}
+            <span
+              className="transition-transform duration-300"
+              style={{
+                transform: sheetOpen ? "rotate(90deg)" : "rotate(0deg)",
+                transitionTimingFunction: EASE,
+              }}
+            >
+              {icons.more}
+            </span>
             <span className="text-[10px] font-medium">{t.more}</span>
           </button>
         </div>
       </nav>
 
-      {/* Bottom sheet with full section list */}
-      {sheetOpen && (
+      {/* Bottom sheet with full section list — mounted only while open/animating */}
+      {sheetMounted && (
         <div className="md:hidden fixed inset-0 z-[60]">
           <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setSheetOpen(false)}
+            className="absolute inset-0 bg-black/60 transition-opacity duration-300"
+            style={{
+              opacity: sheetOpen ? 1 : 0,
+              transitionTimingFunction: EASE,
+            }}
+            onClick={closeSheet}
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] bg-ujjain-dark border-t border-ujjain-gold/25 rounded-t-2xl overflow-y-auto">
+          <div
+            className="absolute bottom-0 left-0 right-0 max-h-[80vh] bg-ujjain-dark border-t border-ujjain-gold/25 rounded-t-2xl overflow-y-auto transition-transform duration-350"
+            style={{
+              transform: sheetOpen ? "translateY(0)" : "translateY(100%)",
+              transitionTimingFunction: EASE,
+              transitionDuration: "350ms",
+            }}
+          >
             <div className="sticky top-0 bg-ujjain-dark pt-3 pb-2 flex flex-col items-center border-b border-ujjain-gold/10">
-              <div className="w-10 h-1.5 rounded-full bg-ujjain-gold/30 mb-2" />
+              <div className="w-10 h-1.5 rounded-full bg-ujjain-gold/30 mb-2 transition-colors duration-300 hover:bg-ujjain-gold/60" />
               <p className="text-ujjain-gold font-semibold text-sm">
                 {t.allSections}
               </p>
             </div>
             <div className="px-4 py-3">
-              {groups.map((group) => (
+              {groups.map((group, gi) => (
                 <div key={group.label} className="mb-5">
                   <p className="text-xs uppercase tracking-wide text-ujjain-gold/70 font-semibold mb-1">
                     {group.label}
                   </p>
                   <div className="flex flex-col divide-y divide-ujjain-gold/10">
-                    {group.items.map((item) => (
+                    {group.items.map((item, ii) => (
                       <a
                         key={item.href}
                         href={item.href}
-                        onClick={() => setSheetOpen(false)}
-                        className="py-3 active:bg-ujjain-gold/10 -mx-2 px-2 rounded-lg transition"
+                        onClick={closeSheet}
+                        className="py-3 active:bg-ujjain-gold/10 -mx-2 px-2 rounded-lg transition-all duration-300 ease-out"
+                        style={{
+                          opacity: sheetOpen ? 1 : 0,
+                          transform: sheetOpen
+                            ? "translateY(0)"
+                            : "translateY(6px)",
+                          transitionTimingFunction: EASE,
+                          transitionDelay: sheetOpen
+                            ? `${100 + (gi * group.items.length + ii) * 30}ms`
+                            : "0ms",
+                        }}
                       >
                         <p className="text-ujjain-cream text-sm font-medium">
                           {item.title}
