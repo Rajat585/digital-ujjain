@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useLanguage } from "../components/LanguageContext";
+import { motion } from "framer-motion";
 
 const wikiImg = (filename) =>
   `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}`;
@@ -508,6 +509,26 @@ const viewLessLabel = {
 };
 const INITIAL_COUNT = 9;
 
+const gridVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.65, 0, 0.35, 1] },
+  },
+};
+
 galleryData.hinglish = [
   {
     key: "simhastha2016",
@@ -761,7 +782,7 @@ export default function Gallery() {
   }));
 
   const highlightImages = useMemo(
-    () => categories.map((cat) => cat.images[0]),
+    () => categories.flatMap((cat) => cat.images.slice(0, 2)),
     [categories],
   );
 
@@ -838,23 +859,30 @@ export default function Gallery() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-5xl">
-        {visibleImages.map((img, index) => (
-          <button
-            key={`${img.file}-${index}`}
-            onClick={() => setLightboxIndex(index)}
-            className="relative aspect-square rounded-xl overflow-hidden border border-ujjain-gold/30 hover:border-ujjain-gold group"
+        <motion.div
+            variants={gridVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-5xl"
           >
-            <img
-              src={wikiImg(img.file)}
-              alt={img.caption}
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
-          </button>
-        ))}
-      </div>
+            {visibleImages.map((img, index) => (
+              <motion.button
+                key={`${img.file}-${index}`}
+                variants={cardVariants}
+                onClick={() => setLightboxIndex(index)}
+                className="relative aspect-square rounded-xl overflow-hidden border border-ujjain-gold/30 hover:border-ujjain-gold group"
+              >
+                <img
+                  src={wikiImg(img.file)}
+                  alt={img.caption}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
+              </motion.button>
+            ))}
+        </motion.div>
 
       {fullList.length > INITIAL_COUNT && (
         <button
