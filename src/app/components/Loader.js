@@ -46,8 +46,7 @@ export default function Loader() {
   if (hide) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-[100] bg-ujjain-dark flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ${exiting ? "opacity-0" : "opacity-100"}`}
+    <div className={`fixed inset-0 z-[100] bg-ujjain-dark flex flex-col items-center justify-center overflow-hidden transition-all duration-500 ${exiting ? "opacity-0" : "opacity-100"}`}
       style={{ transitionTimingFunction: EASE, transitionDelay: exiting ? `${TITLE.length * 20 + 350}ms` : "0ms" }}
     >
       <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-ujjain-saffron/10 blur-[80px] animate-pulse" />
