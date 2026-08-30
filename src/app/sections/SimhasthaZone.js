@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 const zonesData = {
   hi: [
@@ -387,6 +389,27 @@ export default function SimhasthaZone() {
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState("");
 
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const getDirectionsUrl = (zone) =>
     `https://www.google.com/maps/dir/?api=1&destination=${zone.lat},${zone.lng}&travelmode=driving`;
 
@@ -449,54 +472,93 @@ export default function SimhasthaZone() {
   return (
     <section
       id="map"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+      ref={sectionRef}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
     >
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+      <h2
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-16px)",
+          transition: `opacity 0.7s ${EASE}, transform 0.7s ${EASE}`,
+        }}
+      >
         {t.title}
       </h2>
-      <p className="text-ujjain-cream mb-6 text-center max-w-xl">
+      <p
+        className="text-ujjain-cream mb-6 text-center max-w-xl"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-12px)",
+          transition: `opacity 0.7s ${EASE} 0.1s, transform 0.7s ${EASE} 0.1s`,
+        }}
+      >
         {t.subtitle}
       </p>
 
-      <div className="mb-10 flex flex-col items-center">
+      <div
+        className="mb-10 flex flex-col items-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity 0.7s ${EASE} 0.2s`,
+        }}
+      >
         {!userLocation ? (
           <button
             onClick={handleFindNearest}
             disabled={locating}
-            className="inline-flex items-center gap-2 bg-white/5 border border-ujjain-gold/40 text-ujjain-gold font-semibold px-5 py-2.5 rounded-full hover:border-ujjain-gold hover:bg-ujjain-gold/10 transition disabled:opacity-50"
+            className={`inline-flex items-center gap-2 bg-white/5 border border-ujjain-gold/40 text-ujjain-gold font-semibold px-5 py-2.5 rounded-full hover:border-ujjain-gold hover:bg-ujjain-gold/10 hover:scale-105 hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.4)] disabled:opacity-50 disabled:hover:scale-100 ${locating ? "animate-pulse" : ""}`}
+            style={{
+              transition: `background-color 0.3s ${EASE}, border-color 0.3s ${EASE}, transform 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+            }}
           >
             {locating ? t.locating : t.findNearest}
           </button>
         ) : (
           <button
             onClick={() => setUserLocation(null)}
-            className="text-xs text-ujjain-cream/60 underline"
+            className="text-xs text-ujjain-cream/60 hover:text-ujjain-gold underline transition-colors duration-300"
           >
             {t.clearLocation}
           </button>
         )}
         {locationError && (
-          <p className="text-red-400 text-xs mt-2 text-center max-w-sm">
+          <p
+            key="loc-error"
+            className="text-red-400 text-xs mt-2 text-center max-w-sm"
+            style={{ animation: `simhZoneFadeUp 0.4s ${EASE} both` }}
+          >
             {locationError}
           </p>
         )}
       </div>
 
       {zonesWithDistance && (
-        <div className="w-full max-w-5xl mb-10">
+        <div
+          key="nearest-panel"
+          className="w-full max-w-5xl mb-10"
+          style={{ animation: `simhZoneFadeUp 0.5s ${EASE} both` }}
+        >
           <h3 className="text-ujjain-gold font-bold text-sm mb-3 tracking-wide uppercase">
             {t.nearestTitle}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {zonesWithDistance.slice(0, 3).map((zone) => (
+            {zonesWithDistance.slice(0, 3).map((zone, i) => (
               <button
                 key={zone.name}
                 onClick={() =>
                   setSelected(zones.findIndex((z) => z.name === zone.name))
                 }
-                className="text-left flex items-center gap-3 bg-ujjain-gold/10 border border-ujjain-gold/50 rounded-lg p-3 hover:bg-ujjain-gold/20 transition"
+                className="group text-left flex items-center gap-3 bg-ujjain-gold/10 border border-ujjain-gold/50 rounded-lg p-3 hover:bg-ujjain-gold/20 hover:-translate-y-1 hover:shadow-[0_8px_20px_-8px_rgba(212,175,55,0.4)]"
+                style={{
+                  transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                  animation: `simhZoneFadeUp 0.5s ${EASE} both`,
+                  animationDelay: `${i * 100}ms`,
+                }}
               >
-                <span className="text-2xl">{zone.icon}</span>
+                <span className="text-2xl transition-transform duration-300 group-hover:scale-110">
+                  {zone.icon}
+                </span>
                 <div>
                   <div className="text-ujjain-gold font-semibold text-sm">
                     {zone.name}
@@ -511,7 +573,14 @@ export default function SimhasthaZone() {
         </div>
       )}
 
-      <div className="w-full max-w-5xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-10">
+      <div
+        className="w-full max-w-5xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 md:p-10"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(24px)",
+          transition: `opacity 0.7s ${EASE} 0.15s, transform 0.7s ${EASE} 0.15s`,
+        }}
+      >
         <div className="w-full h-[350px] rounded-lg overflow-hidden mb-8 border border-ujjain-gold/20">
           <iframe
             title="Ujjain Map"
@@ -527,19 +596,29 @@ export default function SimhasthaZone() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {(zonesWithDistance || zones).map((zone) => {
+          {(zonesWithDistance || zones).map((zone, i) => {
             const index = zones.findIndex((z) => z.name === zone.name);
             return (
               <button
                 key={zone.name}
                 onClick={() => setSelected(selected === index ? null : index)}
-                className={`text-left flex items-center gap-2 border rounded-lg p-3 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-ujjain-gold/20 ${
+                className={`group text-left flex items-center gap-2 border rounded-lg p-3 hover:scale-105 hover:shadow-[0_10px_24px_-8px_rgba(212,175,55,0.35)] ${
                   selected === index
                     ? "bg-ujjain-gold/10 border-ujjain-gold"
                     : "bg-white/5 border-ujjain-gold/20 hover:border-ujjain-gold"
                 }`}
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible
+                    ? "translateY(0) scale(1)"
+                    : "translateY(14px) scale(0.97)",
+                  transition: `opacity 0.5s ${EASE}, transform 0.35s ${EASE}, border-color 0.3s ${EASE}, background-color 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                  transitionDelay: visible ? `${250 + i * 35}ms` : "0ms",
+                }}
               >
-                <span className="text-xl">{zone.icon}</span>
+                <span className="text-xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                  {zone.icon}
+                </span>
                 <div>
                   <div className="text-ujjain-gold font-semibold text-xs">
                     {zone.name}
@@ -555,61 +634,100 @@ export default function SimhasthaZone() {
           })}
         </div>
 
-        {selected !== null && (
-          <div className="mt-6 bg-ujjain-gold/5 border border-ujjain-gold/40 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-3xl">{zones[selected].icon}</span>
-              <div>
-                <h3 className="text-xl font-bold text-ujjain-gold">
-                  {zones[selected].name}
-                </h3>
-                <p className="text-ujjain-saffron text-xs">
-                  {zones[selected].type}
+        {/* Grid-rows trick gives a smooth auto-height expand/collapse without measuring the DOM */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateRows: selected !== null ? "1fr" : "0fr",
+            transition: `grid-template-rows 0.45s ${EASE}`,
+          }}
+        >
+          <div style={{ overflow: "hidden" }}>
+            {selected !== null && (
+              <div
+                key={selected}
+                className="mt-6 bg-ujjain-gold/5 border border-ujjain-gold/40 rounded-xl p-6"
+                style={{ animation: `simhZoneFadeUp 0.4s ${EASE} both` }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">{zones[selected].icon}</span>
+                  <div>
+                    <h3 className="text-xl font-bold text-ujjain-gold">
+                      {zones[selected].name}
+                    </h3>
+                    <p className="text-ujjain-saffron text-xs">
+                      {zones[selected].type}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-ujjain-cream/90 mb-5">
+                  {zones[selected].desc}
                 </p>
+
+                <a
+                  href={getDirectionsUrl(zones[selected])}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-ujjain-gold text-ujjain-dark font-bold px-5 py-2.5 rounded-lg hover:bg-ujjain-saffron hover:scale-105 hover:shadow-[0_8px_20px_-6px_rgba(212,175,55,0.5)] mb-5"
+                  style={{
+                    transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                  }}
+                >
+                  {t.viewRoute}
+                </a>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-ujjain-gold/20">
+                  {prevZone && (
+                    <button
+                      onClick={() => setSelected(selected - 1)}
+                      className="group text-left bg-white/5 border border-ujjain-gold/20 rounded-lg p-3 hover:border-ujjain-gold hover:-translate-x-1"
+                      style={{
+                        transition: `border-color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+                      }}
+                    >
+                      <div className="text-ujjain-cream/50 text-xs mb-1">
+                        {t.prevDarshan}
+                      </div>
+                      <div className="text-ujjain-gold text-sm font-semibold">
+                        {prevZone.icon} {prevZone.name}
+                      </div>
+                    </button>
+                  )}
+                  {nextZone && (
+                    <button
+                      onClick={() => setSelected(selected + 1)}
+                      className="group text-left bg-white/5 border border-ujjain-gold/20 rounded-lg p-3 hover:border-ujjain-gold hover:translate-x-1"
+                      style={{
+                        transition: `border-color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+                      }}
+                    >
+                      <div className="text-ujjain-cream/50 text-xs mb-1">
+                        {t.nextDarshan}
+                      </div>
+                      <div className="text-ujjain-gold text-sm font-semibold">
+                        {nextZone.icon} {nextZone.name}
+                      </div>
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-            <p className="text-ujjain-cream/90 mb-5">{zones[selected].desc}</p>
-
-            <a
-              href={getDirectionsUrl(zones[selected])}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-ujjain-gold text-ujjain-dark font-bold px-5 py-2.5 rounded-lg hover:bg-ujjain-saffron transition mb-5"
-            >
-              {t.viewRoute}
-            </a>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-ujjain-gold/20">
-              {prevZone && (
-                <button
-                  onClick={() => setSelected(selected - 1)}
-                  className="text-left bg-white/5 border border-ujjain-gold/20 rounded-lg p-3 hover:border-ujjain-gold transition"
-                >
-                  <div className="text-ujjain-cream/50 text-xs mb-1">
-                    {t.prevDarshan}
-                  </div>
-                  <div className="text-ujjain-gold text-sm font-semibold">
-                    {prevZone.icon} {prevZone.name}
-                  </div>
-                </button>
-              )}
-              {nextZone && (
-                <button
-                  onClick={() => setSelected(selected + 1)}
-                  className="text-left bg-white/5 border border-ujjain-gold/20 rounded-lg p-3 hover:border-ujjain-gold transition"
-                >
-                  <div className="text-ujjain-cream/50 text-xs mb-1">
-                    {t.nextDarshan}
-                  </div>
-                  <div className="text-ujjain-gold text-sm font-semibold">
-                    {nextZone.icon} {nextZone.name}
-                  </div>
-                </button>
-              )}
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes simhZoneFadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(14px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </section>
   );
 }

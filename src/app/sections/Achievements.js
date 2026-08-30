@@ -1,6 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
+const EASE_POP = "cubic-bezier(0.34, 1.56, 0.64, 1)"; // overshoot for a punchy, "heavier" landing
 
 const achievementsData = {
   hi: [
@@ -293,8 +296,75 @@ export default function Achievements() {
   const [activeIndex, setActiveIndex] = useState(null);
   const activeItem = activeIndex !== null ? achievements[activeIndex] : null;
 
+  // Scroll-triggered 3D tilt-in for the whole grid, staggered per card.
+  const [gridVisible, setGridVisible] = useState(false);
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setGridVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Modal open/close animation — two states so the panel mounts, then
+  // transitions in on the next frame (needs two RAFs to fire reliably).
+  const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [listVisible, setListVisible] = useState(false);
+
+  const openModal = (index) => {
+    setActiveIndex(index);
+    setShowModal(true);
+    setListVisible(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setModalVisible(true);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setListVisible(true));
+        });
+      });
+    });
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setListVisible(false);
+    setTimeout(() => {
+      setShowModal(false);
+      setActiveIndex(null);
+    }, 300);
+  };
+
   return (
-    <section id="achievements" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section id="achievements" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden">
+      <style>{`
+        @keyframes ujjainAchBurst {
+          0% { transform: scale(0.3); opacity: 0.8; }
+          60% { opacity: 0.35; }
+          100% { transform: scale(2.6); opacity: 0; }
+        }
+        @keyframes ujjainAchShimmer {
+          0% { transform: translateX(-160%) skewX(-12deg); }
+          100% { transform: translateX(480%) skewX(-12deg); }
+        }
+        .ujjain-ach-card:hover .ujjain-ach-shimmer {
+          animation: ujjainAchShimmer 1.1s ease-in-out infinite;
+        }
+        .ujjain-ach-card:hover .ujjain-ach-icon {
+          transform: scale(1.25) rotate(-10deg);
+        }
+      `}</style>
+
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
         {headings[lang].title}
       </h2>
@@ -302,16 +372,44 @@ export default function Achievements() {
         {headings[lang].subtitle}
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl">
+      <div ref={gridRef} style={{ perspective: "1400px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl">
         {achievements.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center text-center bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 hover:border-ujjain-gold hover:-translate-y-2 hover:scale-105 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300"
+            style={{
+              opacity: gridVisible ? 1 : 0,
+              transform: gridVisible ? "none" : "perspective(1400px) rotateX(-40deg) rotateY(10deg) translateY(70px) scale(0.6)",
+              transition: `opacity 850ms ${EASE_POP}, transform 850ms ${EASE_POP}`,
+              transitionDelay: `${index * 160}ms`,
+            }}
+            className="ujjain-ach-card relative flex flex-col items-center text-center bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 overflow-hidden hover:border-ujjain-gold hover:-translate-y-3 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/30 transition-[transform,box-shadow,border-color] duration-300"
           >
+            <div className="ujjain-ach-shimmer pointer-events-none absolute inset-y-0 -left-1/3 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-ujjain-gold/40 to-transparent -translate-x-[160%]" />
+
             <span className="text-xs text-ujjain-saffron font-semibold mb-2 bg-ujjain-saffron/10 px-3 py-0.5 rounded-full">
               {item.year}
             </span>
-            <div className="text-5xl mb-4">{item.icon}</div>
+
+            <div className="relative mb-4 flex items-center justify-center">
+              {gridVisible && (
+                <span
+                  style={{ animation: "ujjainAchBurst 900ms ease-out forwards", animationDelay: `${index * 160 + 300}ms` }}
+                  className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-ujjain-gold/60 blur-md opacity-0"
+                />
+              )}
+              <div
+                style={{
+                  opacity: gridVisible ? 1 : 0,
+                  transform: gridVisible ? "scale(1) rotate(0deg) translateY(0)" : "scale(0.1) rotate(-50deg) translateY(-24px)",
+                  transition: `opacity 550ms ${EASE_POP}, transform 550ms ${EASE_POP}`,
+                  transitionDelay: `${index * 160 + 320}ms`,
+                }}
+                className="ujjain-ach-icon relative text-6xl transition-transform duration-300"
+              >
+                {item.icon}
+              </div>
+            </div>
+
             <h3 className="text-lg font-bold text-ujjain-gold mb-2">
               {item.title}
             </h3>
@@ -331,8 +429,8 @@ export default function Achievements() {
             </div>
 
             <button
-              onClick={() => setActiveIndex(index)}
-              className="mt-auto px-4 py-1.5 rounded-full bg-ujjain-gold text-ujjain-dark text-xs font-semibold hover:bg-ujjain-saffron transition"
+              onClick={() => openModal(index)}
+              className="mt-auto px-4 py-1.5 rounded-full bg-ujjain-gold text-ujjain-dark text-xs font-semibold hover:bg-ujjain-saffron hover:-translate-y-1 hover:scale-110 hover:shadow-lg hover:shadow-ujjain-gold/40 transition-all duration-300"
             >
               {readMoreLabel[lang]}
             </button>
@@ -340,18 +438,20 @@ export default function Achievements() {
         ))}
       </div>
 
-      {activeItem && (
+      {showModal && activeItem && (
         <div
+          style={{ opacity: modalVisible ? 1 : 0, backdropFilter: modalVisible ? "blur(6px)" : "blur(0px)", transition: `opacity 300ms ${EASE}, backdrop-filter 300ms ${EASE}` }}
           className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4"
-          onClick={() => setActiveIndex(null)}
+          onClick={closeModal}
         >
           <div
+            style={{ opacity: modalVisible ? 1 : 0, transform: modalVisible ? "scale(1) translateY(0) rotateX(0deg)" : "scale(0.75) translateY(50px) rotateX(12deg)", transition: `opacity 400ms ${EASE_POP}, transform 400ms ${EASE_POP}` }}
             className="w-full max-w-xl bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-6 md:p-8 relative max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setActiveIndex(null)}
-              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold text-2xl leading-none"
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold text-2xl leading-none hover:rotate-90 hover:scale-125 transition-all duration-300"
             >
               ×
             </button>
@@ -388,7 +488,11 @@ export default function Achievements() {
             </h4>
             <ul className="text-ujjain-cream/90 text-sm mb-6 space-y-2 text-left">
               {activeItem.highlights.map((h, i) => (
-                <li key={i} className="flex gap-2">
+                <li
+                  key={i}
+                  style={{ opacity: listVisible ? 1 : 0, transform: listVisible ? "translateX(0)" : "translateX(-20px)", transition: `opacity 450ms ${EASE}, transform 450ms ${EASE}`, transitionDelay: `${i * 100}ms` }}
+                  className="flex gap-2"
+                >
                   <span className="text-ujjain-saffron">✓</span>
                   <span>{h}</span>
                 </li>

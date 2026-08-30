@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "./LanguageContext";
 
+const EASE = "cubic-bezier(0.34, 1.56, 0.64, 1)"; // slight overshoot — a "spring" feel for pops/entrances
+
 const badgesData = {
   hi: [
     { threshold: 20, name: "इतिहास प्रेमी", icon: "📜" },
@@ -35,6 +37,8 @@ export default function BadgeSystem() {
   const t = text[lang];
   const [unlocked, setUnlocked] = useState([]);
   const [toast, setToast] = useState(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [justPopped, setJustPopped] = useState(null); // name of the badge currently playing its unlock burst
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,8 +53,14 @@ export default function BadgeSystem() {
           !unlocked.includes(badge.name)
         ) {
           setUnlocked((prev) => [...prev, badge.name]);
+
           setToast(badge);
-          setTimeout(() => setToast(null), 3000);
+          requestAnimationFrame(() => setToastVisible(true));
+          setTimeout(() => setToastVisible(false), 2800);
+          setTimeout(() => setToast(null), 3200); // stays mounted a bit longer so the exit transition can play
+
+          setJustPopped(badge.name);
+          setTimeout(() => setJustPopped(null), 600);
         }
       });
     };
@@ -62,8 +72,27 @@ export default function BadgeSystem() {
   return (
     <>
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-ujjain-gold text-ujjain-dark px-5 py-4 rounded-xl shadow-lg flex items-center gap-3 animate-bounce">
-          <span className="text-3xl">{toast.icon}</span>
+        <div
+          className="fixed bottom-6 right-6 z-50 bg-ujjain-gold text-ujjain-dark px-5 py-4 rounded-xl shadow-lg shadow-black/30 flex items-center gap-3 transition-all duration-500"
+          style={{
+            opacity: toastVisible ? 1 : 0,
+            transform: toastVisible
+              ? "translateX(0) scale(1)"
+              : "translateX(24px) scale(0.9)",
+            transitionTimingFunction: EASE,
+          }}
+        >
+          <span
+            className="text-3xl inline-block transition-transform duration-500"
+            style={{
+              transform: toastVisible
+                ? "rotate(0deg) scale(1)"
+                : "rotate(-15deg) scale(0.6)",
+              transitionTimingFunction: EASE,
+            }}
+          >
+            {toast.icon}
+          </span>
           <div>
             <div className="font-bold">{t.unlocked}</div>
             <div className="text-sm">{toast.name}</div>
@@ -72,19 +101,27 @@ export default function BadgeSystem() {
       )}
 
       <div className="fixed bottom-6 left-6 z-40 flex gap-2">
-        {badges.map((badge, index) => (
-          <div
-            key={index}
-            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border transition ${
-              unlocked.includes(badge.name)
-                ? "bg-ujjain-gold border-ujjain-gold"
-                : "bg-white/5 border-ujjain-gold/20 opacity-40"
-            }`}
-            title={badge.name}
-          >
-            {badge.icon}
-          </div>
-        ))}
+        {badges.map((badge, index) => {
+          const isUnlocked = unlocked.includes(badge.name);
+          const isPopping = justPopped === badge.name;
+          return (
+            <div
+              key={index}
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border transition-all duration-500 hover:scale-125 hover:-translate-y-1 cursor-default ${
+                isUnlocked
+                  ? "bg-ujjain-gold border-ujjain-gold shadow-md shadow-ujjain-gold/40"
+                  : "bg-white/5 border-ujjain-gold/20 opacity-40"
+              }`}
+              style={{
+                transform: isPopping ? "scale(1.4)" : undefined,
+                transitionTimingFunction: EASE,
+              }}
+              title={badge.name}
+            >
+              {badge.icon}
+            </div>
+          );
+        })}
       </div>
     </>
   );

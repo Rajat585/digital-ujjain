@@ -1,8 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "../components/LanguageContext";
 import { api, openRazorpayCheckout } from "../lib/api";
+
+const EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 const propertiesData = {
   hi: [
@@ -96,13 +98,7 @@ const propertiesData = {
       price: 3200,
       rating: 4.8,
       reviews: 174,
-      amenities: [
-        "फ्री वाईफाई",
-        "एसी कमरे",
-        "रेस्टोरेंट",
-        "पूल",
-        "रूम सर्विस",
-      ],
+      amenities: ["फ्री वाईफाई", "एसी कमरे", "रेस्टोरेंट", "पूल", "रूम सर्विस"],
       image:
         "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain,%20Ram%20Ghat%20(9840921865).jpg",
     },
@@ -302,13 +298,7 @@ propertiesData.hinglish = [
     price: 3200,
     rating: 4.8,
     reviews: 174,
-    amenities: [
-      "Free WiFi",
-      "AC Kamre",
-      "Restaurant",
-      "Pool",
-      "Room Service",
-    ],
+    amenities: ["Free WiFi", "AC Kamre", "Restaurant", "Pool", "Room Service"],
     image:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Ujjain,%20Ram%20Ghat%20(9840921865).jpg",
   },
@@ -340,12 +330,10 @@ const text = {
     confirmBooking: "भुगतान करें और बुक करें",
     confirming: "भुगतान खुल रहा है...",
     congrats: "भुगतान सफल! आपकी बुकिंग पुष्टि हो गई है 🎉",
-    lockedNote:
-      "यह अंतिम राशि है — मौके पर कोई अतिरिक्त शुल्क मान्य नहीं होगा",
+    lockedNote: "यह अंतिम राशि है — मौके पर कोई अतिरिक्त शुल्क मान्य नहीं होगा",
     amountLocked: "(भुगतान हो चुका)",
     reportBtn: "⚠️ किसी ने अतिरिक्त पैसा मांगा? रिपोर्ट करें",
-    reportSentMsg:
-      "आपकी शिकायत प्रशासन तक भेज दी गई है। धन्यवाद।",
+    reportSentMsg: "आपकी शिकायत प्रशासन तक भेज दी गई है। धन्यवाद।",
     bookingError:
       "भुगतान या बुकिंग में दिक्कत आई। पैसा कटा है तो अपने आप रिफंड हो जाएगा। कृपया दोबारा कोशिश करें।",
     close: "बंद करें",
@@ -466,6 +454,33 @@ export default function HotelBooking() {
   const [bookingError, setBookingError] = useState("");
   const [showVerifyInfo, setShowVerifyInfo] = useState(false);
 
+  // Standard modal pattern: showModal mounts it, modalVisible (delayed via
+  // nested rAF) drives the transition-in; closeModal reverses it and only
+  // clears activeProperty after the 300ms transition-out completes.
+  const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.08 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const today = new Date();
     const tomorrow = new Date(today);
@@ -493,12 +508,20 @@ export default function HotelBooking() {
     setGuestName("");
     setGuestPhone("");
     setBookingError("");
+    setShowModal(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setModalVisible(true));
+    });
   };
 
   const closeModal = () => {
-    setActiveProperty(null);
-    setModalStep("details");
-    setBookingError("");
+    setModalVisible(false);
+    setTimeout(() => {
+      setShowModal(false);
+      setActiveProperty(null);
+      setModalStep("details");
+      setBookingError("");
+    }, 300);
   };
 
   const confirmBooking = async () => {
@@ -580,35 +603,80 @@ export default function HotelBooking() {
   return (
     <section
       id="hotel-booking"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+      ref={sectionRef}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
     >
-      <span className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2">
+      <span
+        className="text-ujjain-saffron text-xs font-semibold tracking-widest uppercase mb-2"
+        style={{ opacity: visible ? 1 : 0, transition: `opacity 0.6s ${EASE}` }}
+      >
         {t.eyebrow}
       </span>
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+      <h2
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-16px)",
+          transition: `opacity 0.7s ${EASE}, transform 0.7s ${EASE}`,
+        }}
+      >
         {t.title}
       </h2>
-      <p className="text-ujjain-cream mb-4 text-center max-w-xl">
+      <p
+        className="text-ujjain-cream mb-4 text-center max-w-xl"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(-12px)",
+          transition: `opacity 0.7s ${EASE} 0.1s, transform 0.7s ${EASE} 0.1s`,
+        }}
+      >
         {t.subtitle}
       </p>
-      <div className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center">
+      <div
+        className="flex items-center gap-2 text-xs text-ujjain-saffron mb-2 bg-white/5 px-4 py-2 rounded-full border border-ujjain-saffron/30 text-center flex-wrap justify-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity 0.7s ${EASE} 0.2s`,
+        }}
+      >
         <span>✓</span> {t.trustBar}
         <button
           onClick={() => setShowVerifyInfo((v) => !v)}
-          className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20"
+          className="ml-1 w-4 h-4 rounded-full border border-ujjain-saffron/60 text-[10px] leading-none flex items-center justify-center hover:bg-ujjain-saffron/20 hover:scale-110"
+          style={{
+            transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+          }}
           aria-label={t.howVerified}
         >
           ⓘ
         </button>
       </div>
-      {showVerifyInfo && (
-        <p className="text-ujjain-cream/60 text-xs max-w-lg text-center mb-8 -mt-1">
-          {t.howVerifiedText}
-        </p>
-      )}
-      {!showVerifyInfo && <div className="mb-8" />}
 
-      <div className="w-full max-w-4xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 md:p-5 mb-10 flex flex-col md:flex-row gap-3 md:items-end">
+      {/* Grid-rows trick gives a smooth auto-height expand/collapse for the verify-info note */}
+      <div
+        className="w-full max-w-lg"
+        style={{
+          display: "grid",
+          gridTemplateRows: showVerifyInfo ? "1fr" : "0fr",
+          transition: `grid-template-rows 0.4s ${EASE}`,
+          marginBottom: "2rem",
+        }}
+      >
+        <div style={{ overflow: "hidden" }}>
+          <p className="text-ujjain-cream/60 text-xs text-center -mt-1">
+            {t.howVerifiedText}
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="w-full max-w-4xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 md:p-5 mb-10 flex flex-col md:flex-row gap-3 md:items-end"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(20px)",
+          transition: `opacity 0.7s ${EASE} 0.15s, transform 0.7s ${EASE} 0.15s`,
+        }}
+      >
         <div className="flex-1">
           <label className="block text-ujjain-cream/60 text-xs mb-1">
             {t.checkIn}
@@ -619,6 +687,7 @@ export default function HotelBooking() {
             min={todayStr}
             onChange={(e) => setCheckIn(e.target.value)}
             className="w-full bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2 text-ujjain-cream text-sm focus:outline-none focus:border-ujjain-gold"
+            style={{ transition: `border-color 0.3s ${EASE}` }}
           />
         </div>
         <div className="flex-1">
@@ -631,6 +700,7 @@ export default function HotelBooking() {
             min={checkIn || todayStr}
             onChange={(e) => setCheckOut(e.target.value)}
             className="w-full bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2 text-ujjain-cream text-sm focus:outline-none focus:border-ujjain-gold"
+            style={{ transition: `border-color 0.3s ${EASE}` }}
           />
         </div>
         <div className="flex-1">
@@ -640,7 +710,8 @@ export default function HotelBooking() {
           <div className="flex items-center justify-between bg-black/30 border border-ujjain-gold/30 rounded-lg px-3 py-2">
             <button
               onClick={() => setGuests((g) => Math.max(1, g - 1))}
-              className="text-ujjain-gold font-bold px-2"
+              className="text-ujjain-gold font-bold px-2 hover:scale-125 active:scale-90"
+              style={{ transition: `transform 0.2s ${EASE}` }}
             >
               −
             </button>
@@ -649,7 +720,8 @@ export default function HotelBooking() {
             </span>
             <button
               onClick={() => setGuests((g) => Math.min(8, g + 1))}
-              className="text-ujjain-gold font-bold px-2"
+              className="text-ujjain-gold font-bold px-2 hover:scale-125 active:scale-90"
+              style={{ transition: `transform 0.2s ${EASE}` }}
             >
               +
             </button>
@@ -661,27 +733,36 @@ export default function HotelBooking() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-        {properties.map((p) => (
+        {properties.map((p, i) => (
           <div
             key={p.id}
-            className="bg-white/5 border border-ujjain-gold/20 rounded-xl overflow-hidden hover:border-ujjain-gold hover:scale-105 hover:shadow-lg hover:shadow-ujjain-gold/20 transition-all duration-300 flex flex-col"
+            className="group bg-white/5 border border-ujjain-gold/20 rounded-xl overflow-hidden hover:border-ujjain-gold hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(212,175,55,0.35)] flex flex-col"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(24px)",
+              transition: `opacity 0.6s ${EASE}, transform 0.6s ${EASE}, border-color 0.4s ${EASE}, box-shadow 0.4s ${EASE}`,
+              transitionDelay: visible ? `${200 + i * 90}ms` : "0ms",
+            }}
           >
             <div className="relative h-44 w-full overflow-hidden bg-black/30">
               <img
                 src={p.image}
                 alt={p.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                style={{ transitionTimingFunction: EASE }}
                 loading="lazy"
               />
               <span className="absolute top-2 left-2 text-[10px] bg-ujjain-dark/80 text-ujjain-saffron px-2 py-1 rounded-full border border-ujjain-saffron/40">
                 {p.type}
               </span>
-              <span className="absolute top-2 right-2 text-[10px] bg-ujjain-saffron/90 text-ujjain-dark font-semibold px-2 py-1 rounded-full">
+              <span className="absolute top-2 right-2 text-[10px] bg-ujjain-saffron/90 text-ujjain-dark font-semibold px-2 py-1 rounded-full transition-transform duration-300 group-hover:scale-105">
                 {t.verified}
               </span>
             </div>
             <div className="p-4 flex flex-col flex-1">
-              <h3 className="text-ujjain-gold font-bold mb-1">{p.name}</h3>
+              <h3 className="text-ujjain-gold font-bold mb-1 transition-colors duration-300 group-hover:text-ujjain-saffron">
+                {p.name}
+              </h3>
               <div className="flex items-center gap-2 mb-2">
                 <StarRating rating={p.rating} />
                 <span className="text-ujjain-cream/40 text-xs">
@@ -689,9 +770,9 @@ export default function HotelBooking() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5 mb-4">
-                {p.amenities.map((a, i) => (
+                {p.amenities.map((a, ai) => (
                   <span
-                    key={i}
+                    key={ai}
                     className="text-[10px] text-ujjain-cream/70 bg-white/5 border border-ujjain-gold/20 px-2 py-0.5 rounded-full"
                   >
                     {a}
@@ -709,7 +790,10 @@ export default function HotelBooking() {
                 </div>
                 <button
                   onClick={() => openBooking(p)}
-                  className="bg-ujjain-gold text-ujjain-dark text-sm font-bold px-4 py-2 rounded-lg hover:bg-ujjain-saffron transition"
+                  className="bg-ujjain-gold text-ujjain-dark text-sm font-bold px-4 py-2 rounded-lg hover:bg-ujjain-saffron hover:scale-105 hover:shadow-[0_6px_16px_-4px_rgba(212,175,55,0.5)]"
+                  style={{
+                    transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                  }}
                 >
                   {t.bookNow}
                 </button>
@@ -719,150 +803,215 @@ export default function HotelBooking() {
         ))}
       </div>
 
-      {activeProperty && (
+      {showModal && activeProperty && (
         <div
           className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4"
+          style={{
+            opacity: modalVisible ? 1 : 0,
+            transition: `opacity 0.3s ${EASE}`,
+          }}
           onClick={closeModal}
         >
           <div
             className="w-full max-w-md bg-ujjain-dark border border-ujjain-gold/40 rounded-xl p-6 relative max-h-[85vh] overflow-y-auto"
+            style={{
+              opacity: modalVisible ? 1 : 0,
+              transform: modalVisible
+                ? "scale(1) translateY(0)"
+                : "scale(0.94) translateY(12px)",
+              transition: `opacity 0.3s ${EASE}, transform 0.3s ${EASE}`,
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold text-2xl leading-none"
+              className="absolute top-4 right-4 text-ujjain-cream hover:text-ujjain-gold hover:rotate-90 text-2xl leading-none"
+              style={{
+                transition: `color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+              }}
             >
               ×
             </button>
 
-            {modalStep === "details" && (
-              <div>
-                <h3 className="text-xl font-bold text-ujjain-gold mb-1">
-                  {activeProperty.name}
-                </h3>
-                <p className="text-ujjain-cream/60 text-xs mb-4">
-                  {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}{" "}
-                  &nbsp;•&nbsp; {t.nightsLabel(nights)}
-                </p>
-                <div className="flex flex-col gap-3 mb-4">
-                  <input
-                    type="text"
-                    placeholder={t.guestName} aria-label={t.guestName}
-                    value={guestName}
-                    onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
-                  />
-                  <input
-                    type="tel"
-                    placeholder={t.mobile} aria-label={t.mobile}
-                    value={guestPhone}
-                    onChange={(e) => setGuestPhone(e.target.value)}
-                    className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
-                  />
-                </div>
-                <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-4 text-sm">
-                  <div className="flex justify-between text-ujjain-cream/80 mb-1">
-                    <span>{t.perNight(activeProperty.price, nights)}</span>
-                    <span>₹{baseTotal}</span>
-                  </div>
-                  <div className="flex justify-between text-ujjain-cream/80 mb-1">
-                    <span>{t.taxesFees}</span>
-                    <span>₹{taxes}</span>
-                  </div>
-                  <div className="flex justify-between text-ujjain-cream/40 mb-2 text-xs">
-                    <span>{t.commission}</span>
-                    <span>₹0</span>
-                  </div>
-                  <div className="border-t border-ujjain-gold/20 pt-2 flex justify-between text-ujjain-gold font-bold">
-                    <span>{t.total}</span>
-                    <span>₹{grandTotal}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-3 mb-3 flex-wrap">
-                  <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
-                    {t.secureBadge}
-                  </span>
-                  <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
-                    {t.verifiedBadge}
-                  </span>
-                </div>
-                <button
-                  onClick={() =>
-                    guestName.trim() &&
-                    guestPhone.trim().length >= 10 &&
-                    confirmBooking()
-                  }
-                  disabled={
-                    !(guestName.trim() && guestPhone.trim().length >= 10) ||
-                    confirming
-                  }
-                  className="w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition disabled:opacity-40"
-                >
-                  {confirming ? t.confirming : t.confirmBooking}
-                </button>
-                <p className="text-ujjain-cream/40 text-[11px] text-center mt-3">
-                  {t.cancellationPolicy}: {t.cancellationPolicyText}
-                </p>
-              </div>
-            )}
-
-            {modalStep === "confirmed" && (
-              <div className="text-center">
-                <p className="text-ujjain-cream mb-4">{t.congrats}</p>
-                <div className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-3">
-                  <QRCodeSVG
-                    value={bookingId}
-                    size={110}
-                    bgColor="transparent"
-                    fgColor="#D4AF37"
-                  />
-                  <div className="text-ujjain-gold font-bold">{bookingId}</div>
-                  <div className="text-ujjain-cream text-sm">
+            <div
+              key={modalStep}
+              style={{ animation: `bookingStepIn 0.4s ${EASE} both` }}
+            >
+              {modalStep === "details" && (
+                <div>
+                  <h3 className="text-xl font-bold text-ujjain-gold mb-1">
                     {activeProperty.name}
+                  </h3>
+                  <p className="text-ujjain-cream/60 text-xs mb-4">
+                    {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}{" "}
+                    &nbsp;•&nbsp; {t.nightsLabel(nights)}
+                  </p>
+                  <div className="flex flex-col gap-3 mb-4">
+                    <input
+                      type="text"
+                      placeholder={t.guestName}
+                      aria-label={t.guestName}
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+                      style={{ transition: `border-color 0.3s ${EASE}` }}
+                    />
+                    <input
+                      type="tel"
+                      placeholder={t.mobile}
+                      aria-label={t.mobile}
+                      value={guestPhone}
+                      onChange={(e) => setGuestPhone(e.target.value)}
+                      className="w-full bg-white/5 border border-ujjain-gold/30 rounded-lg px-4 py-3 text-ujjain-cream placeholder:text-ujjain-cream/40 focus:outline-none focus:border-ujjain-gold"
+                      style={{ transition: `border-color 0.3s ${EASE}` }}
+                    />
                   </div>
-                  <div className="text-ujjain-cream/60 text-xs">
-                    {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}
+                  <div className="bg-black/20 border border-ujjain-gold/20 rounded-lg p-4 mb-4 text-sm">
+                    <div className="flex justify-between text-ujjain-cream/80 mb-1">
+                      <span>{t.perNight(activeProperty.price, nights)}</span>
+                      <span>₹{baseTotal}</span>
+                    </div>
+                    <div className="flex justify-between text-ujjain-cream/80 mb-1">
+                      <span>{t.taxesFees}</span>
+                      <span>₹{taxes}</span>
+                    </div>
+                    <div className="flex justify-between text-ujjain-cream/40 mb-2 text-xs">
+                      <span>{t.commission}</span>
+                      <span>₹0</span>
+                    </div>
+                    <div className="border-t border-ujjain-gold/20 pt-2 flex justify-between text-ujjain-gold font-bold">
+                      <span>{t.total}</span>
+                      <span>₹{grandTotal}</span>
+                    </div>
                   </div>
-                  <div className="text-2xl font-bold text-ujjain-gold">
-                    ₹{grandTotal}{" "}
-                    <span className="text-xs text-ujjain-cream/60">
-                      {t.amountLocked}
+                  <div className="flex items-center justify-center gap-3 mb-3 flex-wrap">
+                    <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
+                      {t.secureBadge}
+                    </span>
+                    <span className="text-[10px] text-ujjain-cream/60 bg-white/5 border border-ujjain-gold/20 px-2.5 py-1 rounded-full">
+                      {t.verifiedBadge}
                     </span>
                   </div>
-                  <div className="text-xs text-ujjain-cream/50">
-                    {t.lockedNote}
+                  <button
+                    onClick={() =>
+                      guestName.trim() &&
+                      guestPhone.trim().length >= 10 &&
+                      confirmBooking()
+                    }
+                    disabled={
+                      !(guestName.trim() && guestPhone.trim().length >= 10) ||
+                      confirming
+                    }
+                    className={`w-full bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:shadow-[0_8px_20px_-6px_rgba(212,175,55,0.5)] disabled:opacity-40 disabled:hover:shadow-none ${confirming ? "animate-pulse" : ""}`}
+                    style={{
+                      transition: `background-color 0.3s ${EASE}, box-shadow 0.3s ${EASE}`,
+                    }}
+                  >
+                    {confirming ? t.confirming : t.confirmBooking}
+                  </button>
+                  <p className="text-ujjain-cream/40 text-[11px] text-center mt-3">
+                    {t.cancellationPolicy}: {t.cancellationPolicyText}
+                  </p>
+                </div>
+              )}
+
+              {modalStep === "confirmed" && (
+                <div className="text-center">
+                  <p className="text-ujjain-cream mb-4">{t.congrats}</p>
+                  <div
+                    className="bg-black/30 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col items-center gap-3"
+                    style={{
+                      animation: `bookingQrPop 0.5s ${EASE} both`,
+                      animationDelay: "100ms",
+                    }}
+                  >
+                    <QRCodeSVG
+                      value={bookingId}
+                      size={110}
+                      bgColor="transparent"
+                      fgColor="#D4AF37"
+                    />
+                    <div className="text-ujjain-gold font-bold">
+                      {bookingId}
+                    </div>
+                    <div className="text-ujjain-cream text-sm">
+                      {activeProperty.name}
+                    </div>
+                    <div className="text-ujjain-cream/60 text-xs">
+                      {checkIn} → {checkOut} &nbsp;•&nbsp; {guests} {t.guests}
+                    </div>
+                    <div className="text-2xl font-bold text-ujjain-gold">
+                      ₹{grandTotal}{" "}
+                      <span className="text-xs text-ujjain-cream/60">
+                        {t.amountLocked}
+                      </span>
+                    </div>
+                    <div className="text-xs text-ujjain-cream/50">
+                      {t.lockedNote}
+                    </div>
+                  </div>
+                  {bookingError && (
+                    <p className="text-red-400 text-xs mt-3">{bookingError}</p>
+                  )}
+                  <p className="text-ujjain-cream/40 text-[11px] mt-4">
+                    {t.cancellationPolicy}: {t.cancellationPolicyText}
+                  </p>
+                  <button
+                    onClick={handleReport}
+                    className="mt-6 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 hover:scale-105"
+                    style={{
+                      transition: `background-color 0.3s ${EASE}, transform 0.3s ${EASE}`,
+                    }}
+                  >
+                    {t.reportBtn}
+                  </button>
+                  {reportSent && (
+                    <p
+                      key="report-sent"
+                      className="text-ujjain-saffron text-sm mt-3"
+                      style={{ animation: `bookingStepIn 0.4s ${EASE} both` }}
+                    >
+                      {t.reportSentMsg}
+                    </p>
+                  )}
+                  <div>
+                    <button
+                      onClick={closeModal}
+                      className="mt-6 text-ujjain-cream/60 text-sm underline hover:text-ujjain-gold"
+                      style={{ transition: `color 0.3s ${EASE}` }}
+                    >
+                      {t.close}
+                    </button>
                   </div>
                 </div>
-                {bookingError && (
-                  <p className="text-red-400 text-xs mt-3">{bookingError}</p>
-                )}
-                <p className="text-ujjain-cream/40 text-[11px] mt-4">
-                  {t.cancellationPolicy}: {t.cancellationPolicyText}
-                </p>
-                <button
-                  onClick={handleReport}
-                  className="mt-6 text-xs text-ujjain-saffron border border-ujjain-saffron/40 px-4 py-2 rounded-full hover:bg-ujjain-saffron/10 transition"
-                >
-                  {t.reportBtn}
-                </button>
-                {reportSent && (
-                  <p className="text-ujjain-saffron text-sm mt-3">
-                    {t.reportSentMsg}
-                  </p>
-                )}
-                <div>
-                  <button
-                    onClick={closeModal}
-                    className="mt-6 text-ujjain-cream/60 text-sm underline"
-                  >
-                    {t.close}
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes bookingStepIn {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes bookingQrPop {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </section>
   );
 }
