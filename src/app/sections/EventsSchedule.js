@@ -255,8 +255,7 @@ export default function EventsSchedule() {
             {/* Event cards — remounts on filter change so the stagger replays */}
             <div key={activeFilter} className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
                 {filteredEvents.map((event, index) => (
-                    <div
-                        key={event.id}
+                    <div key={event.id}
                         className="event-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 flex flex-col overflow-hidden hover:border-ujjain-gold/70 hover:-translate-y-1.5 hover:shadow-[0_12px_32px_-8px_rgba(212,175,55,0.35)]"
                         style={{
                             transition: `border-color 0.4s ${EASE}, box-shadow 0.4s ${EASE}, transform 0.4s ${EASE}`,
