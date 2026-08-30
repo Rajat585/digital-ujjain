@@ -5,6 +5,7 @@ import "./globals.css";
 import { LanguageProvider } from "./components/LanguageContext";
 import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import InstallPrompt from "./components/InstallPrompt";
+import LofiOverlay from "./components/LofiOverlay";
 
 export const metadata = {
   metadataBase: new URL("https://digital-ujjain.vercel.app"),
@@ -60,6 +61,7 @@ export default function RootLayout({ children }) {
         />
         <ServiceWorkerRegister />
         <InstallPrompt />
+        <LofiOverlay />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
