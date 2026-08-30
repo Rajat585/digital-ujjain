@@ -1,6 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE_POP = "cubic-bezier(0.34, 1.56, 0.64, 1)";
 
 const avatarColors = [
   "bg-ujjain-gold/20 text-ujjain-gold",
@@ -72,10 +74,11 @@ const text = {
 function TestimonialCard({ t, colorIndex, verifiedLabel }) {
   const initial = t.name.charAt(0).toUpperCase();
   return (
-    <div className="min-w-[280px] max-w-[280px] bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 hover:border-ujjain-gold/50 transition">
+    <div className="ujjain-sw-card group relative min-w-[280px] max-w-[280px] bg-white/5 border border-ujjain-gold/20 rounded-lg p-4 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:border-ujjain-gold/70 hover:shadow-2xl hover:shadow-ujjain-gold/20">
+      <span className="ujjain-sw-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/30 to-transparent z-10" />
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${avatarColors[colorIndex % avatarColors.length]}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 ${avatarColors[colorIndex % avatarColors.length]}`}>
             {initial}
           </div>
           <div>
@@ -87,7 +90,7 @@ function TestimonialCard({ t, colorIndex, verifiedLabel }) {
         </div>
       </div>
       <p className="text-ujjain-cream/90 text-sm mb-3">&ldquo;{t.text}&rdquo;</p>
-      <span className="inline-block text-[10px] text-ujjain-saffron bg-ujjain-saffron/10 px-2 py-0.5 rounded-full border border-ujjain-saffron/20">
+      <span className="inline-block text-[10px] text-ujjain-saffron bg-ujjain-saffron/10 px-2 py-0.5 rounded-full border border-ujjain-saffron/20 transition-colors duration-300 group-hover:bg-ujjain-saffron/25">
         {t.category}
       </span>
     </div>
@@ -99,6 +102,8 @@ export default function SentimentWall() {
   const t = text[lang];
   const testimonials = testimonialsData[lang];
   const [supportCount, setSupportCount] = useState(24817);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -107,12 +112,64 @@ export default function SentimentWall() {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <section id="sentiment-wall" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden">
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">{t.title}</h2>
-      <p className="text-ujjain-cream mb-6 text-center max-w-xl">{t.subtitle}</p>
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
-      <div className="flex items-center gap-2 mb-12 px-5 py-2.5 rounded-full bg-ujjain-saffron/10 border border-ujjain-saffron/30">
+  return (
+    <section id="sentiment-wall" ref={sectionRef} className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden">
+      <style>{`
+        @keyframes ujjainSwShimmer {
+          0% { transform: translateX(-160%) skewX(-12deg); }
+          100% { transform: translateX(480%) skewX(-12deg); }
+        }
+        .ujjain-sw-card:hover .ujjain-sw-shimmer {
+          animation: ujjainSwShimmer 1.1s ease-in-out infinite;
+        }
+      `}</style>
+      <h2
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible
+            ? "none"
+            : "perspective(1000px) rotateX(-35deg) translateY(-60px) scale(0.7)",
+          transition: `opacity 850ms ${EASE_POP}, transform 850ms ${EASE_POP}`,
+        }}
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+      >
+        {t.title}
+      </h2>
+      <p
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(-30px)",
+          transition: `opacity 700ms ${EASE_POP} 120ms, transform 700ms ${EASE_POP} 120ms`,
+        }}
+        className="text-ujjain-cream mb-6 text-center max-w-xl"
+      >
+        {t.subtitle}
+      </p>
+
+      <div
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "scale(1)" : "scale(0.4)",
+          transition: `opacity 800ms ${EASE_POP} 260ms, transform 800ms ${EASE_POP} 260ms`,
+        }}
+        className="flex items-center gap-2 mb-12 px-5 py-2.5 rounded-full bg-ujjain-saffron/10 border border-ujjain-saffron/30 hover:scale-110 hover:shadow-lg hover:shadow-ujjain-saffron/30 transition-all duration-300"
+      >
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ujjain-saffron opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-ujjain-saffron"></span>
@@ -121,7 +178,14 @@ export default function SentimentWall() {
         <span className="text-ujjain-cream/80 text-sm">{t.supportText}</span>
       </div>
 
-      <div className="relative w-full max-w-6xl">
+      <div
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(70px) scale(0.85)",
+          transition: `opacity 900ms ${EASE_POP} 350ms, transform 900ms ${EASE_POP} 350ms`,
+        }}
+        className="relative w-full max-w-6xl"
+      >
         <div className="space-y-4">
           <div className="flex gap-4 animate-scroll-left">
             {[...testimonials, ...testimonials].map((item, i) => (
@@ -136,7 +200,15 @@ export default function SentimentWall() {
         </div>
       </div>
 
-      <a href="#contact" className="mt-12 bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron transition">
+      <a
+        href="#contact"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(50px) scale(0.6)",
+          transition: `opacity 800ms ${EASE_POP} 500ms, transform 800ms ${EASE_POP} 500ms`,
+        }}
+        className="mt-12 bg-ujjain-gold text-ujjain-dark font-bold px-6 py-3 rounded-lg hover:bg-ujjain-saffron hover:-translate-y-1.5 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/40 transition-all duration-300"
+      >
         {t.feedbackBtn}
       </a>
     </section>
