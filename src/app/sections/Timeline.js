@@ -21,7 +21,8 @@ const timelineData = {
         "18 प्रमुख जंक्शनों पर ट्रैफिक सिग्नल और स्मार्ट क्रॉसिंग",
         "बरसात में जलभराव रोकने के लिए नई जल निकासी व्यवस्था",
       ],
-      impact: "इस परियोजना से शहर के अंदर आने-जाने का समय लगभग 30% कम हुआ है, और सिंहस्थ के दौरान भारी भीड़ संभालने की तैयारी भी मज़बूत हुई है।",
+      impact:
+        "इस परियोजना से शहर के अंदर आने-जाने का समय लगभग 30% कम हुआ है, और सिंहस्थ के दौरान भारी भीड़ संभालने की तैयारी भी मज़बूत हुई है।",
     },
     {
       year: "2025",
@@ -40,7 +41,8 @@ const timelineData = {
         "भक्तों के लिए छाया-युक्त वॉकिंग कॉरिडोर",
         "नए पार्किंग और ई-रिक्शा पिकअप ज़ोन",
       ],
-      impact: "अब प्रतिदिन लगभग 40,000 से ज़्यादा श्रद्धालु आसानी से दर्शन कर पा रहे हैं, जो सिंहस्थ 2028 के लिए एक मज़बूत आधार है।",
+      impact:
+        "अब प्रतिदिन लगभग 40,000 से ज़्यादा श्रद्धालु आसानी से दर्शन कर पा रहे हैं, जो सिंहस्थ 2028 के लिए एक मज़बूत आधार है।",
     },
     {
       year: "2025",
@@ -59,7 +61,8 @@ const timelineData = {
         "आपातकालीन अलर्ट प्रणाली एसएमएस और ऐप के ज़रिए",
         "पर्यटक सूचना कियोस्क डिजिटल स्क्रीन के साथ",
       ],
-      impact: "डिजिटल निगरानी से सुरक्षा प्रतिक्रिया समय कम हुआ है, और भक्तों को रीयल-टाइम भीड़ जानकारी मिलना आसान हो गया है।",
+      impact:
+        "डिजिटल निगरानी से सुरक्षा प्रतिक्रिया समय कम हुआ है, और भक्तों को रीयल-टाइम भीड़ जानकारी मिलना आसान हो गया है।",
     },
     {
       year: "2026",
@@ -78,7 +81,8 @@ const timelineData = {
         "नए चेंजिंग रूम और लॉकर सुविधा स्नान के लिए",
         "घाट पर सौंदर्य-संवर्धन रोशनी और लैंडस्केपिंग",
       ],
-      impact: "नवीनीकरण के बाद घाट न सिर्फ ज़्यादा सुरक्षित हुए हैं बल्कि क्षिप्रा का जल-स्तर भी पहले से साफ दिख रहा है।",
+      impact:
+        "नवीनीकरण के बाद घाट न सिर्फ ज़्यादा सुरक्षित हुए हैं बल्कि क्षिप्रा का जल-स्तर भी पहले से साफ दिख रहा है।",
     },
   ],
   en: [
@@ -99,7 +103,8 @@ const timelineData = {
         "Smart traffic signals at 18 key junctions",
         "New drainage systems to prevent monsoon waterlogging",
       ],
-      impact: "This project has reduced average commute time within the city by nearly 30%, and strengthened the city's readiness to handle large crowds during Simhastha.",
+      impact:
+        "This project has reduced average commute time within the city by nearly 30%, and strengthened the city's readiness to handle large crowds during Simhastha.",
     },
     {
       year: "2025",
@@ -118,7 +123,8 @@ const timelineData = {
         "Shaded walking corridor for devotees",
         "New parking and e-rickshaw pickup zones",
       ],
-      impact: "Over 40,000 devotees are now able to have darshan smoothly every day, forming a strong foundation for Simhastha 2028.",
+      impact:
+        "Over 40,000 devotees are now able to have darshan smoothly every day, forming a strong foundation for Simhastha 2028.",
     },
     {
       year: "2025",
@@ -137,7 +143,8 @@ const timelineData = {
         "Emergency alert system via SMS and app notifications",
         "Digital tourist information kiosks across the city",
       ],
-      impact: "Digital surveillance has reduced emergency response time and made real-time crowd information easily accessible to devotees.",
+      impact:
+        "Digital surveillance has reduced emergency response time and made real-time crowd information easily accessible to devotees.",
     },
     {
       year: "2026",
@@ -156,15 +163,25 @@ const timelineData = {
         "New changing rooms and locker facilities for bathing",
         "Aesthetic lighting and landscaping along the ghats",
       ],
-      impact: "After renovation, the ghats are not only safer but the water level of the Kshipra also appears visibly cleaner than before.",
+      impact:
+        "After renovation, the ghats are not only safer but the water level of the Kshipra also appears visibly cleaner than before.",
     },
   ],
 };
 
 const headings = {
-  hi: { title: "2 साल का विकास", subtitle: "उज्जैन में हुए प्रमुख विकास कार्यों की झलक" },
-  en: { title: "2 Years of Development", subtitle: "A glimpse of the major development projects in Ujjain" },
-  hinglish: { title: "2 Saal Ka Vikas", subtitle: "Ujjain mein hue pramukh vikas karyon ki jhalak" },
+  hi: {
+    title: "2 साल का विकास",
+    subtitle: "उज्जैन में हुए प्रमुख विकास कार्यों की झलक",
+  },
+  en: {
+    title: "2 Years of Development",
+    subtitle: "A glimpse of the major development projects in Ujjain",
+  },
+  hinglish: {
+    title: "2 Saal Ka Vikas",
+    subtitle: "Ujjain mein hue pramukh vikas karyon ki jhalak",
+  },
 };
 
 const modalLabels = {
@@ -173,9 +190,117 @@ const modalLabels = {
   hinglish: { highlights: "Mukhya Baatein", impact: "Prabhav" },
 };
 
-const readMoreLabel = { hi: "और पढ़ें →", en: "Read More →", hinglish: "Aur Padhein →" };
+const readMoreLabel = {
+  hi: "और पढ़ें →",
+  en: "Read More →",
+  hinglish: "Aur Padhein →",
+};
 
 timelineData.hinglish = timelineData.hi;
+
+// Category-wise decorative visuals: glow blob colors + a subtle SVG motif for each tab.
+// Order matches timelineData index: 0 Smart City Roads, 1 Mahakal Lok Expansion, 2 Digital Infrastructure, 3 Ghat Renovation
+const cardVisuals = [
+  {
+    blobA: "bg-ujjain-gold/25",
+    blobB: "bg-ujjain-gold/10",
+    motif: (
+      <svg
+        viewBox="0 0 400 300"
+        className="absolute inset-0 w-full h-full"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M -40 260 Q 130 120 200 150 Q 280 185 440 60"
+          stroke="#d4af37"
+          strokeWidth="36"
+          strokeLinecap="round"
+        />
+        <path
+          d="M -40 260 Q 130 120 200 150 Q 280 185 440 60"
+          stroke="#f5f0e6"
+          strokeWidth="2"
+          strokeDasharray="12 16"
+        />
+      </svg>
+    ),
+  },
+  {
+    blobA: "bg-ujjain-saffron/25",
+    blobB: "bg-ujjain-saffron/10",
+    motif: (
+      <svg
+        viewBox="0 0 400 300"
+        className="absolute inset-0 w-full h-full"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M200 30 C207 30 210 42 206 52 C222 58 228 78 218 92 C240 98 248 122 234 140 C258 148 268 176 250 196 L150 196 C132 176 142 148 166 140 C152 122 160 98 182 92 C172 78 178 58 194 52 C190 42 193 30 200 30 Z"
+          fill="#ff9933"
+        />
+        <circle cx="200" cy="18" r="6" fill="#ff9933" />
+        <rect x="130" y="196" width="140" height="10" fill="#ff9933" />
+      </svg>
+    ),
+  },
+  {
+    blobA: "bg-blue-500/20",
+    blobB: "bg-purple-500/20",
+    motif: (
+      <svg
+        viewBox="0 0 400 300"
+        className="absolute inset-0 w-full h-full"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M40 60 H160 V140 H280 V220" stroke="#60a5fa" strokeWidth="3" />
+        <path
+          d="M360 40 H260 V110 H120 V260"
+          stroke="#a78bfa"
+          strokeWidth="3"
+        />
+        <circle cx="40" cy="60" r="6" fill="#60a5fa" />
+        <circle cx="160" cy="60" r="6" fill="#60a5fa" />
+        <circle cx="160" cy="140" r="6" fill="#60a5fa" />
+        <circle cx="280" cy="140" r="6" fill="#60a5fa" />
+        <circle cx="280" cy="220" r="6" fill="#60a5fa" />
+        <circle cx="360" cy="40" r="6" fill="#a78bfa" />
+        <circle cx="120" cy="110" r="6" fill="#a78bfa" />
+        <circle cx="120" cy="260" r="6" fill="#a78bfa" />
+      </svg>
+    ),
+  },
+  {
+    blobA: "bg-blue-500/25",
+    blobB: "bg-blue-400/10",
+    motif: (
+      <svg
+        viewBox="0 0 400 300"
+        className="absolute inset-0 w-full h-full"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M-20 90 Q 30 70 80 90 T 180 90 T 280 90 T 380 90 T 480 90"
+          stroke="#60a5fa"
+          strokeWidth="3"
+        />
+        <path
+          d="M-20 150 Q 30 130 80 150 T 180 150 T 280 150 T 380 150 T 480 150"
+          stroke="#60a5fa"
+          strokeWidth="3"
+        />
+        <path
+          d="M-20 210 Q 30 190 80 210 T 180 210 T 280 210 T 380 210 T 480 210"
+          stroke="#60a5fa"
+          strokeWidth="3"
+        />
+      </svg>
+    ),
+  },
+];
 
 export default function Timeline() {
   const { lang } = useLanguage();
@@ -185,7 +310,10 @@ export default function Timeline() {
   const item = data[active];
 
   return (
-    <section id="timeline" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark">
+    <section
+      id="timeline"
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+    >
       <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
         {headings[lang].title}
       </h2>
@@ -198,36 +326,67 @@ export default function Timeline() {
           <button
             key={index}
             onClick={() => setActive(index)}
-            className={`px-5 py-2 rounded-full border transition ${active === index
+            className={`px-5 py-2 rounded-full border transition ${
+              active === index
                 ? "bg-ujjain-gold text-ujjain-dark border-ujjain-gold"
                 : "border-ujjain-gold/40 text-ujjain-cream hover:border-ujjain-gold"
-              }`}
+            }`}
           >
             {d.title}
           </button>
         ))}
       </div>
 
-      <div className="w-full max-w-2xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-8 text-center">
-        <span className="text-ujjain-saffron font-semibold">{item.year}</span>
-        <h3 className="text-2xl font-bold text-ujjain-gold mt-2 mb-4">{item.title}</h3>
-        <p className="text-ujjain-cream mb-6">{item.desc}</p>
-
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          {item.extraStats.map((s, i) => (
-            <div key={i}>
-              <div className="text-2xl md:text-3xl font-bold text-ujjain-gold">{s.value}</div>
-              <div className="text-ujjain-cream/70 text-xs md:text-sm">{s.label}</div>
+      <div className="relative overflow-hidden w-full max-w-2xl bg-white/5 border border-ujjain-gold/30 rounded-xl p-8 text-center">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+        >
+          {cardVisuals.map((visual, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-700 ease-[cubic-bezier(0.65,0,0.35,1)] ${active === index ? "opacity-100" : "opacity-0"}`}
+            >
+              <div
+                className={`absolute -top-16 -left-16 w-64 h-64 rounded-full blur-[70px] animate-pulse ${visual.blobA}`}
+              />
+              <div
+                className={`absolute -bottom-16 -right-16 w-64 h-64 rounded-full blur-[70px] animate-pulse ${visual.blobB}`}
+              />
+              <div className="absolute inset-0 opacity-[0.09]">
+                {visual.motif}
+              </div>
             </div>
           ))}
         </div>
 
-        <button
-          onClick={() => setShowModal(true)}
-          className="px-6 py-2 rounded-full bg-ujjain-gold text-ujjain-dark font-semibold hover:bg-ujjain-saffron transition"
-        >
-          {readMoreLabel[lang]}
-        </button>
+        <div className="relative z-10">
+          <span className="text-ujjain-saffron font-semibold">{item.year}</span>
+          <h3 className="text-2xl font-bold text-ujjain-gold mt-2 mb-4">
+            {item.title}
+          </h3>
+          <p className="text-ujjain-cream mb-6">{item.desc}</p>
+
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {item.extraStats.map((s, i) => (
+              <div key={i}>
+                <div className="text-2xl md:text-3xl font-bold text-ujjain-gold">
+                  {s.value}
+                </div>
+                <div className="text-ujjain-cream/70 text-xs md:text-sm">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-6 py-2 rounded-full bg-ujjain-gold text-ujjain-dark font-semibold hover:bg-ujjain-saffron transition"
+          >
+            {readMoreLabel[lang]}
+          </button>
+        </div>
       </div>
 
       {showModal && (
@@ -246,20 +405,28 @@ export default function Timeline() {
               ×
             </button>
 
-            <span className="text-ujjain-saffron font-semibold">{item.year}</span>
-            <h3 className="text-2xl md:text-3xl font-bold text-ujjain-gold mt-1 mb-4">{item.title}</h3>
+            <span className="text-ujjain-saffron font-semibold">
+              {item.year}
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold text-ujjain-gold mt-1 mb-4">
+              {item.title}
+            </h3>
             <p className="text-ujjain-cream mb-6">{item.desc}</p>
 
             <div className="grid grid-cols-3 gap-4 mb-6">
               {item.extraStats.map((s, i) => (
                 <div key={i} className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-ujjain-gold">{s.value}</div>
+                  <div className="text-xl md:text-2xl font-bold text-ujjain-gold">
+                    {s.value}
+                  </div>
                   <div className="text-ujjain-cream/70 text-xs">{s.label}</div>
                 </div>
               ))}
             </div>
 
-            <h4 className="text-ujjain-gold font-semibold mb-2">{modalLabels[lang].highlights}</h4>
+            <h4 className="text-ujjain-gold font-semibold mb-2">
+              {modalLabels[lang].highlights}
+            </h4>
             <ul className="text-ujjain-cream/90 text-sm mb-6 space-y-2 text-left">
               {item.highlights.map((h, i) => (
                 <li key={i} className="flex gap-2">
@@ -269,8 +436,12 @@ export default function Timeline() {
               ))}
             </ul>
 
-            <h4 className="text-ujjain-gold font-semibold mb-2">{modalLabels[lang].impact}</h4>
-            <p className="text-ujjain-cream/90 text-sm text-left">{item.impact}</p>
+            <h4 className="text-ujjain-gold font-semibold mb-2">
+              {modalLabels[lang].impact}
+            </h4>
+            <p className="text-ujjain-cream/90 text-sm text-left">
+              {item.impact}
+            </p>
           </div>
         </div>
       )}
