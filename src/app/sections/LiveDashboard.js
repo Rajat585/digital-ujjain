@@ -229,15 +229,27 @@ export default function LiveDashboard() {
       icon: "🌤️",
       value: loading ? "..." : weather ? `${animatedTemp}°C` : "N/A",
       label: t.temperature,
+      glow: "bg-blue-400/15",
     },
-    { icon: "⏰", value: t.lowCrowdWindow, label: t.lowCrowdTime },
+    {
+      icon: "⏰",
+      value: t.lowCrowdWindow,
+      label: t.lowCrowdTime,
+      glow: "bg-ujjain-gold/15",
+    },
     {
       icon: "🚨",
       value: t.emergencyNumbers,
       label: t.emergencyLabel,
       note: t.emergencyNote,
+      glow: "bg-red-500/15",
     },
-    { icon: "💧", value: t.verifiedStalls, label: t.verifiedStallsNote },
+    {
+      icon: "💧",
+      value: t.verifiedStalls,
+      label: t.verifiedStallsNote,
+      glow: "bg-blue-400/15",
+    },
   ];
 
   return (
@@ -253,57 +265,67 @@ export default function LiveDashboard() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl mb-6">
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:shadow-lg hover:shadow-ujjain-gold/10">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-3xl transition-transform duration-300 hover:scale-110 inline-block">
-              🙏
-            </span>
-            <h3 className="text-xl font-bold text-ujjain-gold">
-              {t.mahakalTitle}
-            </h3>
-          </div>
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-ujjain-cream/70 text-sm">{t.nextAarti}</span>
-            <span className="text-ujjain-gold font-semibold">
-              {mahakalNext}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-ujjain-cream/70 text-sm">
-              {t.currentCrowd}
-            </span>
-            <span
-              className={`font-bold transition-colors duration-500 ${mahakalCrowd.color}`}
-            >
-              {mahakalCrowd.level}
-            </span>
+        <div className="relative overflow-hidden bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:shadow-lg hover:shadow-ujjain-gold/10">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-ujjain-saffron/15 blur-[60px] pointer-events-none z-0" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-3xl transition-transform duration-300 hover:scale-110 inline-block">
+                🙏
+              </span>
+              <h3 className="text-xl font-bold text-ujjain-gold">
+                {t.mahakalTitle}
+              </h3>
+            </div>
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-ujjain-cream/70 text-sm">
+                {t.nextAarti}
+              </span>
+              <span className="text-ujjain-gold font-semibold">
+                {mahakalNext}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-ujjain-cream/70 text-sm">
+                {t.currentCrowd}
+              </span>
+              <span
+                className={`font-bold transition-colors duration-500 ${mahakalCrowd.color}`}
+              >
+                {mahakalCrowd.level}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:shadow-lg hover:shadow-ujjain-gold/10">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-3xl transition-transform duration-300 hover:scale-110 inline-block">
-              🕉️
-            </span>
-            <h3 className="text-xl font-bold text-ujjain-gold">
-              {t.kalBhairavTitle}
-            </h3>
-          </div>
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-ujjain-cream/70 text-sm">{t.nextAarti}</span>
-            <span className="text-ujjain-gold font-semibold">
-              {kalBhairavNext}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-ujjain-cream/70 text-sm">
-              {t.currentCrowd}
-            </span>
-            <span
-              className={`font-bold transition-colors duration-500 ${kalBhairavCrowd.color}`}
-            >
-              {kalBhairavCrowd.level}
-            </span>
+        <div className="relative overflow-hidden bg-white/5 border border-ujjain-gold/30 rounded-xl p-6 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:shadow-lg hover:shadow-ujjain-gold/10">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-purple-500/15 blur-[60px] pointer-events-none z-0" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-3xl transition-transform duration-300 hover:scale-110 inline-block">
+                🕉️
+              </span>
+              <h3 className="text-xl font-bold text-ujjain-gold">
+                {t.kalBhairavTitle}
+              </h3>
+            </div>
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-ujjain-cream/70 text-sm">
+                {t.nextAarti}
+              </span>
+              <span className="text-ujjain-gold font-semibold">
+                {kalBhairavNext}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-ujjain-cream/70 text-sm">
+                {t.currentCrowd}
+              </span>
+              <span
+                className={`font-bold transition-colors duration-500 ${kalBhairavCrowd.color}`}
+              >
+                {kalBhairavCrowd.level}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -315,7 +337,7 @@ export default function LiveDashboard() {
         {statCards.map((card, i) => (
           <div
             key={i}
-            className="bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:bg-white/10"
+            className="relative overflow-hidden bg-white/5 border border-ujjain-gold/30 rounded-xl p-4 text-center transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-ujjain-gold/60 hover:bg-white/10"
             style={{
               opacity: statsVisible ? 1 : 0,
               transform: statsVisible ? "translateY(0)" : "translateY(16px)",
@@ -323,18 +345,23 @@ export default function LiveDashboard() {
               transitionDelay: statsVisible ? `${i * 100}ms` : "0ms",
             }}
           >
-            <div className="text-2xl mb-1">{card.icon}</div>
-            <div className="text-xl font-bold text-ujjain-gold tabular-nums">
-              {card.value}
-            </div>
-            <div className="text-ujjain-cream/60 text-[11px] mt-1">
-              {card.label}
-            </div>
-            {card.note && (
-              <div className="text-ujjain-cream/40 text-[10px] mt-1">
-                {card.note}
+            <div
+              className={`absolute -bottom-8 -right-8 w-28 h-28 rounded-full ${card.glow} blur-[50px] pointer-events-none z-0`}
+            />
+            <div className="relative z-10">
+              <div className="text-2xl mb-1">{card.icon}</div>
+              <div className="text-xl font-bold text-ujjain-gold tabular-nums">
+                {card.value}
               </div>
-            )}
+              <div className="text-ujjain-cream/60 text-[11px] mt-1">
+                {card.label}
+              </div>
+              {card.note && (
+                <div className="text-ujjain-cream/40 text-[10px] mt-1">
+                  {card.note}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
