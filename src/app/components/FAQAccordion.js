@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE_POP = "cubic-bezier(0.34, 1.56, 0.64, 1)";
 
 const faqData = {
   hi: [
@@ -160,6 +162,24 @@ export default function FAQAccordion() {
   const { lang } = useLanguage();
   const faqs = faqData[lang];
   const [openIndex, setOpenIndex] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const toggle = (index) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -172,44 +192,71 @@ export default function FAQAccordion() {
   return (
     <section
       id="faq"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+      ref={sectionRef}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
     >
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+      <style>{`
+        @keyframes ujjainFaqShimmer {
+          0% { transform: translateX(-160%) skewX(-12deg); }
+          100% { transform: translateX(480%) skewX(-12deg); }
+        }
+        .ujjain-faq-item:hover .ujjain-faq-shimmer {
+          animation: ujjainFaqShimmer 1.1s ease-in-out infinite;
+        }
+      `}</style>
+      <h2
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(-40px) scale(0.8)",
+          transition: `opacity 800ms ${EASE_POP}, transform 800ms ${EASE_POP}`,
+        }}
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+      >
         {headings[lang].title}
       </h2>
-      <p className="text-ujjain-cream mb-12 text-center max-w-xl">
+      <p
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(-25px)",
+          transition: `opacity 700ms ${EASE_POP} 100ms, transform 700ms ${EASE_POP} 100ms`,
+        }}
+        className="text-ujjain-cream mb-12 text-center max-w-xl"
+      >
         {headings[lang].subtitle}
       </p>
 
       <div className="w-full max-w-3xl flex flex-col gap-3">
         {faqs.map((item, index) => {
           const isOpen = openIndex === index;
+          const delay = Math.min(index, 7) * 90;
           return (
             <div
               key={index}
-              className="bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden hover:border-ujjain-gold transition-all duration-300"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "none" : "perspective(1000px) rotateX(-20deg) translateY(45px) scale(0.9)",
+                transition: `opacity 700ms ${EASE_POP} ${delay}ms, transform 700ms ${EASE_POP} ${delay}ms`,
+              }}
+              className={`ujjain-faq-item group relative overflow-hidden rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015] hover:shadow-xl hover:shadow-ujjain-gold/20 ${isOpen ? "bg-ujjain-gold/5 border-ujjain-gold" : "bg-white/5 border-ujjain-gold/30 hover:border-ujjain-gold"}`}
             >
+              <span className="ujjain-faq-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/25 to-transparent z-10" />
               <button
                 onClick={() => toggle(index)}
                 aria-expanded={isOpen}
-                className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
+                className="relative w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
               >
                 <span className="text-ujjain-cream font-medium text-sm md:text-base">
                   {item.q}
                 </span>
                 <span
-                  className={`text-ujjain-gold text-xl leading-none flex-shrink-0 transition-transform duration-300 ${
-                    isOpen ? "rotate-45" : ""
-                  }`}
+                  className={`text-ujjain-gold text-xl leading-none flex-shrink-0 transition-transform duration-300 group-hover:scale-125 ${isOpen ? "rotate-45" : ""}`}
                 >
                   +
                 </span>
               </button>
 
               <div
-                className={`grid transition-all duration-300 ease-out ${
-                  isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                }`}
+                className={`relative grid transition-all duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
               >
                 <div className="overflow-hidden">
                   <div className="px-5 pb-5 text-ujjain-cream/70 text-sm leading-relaxed">
@@ -217,7 +264,7 @@ export default function FAQAccordion() {
                     {item.linkTo && (
                       <button
                         onClick={() => scrollTo(item.linkTo)}
-                        className="block mt-3 text-ujjain-saffron text-xs font-semibold hover:text-ujjain-gold transition"
+                        className="block mt-3 text-ujjain-saffron text-xs font-semibold hover:text-ujjain-gold hover:translate-x-1 transition-all duration-300"
                       >
                         {item.linkLabel}
                       </button>

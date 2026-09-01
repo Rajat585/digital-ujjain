@@ -1,6 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../components/LanguageContext";
+
+const EASE_POP = "cubic-bezier(0.34, 1.56, 0.64, 1)";
 
 // Real verified media only — no placeholder/fake content.
 // 2016 & 2028: real YouTube videos. 2004: real Wikimedia Commons photos
@@ -86,6 +88,8 @@ export default function Leadership() {
   const t = text[lang];
   const [photoIndex, setPhotoIndex] = useState(0);
   const [factIndex, setFactIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     const photoTimer = setInterval(
@@ -102,28 +106,81 @@ export default function Leadership() {
     };
   }, []);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const cardEntranceStyle = (index) => ({
+    opacity: visible ? 1 : 0,
+    transform: visible
+      ? undefined
+      : "perspective(1400px) rotateX(-40deg) rotateY(10deg) translateY(70px) scale(0.6)",
+    transition: `opacity 850ms ${EASE_POP}, transform 850ms ${EASE_POP}`,
+    transitionDelay: `${index * 160}ms`,
+  });
+
   return (
     <section
       id="leadership"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark"
+      ref={sectionRef}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-ujjain-dark overflow-hidden"
     >
-      <h2 className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center">
+      <style>{`
+        @keyframes ujjainLeadShimmer {
+          0% { transform: translateX(-160%) skewX(-12deg); }
+          100% { transform: translateX(480%) skewX(-12deg); }
+        }
+        .ujjain-lead-card:hover .ujjain-lead-shimmer {
+          animation: ujjainLeadShimmer 1.1s ease-in-out infinite;
+        }
+      `}</style>
+      <h2
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(-30px)",
+          transition: `opacity 700ms ${EASE_POP}, transform 700ms ${EASE_POP}`,
+        }}
+        className="text-4xl md:text-5xl font-bold text-ujjain-gold mb-4 text-center"
+      >
         {t.title}
       </h2>
-      <p className="text-ujjain-cream mb-12 text-center max-w-xl">
+      <p
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "none" : "translateY(-20px)",
+          transition: `opacity 700ms ${EASE_POP} 120ms, transform 700ms ${EASE_POP} 120ms`,
+        }}
+        className="text-ujjain-cream mb-12 text-center max-w-xl"
+      >
         {t.subtitle}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
         {/* 1992 — rotating real facts (no verified media exists for this year) */}
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden">
+        <div
+          style={cardEntranceStyle(0)}
+          className="ujjain-lead-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-3 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/30 hover:border-ujjain-gold/70"
+        >
+          <span className="ujjain-lead-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/40 to-transparent z-10" />
           <div className="aspect-video relative flex flex-col items-center justify-center text-center p-6 bg-gradient-to-br from-ujjain-dark via-black to-ujjain-dark overflow-hidden">
             <img
               src="https://commons.wikimedia.org/wiki/Special:FilePath/Narmada%20river%20from%20mahakaleshwar%20temple%2C%20Ujjain.jpg"
               alt=""
-              className="absolute inset-0 w-full h-full object-cover opacity-10"
+              className="absolute inset-0 w-full h-full object-cover opacity-10 transition-transform duration-700 group-hover:scale-110"
             />
-            <span className="text-5xl mb-4 relative">📜</span>
+            <span className="text-5xl mb-4 relative transition-transform duration-500 group-hover:scale-125 group-hover:-rotate-6">📜</span>
             <p
               key={factIndex}
               className="relative text-ujjain-cream text-sm md:text-base max-w-md leading-relaxed transition-opacity duration-500"
@@ -136,7 +193,7 @@ export default function Leadership() {
               {facts1992.hi.map((_, i) => (
                 <span
                   key={i}
-                  className={`w-1.5 h-1.5 rounded-full ${i === factIndex ? "bg-ujjain-gold" : "bg-white/30"}`}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === factIndex ? "bg-ujjain-gold" : "bg-white/30"}`}
                 />
               ))}
             </div>
@@ -149,18 +206,22 @@ export default function Leadership() {
           </div>
         </div>
         {/* 2004 — rotating real Wikimedia Commons photos */}
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden">
-          <div className="aspect-video relative">
+        <div
+          style={cardEntranceStyle(1)}
+          className="ujjain-lead-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-3 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/30 hover:border-ujjain-gold/70"
+        >
+          <span className="ujjain-lead-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/40 to-transparent z-10" />
+          <div className="aspect-video relative overflow-hidden">
             <img
               src={wikiImg(photos2004[photoIndex])}
               alt={`Simhastha 2004 — ${photoIndex + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
               {photos2004.map((_, i) => (
                 <span
                   key={i}
-                  className={`w-1.5 h-1.5 rounded-full ${i === photoIndex ? "bg-ujjain-gold" : "bg-white/40"}`}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === photoIndex ? "bg-ujjain-gold" : "bg-white/40"}`}
                 />
               ))}
             </div>
@@ -174,7 +235,11 @@ export default function Leadership() {
         </div>
 
         {/* 2016 — real YouTube video */}
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden">
+        <div
+          style={cardEntranceStyle(2)}
+          className="ujjain-lead-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-3 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/30 hover:border-ujjain-gold/70"
+        >
+          <span className="ujjain-lead-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/40 to-transparent z-10" />
           <div className="aspect-video">
             <iframe
               className="w-full h-full"
@@ -194,7 +259,11 @@ export default function Leadership() {
         </div>
 
         {/* 2028 — real teaser/preparation coverage */}
-        <div className="bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden">
+        <div
+          style={cardEntranceStyle(3)}
+          className="ujjain-lead-card group relative bg-white/5 border border-ujjain-gold/30 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-3 hover:scale-110 hover:shadow-2xl hover:shadow-ujjain-gold/30 hover:border-ujjain-gold/70"
+        >
+          <span className="ujjain-lead-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ujjain-gold/40 to-transparent z-10" />
           <div className="aspect-video">
             <iframe
               className="w-full h-full"
